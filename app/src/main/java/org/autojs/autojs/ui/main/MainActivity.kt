@@ -9,18 +9,11 @@ import android.os.Bundle
 import android.os.Process
 import android.util.Log
 import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.autojs.autojs.AutoJs
-import org.autojs.autojs.app.FragmentPagerAdapterBuilder
-import org.autojs.autojs.app.FragmentPagerAdapterBuilder.StoredFragmentPagerAdapter
 import org.autojs.autojs.app.OnActivityResultDelegate
 import org.autojs.autojs.app.OnActivityResultDelegate.DelegateHost
 import org.autojs.autojs.core.accessibility.AccessibilityTool
@@ -37,19 +30,12 @@ import org.autojs.autojs.pref.Pref
 import org.autojs.autojs.runtime.api.WrappedShizuku
 import org.autojs.autojs.theme.ThemeColorManager.addViewBackground
 import org.autojs.autojs.ui.BaseActivity
-import org.autojs.autojs.ui.doc.DocumentationFragment
 import org.autojs.autojs.ui.enhancedfloaty.FloatyService
-import org.autojs.autojs.ui.explorer.ExplorerView
 import org.autojs.autojs.ui.floating.FloatyWindowManger
-import org.autojs.autojs.ui.log.LogActivity
-import org.autojs.autojs.ui.main.drawer.DrawerFragment.Companion.Event.OnDrawerClosed
-import org.autojs.autojs.ui.main.drawer.DrawerFragment.Companion.Event.OnDrawerOpened
+import org.autojs.autojs.ui.main.drawer.DrawerFragment
 import org.autojs.autojs.ui.main.scripts.ExplorerFragment
-import org.autojs.autojs.ui.main.task.TaskManagerFragment
-import org.autojs.autojs.ui.pager.ViewPager
 import org.autojs.autojs.ui.settings.PreferencesActivity
 import org.autojs.autojs.ui.widget.DrawerAutoClose
-import org.autojs.autojs.ui.widget.SearchViewItem
 import org.autojs.autojs.util.ForegroundServiceUtils
 import org.autojs.autojs.util.UpdateUtils
 import org.autojs.autojs.util.ViewUtils
@@ -67,16 +53,9 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var mDrawerLayout: DrawerLayout
-    private lateinit var mViewPager: ViewPager
-    private lateinit var mFab: FloatingActionButton
-    private lateinit var mPagerAdapter: StoredFragmentPagerAdapter
-    private lateinit var mLogMenuItem: MenuItem
-
     private val mActivityResultMediator = OnActivityResultDelegate.Mediator()
     private val mRequestPermissionCallbacks = RequestPermissionCallbacks()
     private val mBackPressObserver = BackPressedHandler.Observer()
-    private var mSearchViewItem: SearchViewItem? = null
-    private var mDocsSearchItemExpanded = false
 
     private val mA11yToolService by lazy {
         AccessibilityTool(this).service
@@ -97,8 +76,6 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
         binding = ActivityMainBinding.inflate(layoutInflater).also {
             setContentView(it.root)
             mDrawerLayout = it.drawerLayout
-            mViewPager = it.viewpager
-            mFab = it.fab
         }
 
         PostNotificationPermission(this).urgeIfNeeded()
@@ -112,11 +89,21 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
         ViewUtils.registerOnSharedPreferenceChangeListener(this)
 
         WrappedShizuku.onCreate()
-        ExplorerView.clearViewStates()
         setUpToolbar()
-        setUpTabViewPager()
         registerBackPressHandlers()
         addViewBackground(binding.appBar)
+
+        // 删除或注释掉以下代码
+        // supportFragmentManager.beginTransaction()
+        //     .replace(R.id.content_frame, ExplorerFragment())
+        //     .commit()
+
+        // 如果需要,可以添加一个新的默认Fragment或视图
+        // 例如:
+        // binding.contentFrame.addView(TextView(this).apply {
+        //     text = "欢迎使用AutoJs6"
+        //     gravity = Gravity.CENTER
+        // })
     }
 
     override fun onPostResume() {
@@ -159,49 +146,16 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
         ) {
             override fun onDrawerOpened(drawerView: View) {
                 super.onDrawerOpened(drawerView)
-                EventBus.getDefault().post(object : OnDrawerOpened {})
+                EventBus.getDefault().post(object : DrawerFragment.Companion.Event.OnDrawerOpened {})
             }
 
             override fun onDrawerClosed(drawerView: View) {
                 super.onDrawerClosed(drawerView)
-                EventBus.getDefault().post(object : OnDrawerClosed {})
+                EventBus.getDefault().post(object : DrawerFragment.Companion.Event.OnDrawerClosed {})
             }
         }.also {
             it.syncState()
             mDrawerLayout.addDrawerListener(it)
-        }
-    }
-
-    private fun setUpTabViewPager() {
-        mPagerAdapter = FragmentPagerAdapterBuilder(this)
-            .add(ExplorerFragment(), R.string.text_file)
-            .add(DocumentationFragment(), R.string.text_documentation)
-            .add(TaskManagerFragment(), R.string.text_task)
-            .build()
-            .apply {
-                setOnFragmentInstantiateListener { pos: Int, fragment: Fragment ->
-                    val viewPagerFragment = fragment as ViewPagerFragment
-                    viewPagerFragment.setFab(mFab)
-                    if (pos == mViewPager.currentItem) {
-                        viewPagerFragment.onPageShow()
-                    }
-                }
-            }
-        mViewPager.let {
-            it.adapter = mPagerAdapter
-            binding.tab.setupWithViewPager(it)
-            it.addOnPageChangeListener(object : SimpleOnPageChangeListener() {
-                private var mPreviousFragment: ViewPagerFragment? = null
-                override fun onPageSelected(position: Int) {
-                    val fragment = mPagerAdapter.getStoredFragment(position) ?: return
-                    mPreviousFragment?.onPageHide()
-                    mPreviousFragment = fragment as ViewPagerFragment
-                    mPreviousFragment?.onPageShow()
-                    if (mSearchViewItem?.isExpanded == true) {
-                        mSearchViewItem?.collapse()
-                    }
-                }
-            })
         }
     }
 
@@ -247,7 +201,7 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
 
     @Suppress("OVERRIDE_DEPRECATION", "DEPRECATION")
     override fun onBackPressed() {
-        val fragment = mPagerAdapter.getStoredFragment(mViewPager.currentItem)
+        val fragment = supportFragmentManager.findFragmentById(R.id.content_frame)
         if (fragment is BackPressedHandler) {
             if ((fragment as BackPressedHandler).onBackPressed(this)) {
                 return
@@ -259,82 +213,6 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
     }
 
     override fun getBackPressedObserver() = mBackPressObserver
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        mLogMenuItem = menu.findItem(R.id.action_log)
-        setUpSearchMenuItem(menu.findItem(R.id.action_search))
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_log) {
-            if (mDocsSearchItemExpanded) {
-                submitForwardQuery()
-            } else {
-                LogActivity.launch(this)
-            }
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun setUpSearchMenuItem(searchMenuItem: MenuItem) {
-        mSearchViewItem = object : SearchViewItem(this, searchMenuItem) {
-            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-                if (isCurrentPageDocs) {
-                    mDocsSearchItemExpanded = true
-                    mLogMenuItem.setIcon(R.drawable.ic_ali_up)
-                }
-                return super.onMenuItemActionExpand(item)
-            }
-
-            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-                if (mDocsSearchItemExpanded) {
-                    mDocsSearchItemExpanded = false
-                    mLogMenuItem.setIcon(R.drawable.ic_ali_log)
-                }
-                return super.onMenuItemActionCollapse(item)
-            }
-        }.apply {
-            setQueryCallback { query: String? -> submitQuery(query) }
-        }
-    }
-
-    val docsItemIndex: Int
-        get() {
-            var i = 0
-            while (i < mPagerAdapter.count) {
-                val pageTitle = mPagerAdapter.getPageTitle(i)
-                if (pageTitle != null && getString(R.string.text_documentation).contentEquals(pageTitle)) {
-                    return i
-                }
-                i += 1
-            }
-            return -1
-        }
-    private val isCurrentPageDocs: Boolean
-        get() {
-            val pageTitle = mPagerAdapter.getPageTitle(mViewPager.currentItem)
-            return pageTitle != null && getString(R.string.text_documentation).contentEquals(pageTitle)
-        }
-
-    private fun submitQuery(query: String?) {
-        if (query == null) {
-            EventBus.getDefault().post(QueryEvent.CLEAR)
-            return
-        }
-        val event = QueryEvent(query)
-        EventBus.getDefault().post(event)
-        if (event.shouldCollapseSearchView()) {
-            mSearchViewItem!!.collapse()
-        }
-    }
-
-    private fun submitForwardQuery() {
-        val event = QueryEvent.FIND_FORWARD
-        EventBus.getDefault().post(event)
-    }
 
     override fun onDestroy() {
         super.onDestroy()

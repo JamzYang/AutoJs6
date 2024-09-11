@@ -62,24 +62,7 @@ open class ExplorerFragment : ViewPagerFragment(0), OnFloatingActionButtonClickL
         restoreViewStates()
     }
 
-    override fun onFabClick(fab: FloatingActionButton) {
-        mFloatingActionMenu ?: let {
-            mFloatingActionMenu = requireActivity().findViewById<FloatingActionMenu?>(R.id.floating_action_menu).also { menu ->
-                menu.state
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(object : SimpleObserver<Boolean?>() {
-                        override fun onNext(expanding: Boolean) {
-                            fab.animate()
-                                .rotation((if (expanding) 45 else 0).toFloat())
-                                .setDuration(300)
-                                .start()
-                        }
-                    })
-                menu.setOnFloatingActionButtonClickListener(this)
-            }
-        }
-        mFloatingActionMenu!!.let { if (it.isExpanded) it.collapse() else it.expand() }
-    }
+
 
     override fun onBackPressed(activity: Activity): Boolean {
         mFloatingActionMenu?.let {
@@ -95,6 +78,10 @@ open class ExplorerFragment : ViewPagerFragment(0), OnFloatingActionButtonClickL
             }
         }
         return false
+    }
+
+    override fun onFabClick(fab: FloatingActionButton?) {
+//        TODO("Not yet implemented")
     }
 
     override fun onPageHide() {
