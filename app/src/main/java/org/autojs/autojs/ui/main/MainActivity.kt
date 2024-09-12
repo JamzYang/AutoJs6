@@ -45,6 +45,8 @@ import org.autojs.autojs.util.WorkingDirectoryUtils
 import org.autojs.autojs6.R
 import org.autojs.autojs6.databinding.ActivityMainBinding
 import org.greenrobot.eventbus.EventBus
+import android.webkit.WebView
+import android.webkit.WebViewClient
 
 /**
  * Modified by SuperMonster003 as of Dec 1, 2021.
@@ -101,7 +103,7 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
         setUpToolbar()
         registerBackPressHandlers()
         addViewBackground(binding.appBar)
-
+        setUpWebView()
         // 删除或注释掉以下代码
         // supportFragmentManager.beginTransaction()
         //     .replace(R.id.content_frame, ExplorerFragment())
@@ -168,6 +170,15 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun setUpWebView() {
+        binding.webView.apply {
+            settings.javaScriptEnabled = true
+            webViewClient = WebViewClient()
+            loadUrl("https://www.baidu.com")
+        }
+    }
+
     fun rebirth(view: View) {
         val context = view.context as MainActivity
         context.packageManager.getLaunchIntentForPackage(context.packageName)?.let {
@@ -210,13 +221,18 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
 
     @Suppress("OVERRIDE_DEPRECATION", "DEPRECATION")
     override fun onBackPressed() {
-        val fragment = supportFragmentManager.findFragmentById(R.id.content_frame)
-        if (fragment is BackPressedHandler) {
-            if ((fragment as BackPressedHandler).onBackPressed(this)) {
-                return
-            }
-        }
-        if (!mBackPressObserver.onBackPressed(this)) {
+//        val fragment = supportFragmentManager.findFragmentById(R.id.content_frame)
+//        if (fragment is BackPressedHandler) {
+//            if ((fragment as BackPressedHandler).onBackPressed(this)) {
+//                return
+//            }
+//        }
+//        if (!mBackPressObserver.onBackPressed(this)) {
+//            super.onBackPressed()
+//        }
+        if (binding.webView.canGoBack()) {
+            binding.webView.goBack()
+        } else {
             super.onBackPressed()
         }
     }
