@@ -77,6 +77,10 @@ open class DrawerFragment : Fragment() {
     private lateinit var mThemeColorItem: DrawerMenuShortcutItem
     private lateinit var mAboutAppAndDevItem: DrawerMenuShortcutItem
 
+    private lateinit var mAccountItem: DrawerMenuShortcutItem
+    private lateinit var mMemberCenterItem: DrawerMenuShortcutItem
+    private lateinit var mFreeMembershipItem: DrawerMenuShortcutItem
+
     private lateinit var mA11yService: AccessibilityTool.Service
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -363,6 +367,15 @@ open class DrawerFragment : Fragment() {
         mAboutAppAndDevItem = DrawerMenuShortcutItem(R.drawable.ic_about, R.string.text_about_app_and_developer)
             .setAction(Runnable { AboutActivity.startActivity(mContext) })
             .apply { subtitle = BuildConfig.VERSION_NAME }
+
+        mAccountItem = DrawerMenuShortcutItem(R.drawable.ic_person_black_48dp, R.string.text_account)
+            .setAction(Runnable { /* 打开账号页面 */ })
+
+        mMemberCenterItem = DrawerMenuShortcutItem(R.drawable.ic_star_black_48dp, R.string.text_member_center)
+            .setAction(Runnable { /* 打开会员中心页面 */ })
+
+        mFreeMembershipItem = DrawerMenuShortcutItem(R.drawable.ic_card_giftcard_black_48dp, R.string.text_free_membership)
+            .setAction(Runnable { /* 打开免费领会员页面 */ })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -421,6 +434,9 @@ open class DrawerFragment : Fragment() {
 
     private fun initMenuItems() {
         drawerMenuAdapter = listOf(
+            mAccountItem,
+            mMemberCenterItem,
+            mFreeMembershipItem,
             DrawerMenuGroup(R.string.text_service),
             mAccessibilityServiceItem,
             mForegroundServiceItem,

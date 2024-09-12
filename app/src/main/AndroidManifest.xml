@@ -633,6 +633,11 @@
                 android:exported="true"
                 android:multiprocess="false"
                 android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
+
+        <activity
+                android:name="org.autojs.autojs.ui.login.LoginActivity"
+                android:label="@string/title_activity_login"
+                android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

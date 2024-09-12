@@ -32,10 +32,12 @@ import org.autojs.autojs.theme.ThemeColorManager.addViewBackground
 import org.autojs.autojs.ui.BaseActivity
 import org.autojs.autojs.ui.enhancedfloaty.FloatyService
 import org.autojs.autojs.ui.floating.FloatyWindowManger
+import org.autojs.autojs.ui.login.LoginActivity
 import org.autojs.autojs.ui.main.drawer.DrawerFragment
 import org.autojs.autojs.ui.main.scripts.ExplorerFragment
 import org.autojs.autojs.ui.settings.PreferencesActivity
 import org.autojs.autojs.ui.widget.DrawerAutoClose
+import org.autojs.autojs.user.UserManager
 import org.autojs.autojs.util.ForegroundServiceUtils
 import org.autojs.autojs.util.UpdateUtils
 import org.autojs.autojs.util.ViewUtils
@@ -72,7 +74,14 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        // 调试时重置登录状态
+        if (!UserManager.isLoggedIn(this)) {
+            // 用户未登录,打开登录页面
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish() // 结束MainActivity,防止用户按返回键回到未登录状态的主页面
+            return
+        }
+//        setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater).also {
             setContentView(it.root)
             mDrawerLayout = it.drawerLayout
