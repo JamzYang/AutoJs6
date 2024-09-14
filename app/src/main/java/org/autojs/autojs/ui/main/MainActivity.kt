@@ -10,6 +10,7 @@ import android.os.Process
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.webkit.JavascriptInterface
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
@@ -172,6 +173,10 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView() {
+        val webView = findViewById<WebView>(R.id.webView)
+        webView.settings.javaScriptEnabled = true
+        webView.addJavascriptInterface(WebAppInterface(this), "Android")
+        
         binding.webView.apply {
             settings.javaScriptEnabled = true
             webViewClient = WebViewClient()
@@ -264,5 +269,17 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
         fun getIntent(context: Context?) = Intent(context, MainActivity::class.java)
 
     }
+
+    class WebAppInterface(private val context: Context) {
+      @JavascriptInterface
+      fun saveFormData(data: String) {
+          Log.d("WebAppInterface", "saveFormData 被调用，数据: $data")
+          val sharedPref = context.getSharedPreferences("script_config", Context.MODE_PRIVATE)
+          with(sharedPref.edit()) {
+              putString("config", data)
+              apply()
+          }
+      }
+}
 
 }
