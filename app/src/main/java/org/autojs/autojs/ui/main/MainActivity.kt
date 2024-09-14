@@ -175,7 +175,8 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
         binding.webView.apply {
             settings.javaScriptEnabled = true
             webViewClient = WebViewClient()
-            loadUrl("https://www.baidu.com")
+//            loadUrl("https://www.baidu.com")
+            loadUrl("http://192.168.68.16:8080/setting.html")
         }
     }
 

@@ -33,6 +33,7 @@ import org.autojs.autojs.theme.app.ColorSelectActivity
 import org.autojs.autojs.ui.account.AccountActivity
 import org.autojs.autojs.ui.floating.FloatyWindowManger
 import org.autojs.autojs.ui.main.MainActivity
+import org.autojs.autojs.ui.membership.FreeMembershipActivity
 import org.autojs.autojs.ui.settings.AboutActivity
 import org.autojs.autojs.ui.settings.PreferencesActivity
 import org.autojs.autojs.util.NetworkUtils
@@ -379,7 +380,9 @@ open class DrawerFragment : Fragment() {
             .setAction(Runnable { /* 打开会员中心页面 */ })
 
         mFreeMembershipItem = DrawerMenuShortcutItem(R.drawable.ic_card_giftcard_black_48dp, R.string.text_free_membership)
-            .setAction(Runnable { /* 打开免费领会员页面 */ })
+            .setAction(Runnable { 
+                startActivity(Intent(requireContext(), FreeMembershipActivity::class.java))
+            })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -438,6 +441,7 @@ open class DrawerFragment : Fragment() {
 
     private fun initMenuItems() {
         drawerMenuAdapter = listOf(
+            DrawerMenuGroup(R.string.text_my_account),
             mAccountItem,
             mMemberCenterItem,
             mFreeMembershipItem,

@@ -932,6 +932,7 @@
     <string name="text_recommended">Recommended</string>
     <string name="text_download_link_for_autojs6">Download link for AutoJs6</string>
     <string name="text_unavailable_abi_for">ABI \"%s\" is unavailable</string>
+    <string name="text_my_account">My Account</string>
     <string name="text_account">Account</string>
     <string name="text_member_center">Member Center</string>
     <string name="text_free_membership">Free Membership</string>

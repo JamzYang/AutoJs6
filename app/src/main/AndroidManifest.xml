@@ -642,6 +642,8 @@
                 android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name="org.autojs.autojs.ui.account.AccountActivity" />
+        <activity android:name="org.autojs.autojs.ui.membership.FreeMembershipActivity" />
+
     </application>
 
 </manifest>

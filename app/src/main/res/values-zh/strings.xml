@@ -715,6 +715,7 @@
     <string name="text_recommended">推荐</string>
     <string name="text_download_link_for_autojs6">AutoJs6 下载链接</string>
     <string name="text_unavailable_abi_for">ABI \"%s\" 不可用</string>
+    <string name="text_my_account">我的账号</string>
     <string name="text_account">账号</string>
     <string name="text_member_center">会员中心</string>
     <string name="text_free_membership">免费领会员</string>
