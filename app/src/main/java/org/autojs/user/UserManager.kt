@@ -18,4 +18,9 @@ object UserManager {
     fun setLoggedIn(context: Context, isLoggedIn: Boolean) {
         getSharedPreferences(context).edit().putBoolean(KEY_IS_LOGGED_IN, isLoggedIn).apply()
     }
+
+    // 登出
+    fun logout(context: Context) {
+        setLoggedIn(context, false)
+    }
 }

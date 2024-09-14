@@ -30,6 +30,7 @@ import org.autojs.autojs.service.AccessibilityService
 import org.autojs.autojs.service.ForegroundService
 import org.autojs.autojs.service.NotificationService
 import org.autojs.autojs.theme.app.ColorSelectActivity
+import org.autojs.autojs.ui.account.AccountActivity
 import org.autojs.autojs.ui.floating.FloatyWindowManger
 import org.autojs.autojs.ui.main.MainActivity
 import org.autojs.autojs.ui.settings.AboutActivity
@@ -369,7 +370,10 @@ open class DrawerFragment : Fragment() {
             .apply { subtitle = BuildConfig.VERSION_NAME }
 
         mAccountItem = DrawerMenuShortcutItem(R.drawable.ic_person_black_48dp, R.string.text_account)
-            .setAction(Runnable { /* 打开账号页面 */ })
+            .setAction(Runnable {
+                // 打开账号页面
+                startActivity(Intent(requireContext(), AccountActivity::class.java))
+            })
 
         mMemberCenterItem = DrawerMenuShortcutItem(R.drawable.ic_star_black_48dp, R.string.text_member_center)
             .setAction(Runnable { /* 打开会员中心页面 */ })

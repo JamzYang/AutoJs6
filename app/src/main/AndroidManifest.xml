@@ -640,6 +640,8 @@
                 android:name="org.autojs.autojs.ui.login.LoginActivity"
                 android:label="@string/title_activity_login"
                 android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name="org.autojs.autojs.ui.account.AccountActivity" />
     </application>
 
 </manifest>
