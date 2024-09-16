@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-
+    <string name="app_name" >游小猫</string>
     <string name="apk_builder_build" tools:ignore="TypographyEllipsis">构建中...</string>
     <string name="apk_builder_clean" tools:ignore="TypographyEllipsis">清理临时文件...</string>
     <string name="apk_builder_package" tools:ignore="TypographyEllipsis">打包中...</string>
