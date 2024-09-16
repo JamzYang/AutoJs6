@@ -9,8 +9,12 @@ import android.os.Bundle
 import android.os.Process
 import android.util.Log
 import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.webkit.JavascriptInterface
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
@@ -31,11 +35,11 @@ import org.autojs.autojs.pref.Pref
 import org.autojs.autojs.runtime.api.WrappedShizuku
 import org.autojs.autojs.theme.ThemeColorManager.addViewBackground
 import org.autojs.autojs.ui.BaseActivity
+import org.autojs.autojs.ui.Constants.BASE_URL
 import org.autojs.autojs.ui.enhancedfloaty.FloatyService
 import org.autojs.autojs.ui.floating.FloatyWindowManger
 import org.autojs.autojs.ui.login.LoginActivity
 import org.autojs.autojs.ui.main.drawer.DrawerFragment
-import org.autojs.autojs.ui.main.scripts.ExplorerFragment
 import org.autojs.autojs.ui.settings.PreferencesActivity
 import org.autojs.autojs.ui.widget.DrawerAutoClose
 import org.autojs.autojs.user.UserManager
@@ -46,8 +50,6 @@ import org.autojs.autojs.util.WorkingDirectoryUtils
 import org.autojs.autojs6.R
 import org.autojs.autojs6.databinding.ActivityMainBinding
 import org.greenrobot.eventbus.EventBus
-import android.webkit.WebView
-import android.webkit.WebViewClient
 
 /**
  * Modified by SuperMonster003 as of Dec 1, 2021.
@@ -56,7 +58,7 @@ import android.webkit.WebViewClient
 class MainActivity : BaseActivity(), DelegateHost, HostActivity {
 
     private lateinit var binding: ActivityMainBinding
-
+    private lateinit var mLogMenuItem: MenuItem
     private lateinit var mDrawerLayout: DrawerLayout
     private val mActivityResultMediator = OnActivityResultDelegate.Mediator()
     private val mRequestPermissionCallbacks = RequestPermissionCallbacks()
@@ -176,12 +178,12 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
         val webView = findViewById<WebView>(R.id.webView)
         webView.settings.javaScriptEnabled = true
         webView.addJavascriptInterface(WebAppInterface(this), "Android")
-        
+
         binding.webView.apply {
             settings.javaScriptEnabled = true
             webViewClient = WebViewClient()
 //            loadUrl("https://www.baidu.com")
-            loadUrl("http://192.168.68.16:8080/setting.html")
+            loadUrl(BASE_URL + "/setting.html")
         }
     }
 
@@ -245,6 +247,36 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
 
     override fun getBackPressedObserver() = mBackPressObserver
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        mLogMenuItem = menu.findItem(R.id.action_log)
+//        setUpSearchMenuItem(menu.findItem(R.id.action_search))
+
+        return true
+    }
+
+/*    private fun setUpSearchMenuItem(searchMenuItem: MenuItem) {
+        mSearchViewItem = object : SearchViewItem(this, searchMenuItem) {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                if (isCurrentPageDocs) {
+                    mDocsSearchItemExpanded = true
+                    mLogMenuItem.setIcon(R.drawable.ic_ali_up)
+                }
+                return super.onMenuItemActionExpand(item)
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                if (mDocsSearchItemExpanded) {
+                    mDocsSearchItemExpanded = false
+                    mLogMenuItem.setIcon(R.drawable.ic_ali_log)
+                }
+                return super.onMenuItemActionCollapse(item)
+            }
+        }.apply {
+            setQueryCallback { query: String? -> submitQuery(query) }
+        }
+    }*/
+
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
@@ -271,15 +303,19 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
     }
 
     class WebAppInterface(private val context: Context) {
-      @JavascriptInterface
-      fun saveFormData(data: String) {
-          Log.d("WebAppInterface", "saveFormData 被调用，数据: $data")
-          val sharedPref = context.getSharedPreferences("script_config", Context.MODE_PRIVATE)
-          with(sharedPref.edit()) {
-              putString("config", data)
-              apply()
-          }
-      }
-}
+        @JavascriptInterface
+        fun saveScriptConfig(data: String) {
+            val sharedPref = context.getSharedPreferences("autojs.localstorage.script_config", Context.MODE_PRIVATE)
+            with(sharedPref.edit()) {
+                putString("config", data)
+                apply()
+            }
+        }
 
+        @JavascriptInterface
+        fun loadScriptConfig(data: String): String? {
+            val sharedPref = context.getSharedPreferences("autojs.localstorage.script_config", Context.MODE_PRIVATE)
+            return sharedPref.getString("config", "")
+        }
+    }
 }

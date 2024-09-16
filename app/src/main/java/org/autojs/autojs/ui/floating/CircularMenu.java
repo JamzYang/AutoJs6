@@ -1,41 +1,43 @@
 package org.autojs.autojs.ui.floating;
 
+import static org.autojs.autojs.ui.Constants.SHARED_PREF_SCRIPT_VERSION;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
-
+import android.widget.Toast;
 import androidx.annotation.NonNull;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.makeramen.roundedimageview.RoundedImageView;
-
+import java.io.*;
+import java.text.MessageFormat;
+import java.util.Objects;
+import okhttp3.ResponseBody;
 import org.autojs.autojs.AutoJs;
 import org.autojs.autojs.app.AppLevelThemeDialogBuilder;
-import org.autojs.autojs.app.CircularMenuOperationDialogBuilder;
 import org.autojs.autojs.app.DialogUtils;
 import org.autojs.autojs.core.accessibility.AccessibilityTool;
 import org.autojs.autojs.core.accessibility.LayoutInspector;
 import org.autojs.autojs.core.accessibility.NodeInfo;
-import org.autojs.autojs.core.activity.ActivityInfoProvider;
 import org.autojs.autojs.core.record.GlobalActionRecorder;
 import org.autojs.autojs.core.record.Recorder;
 import org.autojs.autojs.model.explorer.ExplorerDirPage;
 import org.autojs.autojs.model.explorer.Explorers;
+import org.autojs.autojs.model.script.ScriptFile;
 import org.autojs.autojs.model.script.Scripts;
+import org.autojs.autojs.network.api.ScriptApi;
 import org.autojs.autojs.pref.Language;
 import org.autojs.autojs.pref.Pref;
 import org.autojs.autojs.tool.Func1;
+import org.autojs.autojs.ui.Constants;
 import org.autojs.autojs.ui.enhancedfloaty.FloatyService;
 import org.autojs.autojs.ui.enhancedfloaty.FloatyWindow;
 import org.autojs.autojs.ui.explorer.ExplorerView;
-import org.autojs.autojs.ui.floating.layoutinspector.LayoutBoundsFloatyWindow;
-import org.autojs.autojs.ui.floating.layoutinspector.LayoutHierarchyFloatyWindow;
-import org.autojs.autojs.ui.main.MainActivity;
-import org.autojs.autojs.util.ClipboardUtils;
-import org.autojs.autojs.util.RootUtils;
 import org.autojs.autojs.util.ViewUtils;
 import org.autojs.autojs.util.WorkingDirectoryUtils;
 import org.autojs.autojs6.R;
@@ -44,8 +46,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.jdeferred.Deferred;
 import org.jdeferred.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
-
-import java.text.MessageFormat;
+import org.autojs.autojs.network.RetrofitClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Stardust on Oct 18, 2017.
@@ -115,94 +119,125 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
             explorerView.setOnProjectToolbarOperateListener(toolbar -> dialog.dismiss());
             explorerView.setOnProjectToolbarClickListener(toolbar -> toolbar.findViewById(R.id.project_run).performClick());
             explorerView.setProjectToolbarRunnableOnly(true);
-
             DialogUtils.adaptToExplorer(dialog, explorerView);
             DialogUtils.showDialog(dialog);
         });
-        binding.record.setOnClickListener(v -> {
-            mWindow.collapse();
-            if (!RootUtils.isRootAvailable()) {
-                DialogUtils.showDialog(new AppLevelThemeDialogBuilder(mContext)
-                        .title(mContext.getString(R.string.text_no_root_access))
-                        .content(mContext.getString(R.string.no_root_access_for_record))
-                        .positiveText(mContext.getString(R.string.dialog_button_quit))
-                        .build());
-            } else {
-                mRecorder.start();
-            }
-        });
-        binding.layoutInspect.setOnClickListener(v -> {
-            mWindow.collapse();
-            inspectLayout(rootNode -> new LayoutBoundsFloatyWindow(rootNode, mContext));
-        });
-        binding.layoutInspect.setOnLongClickListener(v -> {
-            mWindow.collapse();
-            mLayoutInspectDialog = new CircularMenuOperationDialogBuilder(mContext)
-                    .item(R.drawable.ic_circular_menu_bounds, mContext.getString(R.string.text_inspect_layout_bounds), v1 -> {
-                        mWindow.collapse();
-                        inspectLayout(rootNode -> new LayoutBoundsFloatyWindow(rootNode, mContext));
-                    })
-                    .item(R.drawable.ic_circular_menu_hierarchy, mContext.getString(R.string.text_inspect_layout_hierarchy), v1 -> {
-                        mWindow.collapse();
-                        inspectLayout(rootNode -> new LayoutHierarchyFloatyWindow(rootNode, mContext));
-                    })
-                    .title(mContext.getString(R.string.text_inspect_layout))
-                    .build();
-            DialogUtils.showDialog(mLayoutInspectDialog);
-            return true;
-        });
+
         binding.stopAllScripts.setOnClickListener(v -> {
             mWindow.collapse();
             if (AutoJs.getInstance().getScriptEngineService().stopAllAndToast() <= 0) {
                 ViewUtils.showToast(mContext, mContext.getString(R.string.text_no_scripts_to_stop_running));
             }
         });
-        binding.actionMenuMore.setOnClickListener(v -> {
-            mWindow.collapse();
 
-            if (mSettingsDialog != null && mSettingsDialog.isShowing()) {
-                mSettingsDialog.dismiss();
+        binding.runScript.setOnClickListener(v -> {
+            mWindow.collapse();
+            runSpecificScript();
+        });
+    }
+
+    private void runSpecificScript() {
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences("autojs.localstorage.script_config", Context.MODE_PRIVATE);
+        String currentVersion = sharedPreferences.getString(SHARED_PREF_SCRIPT_VERSION, "");
+
+        ScriptApi scriptApi = RetrofitClient.getClient().create(ScriptApi.class);
+        
+        scriptApi.getScriptVersion().enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NotNull Call<String> call, @NotNull Response<String> response) {
+                if (response.isSuccessful()) {
+                    String serverVersion = response.body();
+                    if (!Objects.equals(currentVersion, serverVersion)) {
+                        downloadAndRunScript(scriptApi, serverVersion, sharedPreferences);
+                    } else {
+                        runExistingScript();
+                    }
+                }
             }
 
-            ActivityInfoProvider infoProvider = AutoJs.getInstance().getInfoProvider();
-            mRunningPackage = infoProvider.getLatestPackageByUsageStatsIfGranted();
-            mRunningActivity = infoProvider.getLatestActivity();
-
-            mSettingsDialog = new CircularMenuOperationDialogBuilder(mContext)
-                    .item(R.drawable.ic_accessibility_black_48dp, mContext.getString(R.string.text_manage_a11y_service), v1 -> {
-                        dismissSettingsDialog();
-                        getAccessibilityTool().getService().launchSettings();
-                    })
-                    .item(R.drawable.ic_text_fields_black_48dp, mContext.getString(R.string.text_latest_package) + ":\n" + getRunningPackage(), v1 -> {
-                        dismissSettingsDialog();
-                        if (!TextUtils.isEmpty(mRunningPackage)) {
-                            ClipboardUtils.setClip(mContext, mRunningPackage);
-                            ViewUtils.showToast(mContext, getTextAlreadyCopied(R.string.text_latest_package));
-                        }
-                    })
-                    .item(R.drawable.ic_text_fields_black_48dp, mContext.getString(R.string.text_latest_activity) + ":\n" + getRunningActivity(), v1 -> {
-                        dismissSettingsDialog();
-                        if (!TextUtils.isEmpty(mRunningActivity)) {
-                            ClipboardUtils.setClip(mContext, mRunningActivity);
-                            ViewUtils.showToast(mContext, getTextAlreadyCopied(R.string.text_latest_activity));
-                        }
-                    })
-                    .item(R.drawable.ic_home_black_48dp, mContext.getString(R.string.text_open_main_activity), v1 -> {
-                        dismissSettingsDialog();
-                        MainActivity.launch(mContext);
-                    })
-                    .item(R.drawable.ic_control_point_black_48dp, mContext.getString(R.string.text_pointer_location), v1 -> {
-                        dismissSettingsDialog();
-                        if (!RootUtils.togglePointerLocation()) {
-                            ViewUtils.showToast(mContext, mContext.getString(R.string.text_pointer_location_toggle_failed_with_hint), true);
-                        }
-                    })
-                    .item(R.drawable.ic_close_white_48dp, mContext.getString(R.string.text_close_floating_button), v1 -> closeAndSaveState(false))
-                    .title(mContext.getString(R.string.text_more))
-                    .build();
-
-            DialogUtils.showDialog(mSettingsDialog);
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.e(CircularMenu.class.getSimpleName(), "检查脚本版本失败", t);
+                runExistingScript();
+            }
         });
+    }
+
+    private void downloadAndRunScript(ScriptApi scriptApi, String serverVersion, SharedPreferences sharedPreferences) {
+        scriptApi.downloadScript().enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    ResponseBody body = response.body();
+                    try {
+                      assert body != null;
+                      writeResponseBodyToDisk(body);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(SHARED_PREF_SCRIPT_VERSION, serverVersion);
+                        editor.apply();
+
+                        runExistingScript();
+                    } catch (IOException e) {
+                        Log.e(CircularMenu.class.getSimpleName(), "保存脚本失败", e);
+                        runExistingScript();
+                    }
+                } else {
+                    runExistingScript();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e(CircularMenu.class.getSimpleName(), "下载脚本失败", t);
+                runExistingScript();
+            }
+        });
+    }
+
+    private boolean writeResponseBodyToDisk(ResponseBody body) throws IOException {
+            // 创建一个文件对象，指定下载保存的位置
+            File file = new File(mContext.getFilesDir().getPath() + "/main.js");
+            InputStream inputStream = null;
+            FileOutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(file);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+                    fileSizeDownloaded += read;
+                }
+                outputStream.flush();
+                return true;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+    }
+
+    private void runExistingScript() {
+        try {
+            Scripts.run(mContext, new ScriptFile(mContext.getFilesDir().getPath()+"/main.js"));
+        } catch (Exception e) {
+            Log.e(CircularMenu.class.getSimpleName(),"运行脚本错误",e);
+            ViewUtils.showToast(mContext, e.getMessage(), true);
+        }
     }
 
     public boolean isRecording() {
