@@ -82,8 +82,14 @@ public class CircularMenuWindow extends FloatyWindow {
     }
 
     private void setInitialState() {
-        int x = (int) (ScreenMetrics.getDeviceScreenWidth() * Pref.getFloat(KEY_POSITION_X_PERCENT, 0f));
-        int y = (int) (ScreenMetrics.getDeviceScreenHeight() * Pref.getFloat(KEY_POSITION_Y_PERCENT, 1 - 0.618f));
+        int x, y;
+        if (initialPosition != null) {
+            x = (int) initialPosition.x;
+            y = (int) initialPosition.y;
+        } else {
+            x = (int) (ScreenMetrics.getDeviceScreenWidth() * Pref.getFloat(KEY_POSITION_X_PERCENT, 1f)); // 默认靠右
+            y = (int) (ScreenMetrics.getDeviceScreenHeight() * Pref.getFloat(KEY_POSITION_Y_PERCENT, 0.5f)); // 默认在中间
+        }
         mActionViewWindowBridge.updatePosition(x, y);
         keepToSide();
     }

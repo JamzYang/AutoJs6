@@ -33,6 +33,7 @@ import org.autojs.autojs.model.script.Scripts;
 import org.autojs.autojs.network.api.ScriptApi;
 import org.autojs.autojs.pref.Language;
 import org.autojs.autojs.pref.Pref;
+import org.autojs.autojs.runtime.api.ScreenMetrics;
 import org.autojs.autojs.tool.Func1;
 import org.autojs.autojs.ui.Constants;
 import org.autojs.autojs.ui.enhancedfloaty.FloatyService;
@@ -47,6 +48,7 @@ import org.jdeferred.Deferred;
 import org.jdeferred.impl.DeferredObject;
 import org.jetbrains.annotations.NotNull;
 import org.autojs.autojs.network.RetrofitClient;
+import org.opencv.core.Point;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -103,26 +105,6 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
     }
 
     private void setupBindingListeners() {
-        binding.scriptList.setOnClickListener(v -> {
-            mWindow.collapse();
-            ExplorerView explorerView = new ExplorerView(mContext);
-            explorerView.setExplorer(Explorers.workspace(), ExplorerDirPage.createRoot(WorkingDirectoryUtils.getPath()));
-            explorerView.setDirectorySpanSize(2);
-            final MaterialDialog dialog = new AppLevelThemeDialogBuilder(mContext)
-                    .title(mContext.getString(R.string.text_run_script))
-                    .customView(explorerView, false)
-                    .positiveText(mContext.getString(R.string.text_cancel))
-                    .cancelable(false)
-                    .build();
-            explorerView.setOnItemOperateListener(item -> dialog.dismiss());
-            explorerView.setOnItemClickListener((view, item) -> Scripts.run(mContext, item.toScriptFile()));
-            explorerView.setOnProjectToolbarOperateListener(toolbar -> dialog.dismiss());
-            explorerView.setOnProjectToolbarClickListener(toolbar -> toolbar.findViewById(R.id.project_run).performClick());
-            explorerView.setProjectToolbarRunnableOnly(true);
-            DialogUtils.adaptToExplorer(dialog, explorerView);
-            DialogUtils.showDialog(dialog);
-        });
-
         binding.stopAllScripts.setOnClickListener(v -> {
             mWindow.collapse();
             if (AutoJs.getInstance().getScriptEngineService().stopAllAndToast() <= 0) {
@@ -262,6 +244,9 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
             }
         });
         mWindow.setKeepToSideHiddenWidthRadio(0.25f);
+        // 修改初始位置为右侧中间
+        mWindow.initialPosition = new Point(
+            ScreenMetrics.getDeviceScreenWidth(), (double) ScreenMetrics.getDeviceScreenHeight() / 2);
         FloatyService.addWindow(mWindow);
     }
 
