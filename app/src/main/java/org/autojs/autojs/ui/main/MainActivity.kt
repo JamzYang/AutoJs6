@@ -38,6 +38,7 @@ import org.autojs.autojs.ui.BaseActivity
 import org.autojs.autojs.ui.Constants.BASE_URL
 import org.autojs.autojs.ui.enhancedfloaty.FloatyService
 import org.autojs.autojs.ui.floating.FloatyWindowManger
+import org.autojs.autojs.ui.log.LogActivity
 import org.autojs.autojs.ui.login.LoginActivity
 import org.autojs.autojs.ui.main.drawer.DrawerFragment
 import org.autojs.autojs.ui.settings.PreferencesActivity
@@ -255,6 +256,14 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
         return true
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_log) {
+            LogActivity.launch(this)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 /*    private fun setUpSearchMenuItem(searchMenuItem: MenuItem) {
         mSearchViewItem = object : SearchViewItem(this, searchMenuItem) {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
@@ -313,9 +322,9 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
         }
 
         @JavascriptInterface
-        fun loadScriptConfig(data: String): String? {
+        fun loadScriptConfig(): String? {
             val sharedPref = context.getSharedPreferences("autojs.localstorage.script_config", Context.MODE_PRIVATE)
-            return sharedPref.getString("config", "")
+            return sharedPref.getString("config", null)
         }
     }
 }
