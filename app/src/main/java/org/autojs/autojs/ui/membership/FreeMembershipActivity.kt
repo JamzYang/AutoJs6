@@ -1,11 +1,13 @@
 package org.autojs.autojs.ui.membership
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.autojs.autojs.theme.widget.ThemeColorToolbar
 import org.autojs.autojs6.R
 import org.autojs.autojs6.databinding.ActivityFreeMembershipBinding
 
@@ -18,6 +20,14 @@ class FreeMembershipActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFreeMembershipBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val toolbar = findViewById<ThemeColorToolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true) // 显示返回按钮
+            setDisplayShowHomeEnabled(true) // 显示 Home 图标
+            title = "我的邀请" // 设置标题
+        }
 
         setupUI()
         loadInvitedList()
@@ -37,6 +47,14 @@ class FreeMembershipActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@FreeMembershipActivity)
             adapter = invitedListAdapter
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun showInviteCodeDialog() {

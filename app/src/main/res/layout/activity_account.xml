@@ -1,135 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
-
-  <LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="我的账号"
-      android:textSize="24sp"
-      android:textStyle="bold" />
-
-    <TextView
-      android:id="@+id/membershipStatus"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:text="会员状态：2024年5月1日到期" />
-
-    <Button
-      android:id="@+id/renewButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="续费" />
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:orientation="horizontal"
-      android:minHeight="48dp"> <!-- 设置最小高度 -->
-
-      <Button
-        android:id="@+id/monthlyButton"
-        android:layout_width="0dp"
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="包月" />
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:fitsSystemWindows="true">
 
-      <Button
-        android:id="@+id/quarterlyButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginStart="8dp"
-        android:text="包季" />
-    </LinearLayout>
+        <org.autojs.autojs.theme.widget.ThemeColorToolbar
+            android:id="@+id/toolbar"
+            android:theme="@style/ToolBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:orientation="horizontal"
-      android:minHeight="16dp"> <!-- 设置最小高度 -->
+    </com.google.android.material.appbar.AppBarLayout>
 
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:text="账号：" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-      <TextView
-        android:id="@+id/phoneNumber"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="手机号" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-      <TextView
-        android:id="@+id/editPhoneButton"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:text="修改"
-        android:textColor="@color/colorPrimary"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="onEditPhoneClick"/>
-    </LinearLayout>
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="我的账号"
+              android:textSize="24sp"
+              android:textStyle="bold" />
 
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:orientation="horizontal"
-      android:minHeight="16dp"> <!-- 设置最小高度 -->
+            <TextView
+              android:id="@+id/membershipStatus"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="16dp"
+              android:text="会员状态：2024年5月1日到期" />
 
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:text="密码：" />
+            <Button
+              android:id="@+id/renewButton"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="续费" />
 
-      <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="*****" />
+            <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="16dp"
+              android:orientation="horizontal"
+              android:minHeight="48dp"> <!-- 设置最小高度 -->
 
-      <TextView
-        android:id="@+id/editPasswordButton"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:text="修改"
-        android:textColor="@color/colorPrimary"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="onEditPasswordClick" />
-    </LinearLayout>
+              <Button
+                android:id="@+id/monthlyButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="包月" />
 
-    <TextView
-      android:id="@+id/myInvitation"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:text="我的邀请" />
+              <Button
+                android:id="@+id/quarterlyButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="包季" />
+            </LinearLayout>
 
-    <Button
-      android:id="@+id/logoutButton"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="24dp"
-      android:text="退出登录" />
+            <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="16dp"
+              android:orientation="horizontal"
+              android:minHeight="16dp"> <!-- 设置最小高度 -->
 
-  </LinearLayout>
-</ScrollView>
+              <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="账号：" />
+
+              <TextView
+                android:id="@+id/phoneNumber"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="手机号" />
+
+              <TextView
+                android:id="@+id/editPhoneButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="修改"
+                android:textColor="@color/colorPrimary"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="onEditPhoneClick"/>
+            </LinearLayout>
+
+            <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="8dp"
+              android:orientation="horizontal"
+              android:minHeight="16dp"> <!-- 设置最小高度 -->
+
+              <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="密码：" />
+
+              <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="*****" />
+
+              <TextView
+                android:id="@+id/editPasswordButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="修改"
+                android:textColor="@color/colorPrimary"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="onEditPasswordClick" />
+            </LinearLayout>
+
+            <TextView
+              android:id="@+id/myInvitation"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="16dp"
+              android:text="我的邀请" />
+
+            <Button
+              android:id="@+id/logoutButton"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="24dp"
+              android:text="退出登录" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

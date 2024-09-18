@@ -9,9 +9,11 @@ import org.autojs.autojs.user.UserManager
 import org.autojs.autojs6.R
 import org.autojs.autojs6.databinding.ActivityAccountBinding
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import org.autojs.autojs.theme.widget.ThemeColorToolbar
 
 class AccountActivity : AppCompatActivity() {
 
@@ -21,8 +23,24 @@ class AccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //标题栏设置
+        val toolbar = findViewById<ThemeColorToolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true) // 显示返回按钮
+            setDisplayShowHomeEnabled(true) // 显示 Home 图标
+            title = "我的账号" // 设置标题
+        }
 
         setupUI()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setupUI() {

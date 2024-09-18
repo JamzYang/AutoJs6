@@ -20,6 +20,7 @@ open class PreferencesActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPreferencesBinding.inflate(layoutInflater).also {
             setContentView(it.root)
+            //标题栏设置
             it.toolbar.apply {
                 setTitle(R.string.text_settings)
                 setSupportActionBar(this)
