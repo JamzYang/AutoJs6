@@ -940,6 +940,7 @@
     <string name="hint_mobile">Please input mobile number</string>
     <string name="hint_password">Please input password</string>
     <string name="title_activity_login">Login</string>
+    <string name="text_mark_all_as_read">mark all as read</string>
     <plurals name="text_items_total_sum">
         <item quantity="one">Total: %d item</item>
         <item quantity="other">Total: %d items</item>

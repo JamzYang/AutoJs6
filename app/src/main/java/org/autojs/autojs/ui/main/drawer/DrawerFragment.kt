@@ -34,6 +34,7 @@ import org.autojs.autojs.ui.account.AccountActivity
 import org.autojs.autojs.ui.floating.FloatyWindowManger
 import org.autojs.autojs.ui.main.MainActivity
 import org.autojs.autojs.ui.membership.FreeMembershipActivity
+import org.autojs.autojs.ui.notification.NotificationActivity
 import org.autojs.autojs.ui.settings.AboutActivity
 import org.autojs.autojs.ui.settings.PreferencesActivity
 import org.autojs.autojs.util.NetworkUtils
@@ -404,13 +405,16 @@ open class DrawerFragment : Fragment() {
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
         }
-        binding.restart.setOnClickListener { view -> mActivity.rebirth(view) }
-        binding.exit.setOnClickListener { mActivity.exitCompletely() }
+        binding.inbox.setOnClickListener {
+            startActivity(Intent(requireContext(), NotificationActivity::class.java))
+        }
     }
 
     override fun onResume() {
         super.onResume()
         syncMenuItemStates()
+        val unreadCount = getUnreadNotificationCount()
+        updateNotificationBadge(unreadCount)
     }
 
     override fun onDestroy() {
@@ -418,25 +422,17 @@ open class DrawerFragment : Fragment() {
         mClientModeItem.dispose()
         mServerModeItem.dispose()
         EventBus.getDefault().unregister(this)
-        // mActivity.unregisterReceiver(mReceiver)
     }
-
-    // @Subscribe
-    // fun onCircularMenuStateChange(event: CircularMenu.StateChangeEvent) {
-    //     mFloatingWindowItem.toggle(event.currentState != CircularMenu.STATE_CLOSED)
-    // }
 
     @Subscribe
     @Suppress("UNUSED_PARAMETER")
     fun onDrawerOpened(event: Event.OnDrawerOpened) {
-        // ViewCompat.getWindowInsetsController(mActivity.window.decorView)?.hide(WindowInsets.Type.systemBars())
         syncMenuItemStates()
     }
 
     @Subscribe
     @Suppress("UNUSED_PARAMETER")
     fun onDrawerClosed(event: Event.OnDrawerClosed) {
-        // ViewCompat.getWindowInsetsController(mActivity.window.decorView)?.show(WindowInsets.Type.systemBars())
     }
 
     private fun initMenuItems() {
@@ -508,6 +504,20 @@ open class DrawerFragment : Fragment() {
             item.subtitle = null
             ViewUtils.showToast(mContext, e.message)
         }
+    }
+
+    private fun updateNotificationBadge(unreadCount: Int) {
+        if (unreadCount > 0) {
+            binding.inboxBadge.visibility = View.VISIBLE
+            binding.inboxBadge.text = unreadCount.toString()
+        } else {
+            binding.inboxBadge.visibility = View.GONE
+        }
+    }
+
+    private fun getUnreadNotificationCount(): Int {
+        // TODO: 实现获取未读消息数量的逻辑
+        return 0
     }
 
     companion object {
