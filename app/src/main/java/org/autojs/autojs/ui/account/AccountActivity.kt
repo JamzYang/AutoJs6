@@ -2,10 +2,16 @@ package org.autojs.autojs.ui.account
 
 import android.os.Bundle
 import android.content.Intent
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import org.autojs.autojs.ui.login.LoginActivity
 import org.autojs.autojs.user.UserManager
+import org.autojs.autojs6.R
 import org.autojs.autojs6.databinding.ActivityAccountBinding
+import android.view.LayoutInflater
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 
 class AccountActivity : AppCompatActivity() {
 
@@ -15,6 +21,7 @@ class AccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         setupUI()
     }
 
@@ -31,17 +38,64 @@ class AccountActivity : AppCompatActivity() {
     }
 
     private fun onEditPhoneClick() {
-        // 处理编辑手机号的点击事件
-        // 例如，跳转到编辑手机号的页面
-        val intent = Intent(this, EditPhoneActivity::class.java)
-        startActivity(intent)
+        // 显示修改手机号对话框
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_edit_phone, null)
+        val newPhoneNumber = dialogView.findViewById<EditText>(R.id.newPhoneNumber)
+        val verificationCode = dialogView.findViewById<EditText>(R.id.verificationCode)
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("修改手机号")
+            .setView(dialogView)
+            .setPositiveButton("确定") { _, _ ->
+                // 处理确定按钮点击事件
+                val phone = newPhoneNumber.text.toString()
+                val code = verificationCode.text.toString()
+                // 验证输入并处理逻辑
+                if (phone.isNotEmpty() && code.isNotEmpty()) {
+                    // 处理修改手机号逻辑
+                    Toast.makeText(this, "手机号已修改", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "请输入完整信息", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("取消", null)
+            .create()
+
+        dialogView.findViewById<Button>(R.id.sendVerificationCodeButton).setOnClickListener {
+            // 处理发送验证码逻辑
+            Toast.makeText(this, "验证码已发送", Toast.LENGTH_SHORT).show()
+        }
+
+        dialog.show()
     }
 
     private fun onEditPasswordClick() {
-        // 处理编辑密码的点击事件
-        // 例如，跳转到编辑密码的页面
-        val intent = Intent(this, EditPasswordActivity::class.java)
-        startActivity(intent)
+        // 显示修改密码对话框
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_edit_password, null)
+        val oldPassword = dialogView.findViewById<EditText>(R.id.oldPassword)
+        val newPassword = dialogView.findViewById<EditText>(R.id.newPassword)
+        val confirmPassword = dialogView.findViewById<EditText>(R.id.confirmPassword)
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("修改密码")
+            .setView(dialogView)
+            .setPositiveButton("确定") { _, _ ->
+                // 处理确定按钮点击事件
+                val oldPwd = oldPassword.text.toString()
+                val newPwd = newPassword.text.toString()
+                val confirmPwd = confirmPassword.text.toString()
+                // 验证输入并处理逻辑
+                if (newPwd.length >= 8 && newPwd == confirmPwd) {
+                    // 处理修改密码逻辑
+                    Toast.makeText(this, "密码已修改", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "请检查输入", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("取消", null)
+            .create()
+
+        dialog.show()
     }
 
     private fun logout() {
