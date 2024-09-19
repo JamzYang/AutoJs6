@@ -78,7 +78,7 @@ open class DrawerFragment : Fragment() {
     private lateinit var mAutoNightModeItem: DrawerMenuToggleableItem
     private lateinit var mKeepScreenOnWhenInForegroundItem: DrawerMenuToggleableItem
     private lateinit var mThemeColorItem: DrawerMenuShortcutItem
-    private lateinit var mAboutAppAndDevItem: DrawerMenuShortcutItem
+//    private lateinit var mAboutAppAndDevItem: DrawerMenuShortcutItem
 
     private lateinit var mAccountItem: DrawerMenuShortcutItem
     private lateinit var mMemberCenterItem: DrawerMenuShortcutItem
@@ -367,10 +367,6 @@ open class DrawerFragment : Fragment() {
         mThemeColorItem = DrawerMenuShortcutItem(R.drawable.ic_personalize, R.string.text_theme_color)
             .setAction(Runnable { ColorSelectActivity.startActivity(mContext) })
 
-        mAboutAppAndDevItem = DrawerMenuShortcutItem(R.drawable.ic_about, R.string.text_about_app_and_developer)
-            .setAction(Runnable { AboutActivity.startActivity(mContext) })
-            .apply { subtitle = BuildConfig.VERSION_NAME }
-
         mAccountItem = DrawerMenuShortcutItem(R.drawable.ic_person_black_48dp, R.string.text_account)
             .setAction(Runnable {
                 // 打开账号页面
@@ -464,8 +460,6 @@ open class DrawerFragment : Fragment() {
             mNightModeItem,
             mKeepScreenOnWhenInForegroundItem,
             mThemeColorItem,
-            DrawerMenuGroup(R.string.text_about),
-            mAboutAppAndDevItem,
         ).let { items -> DrawerMenuAdapter(items.filterNot { it.isHidden }) }
 
         mDrawerMenu.apply {
