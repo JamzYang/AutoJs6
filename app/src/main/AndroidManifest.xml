@@ -645,7 +645,10 @@
           android:name="org.autojs.autojs.ui.account.RegisterActivity"
           android:label="@string/title_activity_sign_in"
           android:theme="@style/AppTheme.NoActionBar"/>
-
+        <activity
+          android:name="org.autojs.autojs.ui.account.ForgotPasswordActivity"
+          android:label="@string/title_activity_sign_in"
+          android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name="org.autojs.autojs.ui.account.AccountActivity" />
         <activity android:name="org.autojs.autojs.ui.membership.FreeMembershipActivity" />
 

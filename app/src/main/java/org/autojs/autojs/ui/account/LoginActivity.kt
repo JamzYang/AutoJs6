@@ -41,8 +41,8 @@ class LoginActivity : AppCompatActivity() {
         val tvRegister = findViewById<TextView>(R.id.tv_register)
 
         tvForgotPassword.setOnClickListener {
-            // 处理忘记密码逻辑
-            Toast.makeText(this, "忘记密码功能待实现", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
         }
 
         tvRegister.setOnClickListener {
