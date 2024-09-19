@@ -14,34 +14,21 @@ import org.autojs.autojs.app.tool.FloatingButtonTool
 import org.autojs.autojs.app.tool.JsonSocketClientTool
 import org.autojs.autojs.app.tool.JsonSocketServerTool
 import org.autojs.autojs.core.accessibility.AccessibilityTool
-import org.autojs.autojs.permission.DisplayOverOtherAppsPermission
-import org.autojs.autojs.permission.IgnoreBatteryOptimizationsPermission
-import org.autojs.autojs.permission.MediaProjectionPermission
-import org.autojs.autojs.permission.PostNotificationPermission
-import org.autojs.autojs.permission.ShizukuPermission
-import org.autojs.autojs.permission.UsageStatsPermission
-import org.autojs.autojs.permission.WriteSecureSettingsPermission
-import org.autojs.autojs.permission.WriteSystemSettingsPermission
+import org.autojs.autojs.permission.*
 import org.autojs.autojs.pluginclient.DevPluginService
 import org.autojs.autojs.pluginclient.JsonSocketClient
 import org.autojs.autojs.pluginclient.JsonSocketServer
-import org.autojs.autojs.pref.Pref
 import org.autojs.autojs.service.AccessibilityService
 import org.autojs.autojs.service.ForegroundService
 import org.autojs.autojs.service.NotificationService
-import org.autojs.autojs.theme.app.ColorSelectActivity
 import org.autojs.autojs.ui.account.AccountActivity
 import org.autojs.autojs.ui.floating.FloatyWindowManger
 import org.autojs.autojs.ui.main.MainActivity
 import org.autojs.autojs.ui.membership.FreeMembershipActivity
 import org.autojs.autojs.ui.notification.NotificationActivity
-import org.autojs.autojs.ui.settings.AboutActivity
 import org.autojs.autojs.ui.settings.PreferencesActivity
 import org.autojs.autojs.util.NetworkUtils
 import org.autojs.autojs.util.ViewUtils
-import org.autojs.autojs.util.ViewUtils.MODE
-import org.autojs.autojs.util.ViewUtils.isNightModeYes
-import org.autojs.autojs6.BuildConfig
 import org.autojs.autojs6.R
 import org.autojs.autojs6.databinding.FragmentDrawerBinding
 import org.greenrobot.eventbus.EventBus
@@ -74,10 +61,7 @@ open class DrawerFragment : Fragment() {
     private lateinit var mWriteSecuritySettingsItem: DrawerMenuToggleableItem
     private lateinit var mProjectMediaAccessItem: DrawerMenuToggleableItem
     private lateinit var mShizukuAccessItem: DrawerMenuToggleableItem
-    private lateinit var mNightModeItem: DrawerMenuToggleableItem
-    private lateinit var mAutoNightModeItem: DrawerMenuToggleableItem
-    private lateinit var mKeepScreenOnWhenInForegroundItem: DrawerMenuToggleableItem
-    private lateinit var mThemeColorItem: DrawerMenuShortcutItem
+
 //    private lateinit var mAboutAppAndDevItem: DrawerMenuShortcutItem
 
     private lateinit var mAccountItem: DrawerMenuShortcutItem
@@ -259,113 +243,8 @@ open class DrawerFragment : Fragment() {
             R.string.text_shizuku_access_description,
         )
 
-        mAutoNightModeItem = DrawerMenuToggleableItem(
-            object : DrawerMenuItemCustomHelper(mContext) {
-                override fun toggle(): Boolean = try {
-                    val isTurningOn = !isActive
-                    val isNightModeYes = isNightModeYes(resources.configuration)
-                    val mode = when {
-                        isTurningOn -> MODE.FOLLOW
-                        isNightModeYes -> MODE.NIGHT
-                        else -> MODE.DAY
-                    }
-                    ViewUtils.setDefaultNightMode(mode)
-                    if (isTurningOn) {
-                        ViewUtils.isNightModeEnabled = isNightModeYes
-                        Pref.putString(R.string.key_night_mode, MODE.FOLLOW.key)
-                    } else {
-                        when (isNightModeYes) {
-                            true -> MODE.NIGHT.key
-                            else -> MODE.DAY.key
-                        }.let { Pref.putString(R.string.key_night_mode, it) }
-                    }
-                    true
-                } catch (_: Exception) {
-                    false
-                }
 
-                override val isActive
-                    get() = ViewUtils.isAutoNightModeEnabled
 
-                override val isInMainThread = true
-            },
-            R.drawable.ic_automatic_brightness,
-            R.string.text_auto_night_mode,
-            DrawerMenuItem.DEFAULT_DIALOG_CONTENT,
-            R.string.key_auto_night_mode_enabled,
-        ).apply { isHidden = !ViewUtils.AutoNightMode.isFunctional() }
-
-        mNightModeItem = DrawerMenuToggleableItem(
-            object : DrawerMenuItemCustomHelper(mContext) {
-                override fun toggle(): Boolean = try {
-                    if (!mAutoNightModeItem.isHidden) {
-                        ViewUtils.isAutoNightModeEnabled = false
-                    }
-                    when (/* isTurningOn */ !isActive) {
-                        true -> {
-                            ViewUtils.setDefaultNightMode(MODE.NIGHT)
-                            Pref.putString(R.string.key_night_mode, MODE.NIGHT.key)
-                        }
-                        else -> {
-                            ViewUtils.setDefaultNightMode(MODE.DAY)
-                            Pref.putString(R.string.key_night_mode, MODE.DAY.key)
-                        }
-                    }
-                    true
-                } catch (_: Exception) {
-                    false
-                }
-
-                override val isActive
-                    get() = ViewUtils.isNightModeEnabled
-
-                override val isInMainThread = true
-            },
-            R.drawable.ic_night_mode,
-            R.string.text_night_mode,
-            DrawerMenuItem.DEFAULT_DIALOG_CONTENT,
-            R.string.key_night_mode_enabled,
-        )
-
-        mKeepScreenOnWhenInForegroundItem = DrawerMenuToggleableItem(
-            object : DrawerMenuItemCustomHelper(mContext) {
-                override val isActive: Boolean
-                    get() = ViewUtils.isKeepScreenOnWhenInForegroundEnabled
-
-                override fun toggle(): Boolean = try {
-                    when (/* isTurningOn */ !isActive) {
-                        true -> ViewUtils.setKeepScreenOnWhenInForegroundFromLastEnabledState()
-                        else -> ViewUtils.setKeepScreenOnWhenInForegroundDisabled()
-                    }
-                    refreshSubtitle(!isActive)
-                    true
-                } catch (_: Exception) {
-                    false
-                }
-
-                override fun refreshSubtitle(aimState: Boolean) {
-                    val oldSubtitle = mKeepScreenOnWhenInForegroundItem.subtitle
-                    val aimSubtitle = if (ViewUtils.isKeepScreenOnWhenInForegroundDisabled) null else {
-                        val i = resources.getStringArray(R.array.keys_keep_screen_on_when_in_foreground).indexOf(Pref.keyKeepScreenOnWhenInForeground!!)
-                        resources.getStringArray(R.array.values_keep_screen_on_when_in_foreground)[i]
-                    }
-                    if (mKeepScreenOnWhenInForegroundItem.subtitle != aimSubtitle) {
-                        mKeepScreenOnWhenInForegroundItem.subtitle = aimSubtitle
-                        if (mKeepScreenOnWhenInForegroundItem.subtitle != oldSubtitle) {
-                            /* To refresh subtitle view. */
-                            mKeepScreenOnWhenInForegroundItem.isChecked = mKeepScreenOnWhenInForegroundItem.isChecked
-                        }
-                    }
-                    super.refreshSubtitle(aimState)
-                }
-            },
-            R.drawable.ic_lightbulb_outline_black_48dp,
-            R.string.text_keep_screen_on_when_in_foreground,
-            DrawerMenuItem.DEFAULT_DIALOG_CONTENT,
-        )
-
-        mThemeColorItem = DrawerMenuShortcutItem(R.drawable.ic_personalize, R.string.text_theme_color)
-            .setAction(Runnable { ColorSelectActivity.startActivity(mContext) })
 
         mAccountItem = DrawerMenuShortcutItem(R.drawable.ic_person_black_48dp, R.string.text_account)
             .setAction(Runnable {
@@ -455,11 +334,6 @@ open class DrawerFragment : Fragment() {
             mWriteSecuritySettingsItem,
             mProjectMediaAccessItem,
             mShizukuAccessItem,
-            DrawerMenuGroup(R.string.text_appearance),
-            mAutoNightModeItem,
-            mNightModeItem,
-            mKeepScreenOnWhenInForegroundItem,
-            mThemeColorItem,
         ).let { items -> DrawerMenuAdapter(items.filterNot { it.isHidden }) }
 
         mDrawerMenu.apply {
@@ -488,7 +362,6 @@ open class DrawerFragment : Fragment() {
         mWriteSecuritySettingsItem,
         mProjectMediaAccessItem,
         mShizukuAccessItem,
-        mKeepScreenOnWhenInForegroundItem,
     ).forEach { it.sync() }
 
     private fun consumeJsonSocketItemState(item: DrawerMenuToggleableItem, state: DevPluginService.State) {
@@ -511,7 +384,7 @@ open class DrawerFragment : Fragment() {
 
     private fun getUnreadNotificationCount(): Int {
         // TODO: 实现获取未读消息数量的逻辑
-        return 0
+        return 3
     }
 
     companion object {
