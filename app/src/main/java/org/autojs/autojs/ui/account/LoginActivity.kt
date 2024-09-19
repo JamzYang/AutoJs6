@@ -1,9 +1,10 @@
-package org.autojs.autojs.ui.login
+package org.autojs.autojs.ui.account
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import org.autojs.autojs.ui.main.MainActivity
@@ -34,6 +35,19 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "请输入手机号和密码", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        val tvForgotPassword = findViewById<TextView>(R.id.tv_forgot_password)
+        val tvRegister = findViewById<TextView>(R.id.tv_register)
+
+        tvForgotPassword.setOnClickListener {
+            // 处理忘记密码逻辑
+            Toast.makeText(this, "忘记密码功能待实现", Toast.LENGTH_SHORT).show()
+        }
+
+        tvRegister.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
         }
     }
 

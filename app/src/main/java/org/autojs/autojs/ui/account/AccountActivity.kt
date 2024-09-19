@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import org.autojs.autojs.ui.login.LoginActivity
 import org.autojs.autojs.user.UserManager
 import org.autojs.autojs6.R
 import org.autojs.autojs6.databinding.ActivityAccountBinding

@@ -39,7 +39,7 @@ import org.autojs.autojs.ui.Constants.BASE_URL
 import org.autojs.autojs.ui.enhancedfloaty.FloatyService
 import org.autojs.autojs.ui.floating.FloatyWindowManger
 import org.autojs.autojs.ui.log.LogActivity
-import org.autojs.autojs.ui.login.LoginActivity
+import org.autojs.autojs.ui.account.LoginActivity
 import org.autojs.autojs.ui.main.drawer.DrawerFragment
 import org.autojs.autojs.ui.settings.PreferencesActivity
 import org.autojs.autojs.ui.widget.DrawerAutoClose

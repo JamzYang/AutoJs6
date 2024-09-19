@@ -637,8 +637,13 @@
                 android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
 
         <activity
-                android:name="org.autojs.autojs.ui.login.LoginActivity"
+                android:name="org.autojs.autojs.ui.account.LoginActivity"
                 android:label="@string/title_activity_login"
+          android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+          android:name="org.autojs.autojs.ui.account.RegisterActivity"
+          android:label="@string/title_activity_sign_in"
           android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name="org.autojs.autojs.ui.account.AccountActivity" />
