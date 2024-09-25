@@ -158,9 +158,6 @@
 
             </intent-filter>
 
-            <meta-data
-                    android:name="android.app.shortcuts"
-                    android:resource="@xml/app_shortcuts" />
         </activity>
 
         <activity
