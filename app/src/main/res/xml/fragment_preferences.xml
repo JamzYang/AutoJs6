@@ -14,7 +14,6 @@
                 app:itemDefaultKey="@string/key_app_language_auto"
                 app:neutralText="@string/dialog_button_system_settings"
                 app:neutralTextShort="@string/dialog_button_system_settings_simplified"
-                app:longClickPrompt="@string/description_app_language_preference"
                 app:onConfirmPrompt="@string/prompt_restart_may_be_needed_for_language_switch" />
 
         <org.autojs.autojs.ui.settings.NightModePreference
@@ -23,15 +22,12 @@
                 app:title="@string/text_night_mode"
                 app:itemKeys="@array/keys_night_mode"
                 app:itemValues="@array/values_night_mode"
-                app:itemDefaultKey="@string/key_night_mode_follow_system"
-                app:longClickPrompt="@string/description_night_mode_preference"
-                app:longClickPromptMore="@string/description_night_mode_preference_more" />
+                app:itemDefaultKey="@string/key_night_mode_follow_system" />
 
         <org.autojs.autojs.ui.settings.ThemeColorPreference
                 app:layout="@layout/preference_custom"
                 app:key="@string/key_theme_color"
-                app:title="@string/text_theme_color"
-                app:longClickPrompt="@string/description_theme_color_preference" />
+                app:title="@string/text_theme_color" />
 
         <org.autojs.autojs.ui.settings.KeepScreenOnWhenInForegroundPreference
                 app:layout="@layout/preference_custom"
@@ -39,8 +35,7 @@
                 app:title="@string/text_keep_screen_on_when_in_foreground"
                 app:itemKeys="@array/keys_keep_screen_on_when_in_foreground"
                 app:itemValues="@array/values_keep_screen_on_when_in_foreground"
-                app:itemDefaultKey="@string/key_keep_screen_on_when_in_foreground_disabled"
-                app:longClickPrompt="@string/description_keep_screen_on_when_in_foreground_preference" />
+                app:itemDefaultKey="@string/key_keep_screen_on_when_in_foreground_disabled" />
 
     </org.autojs.autojs.theme.preference.ThemeColorPreferenceCategory>
 
@@ -90,8 +85,7 @@
         <org.autojs.autojs.ui.settings.CheckForUpdatesPreference
                 app:layout="@layout/preference_custom"
                 app:key="@string/key_check_for_updates"
-                app:title="@string/text_check_for_updates"
-                app:longClickPrompt="@string/description_check_for_updates_preference" />
+                app:title="@string/text_check_for_updates" />
 
         <org.autojs.autojs.theme.preference.ThemeColorSwitchPreference
                 app:layout="@layout/preference_custom"
@@ -103,8 +97,7 @@
         <org.autojs.autojs.ui.settings.ManageIgnoredUpdatesPreference
                 app:layout="@layout/preference_custom"
                 app:key="@string/key_manage_ignored_updates"
-                app:title="@string/text_manage_ignored_updates"
-                app:longClickPrompt="@string/description_manage_ignored_updates_preference" />
+                app:title="@string/text_manage_ignored_updates" />
     </org.autojs.autojs.theme.preference.ThemeColorPreferenceCategory>
 
 </PreferenceScreen>

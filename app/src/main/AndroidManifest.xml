@@ -193,7 +193,6 @@
         <activity
                 android:name="org.autojs.autojs.ui.settings.PreferencesActivity"
                 android:exported="true"
-                android:label="@string/text_app_shortcut_settings_long_label"
                 android:theme="@style/AppTheme.Settings" />
 
         <activity
@@ -245,23 +244,7 @@
                 android:name="org.autojs.autojs.ui.shortcut.ShortcutCreateActivity"
                 android:theme="@style/AppTheme.Transparent" />
 
-        <activity
-                android:name="org.autojs.autojs.external.widget.ScriptWidgetSettingsActivity"
-                android:exported="false">
 
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-
-            <intent-filter>
-
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-            </intent-filter>
-
-        </activity>
 
         <service android:name="org.autojs.autojs.ui.enhancedfloaty.FloatyService" />
 
