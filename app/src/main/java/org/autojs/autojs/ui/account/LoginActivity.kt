@@ -7,9 +7,17 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import okhttp3.ResponseBody
+import org.autojs.autojs.network.RetrofitClient
+import org.autojs.autojs.network.api.ScriptApi
+import org.autojs.autojs.network.api.UserApi
+import org.autojs.autojs.network.api.dto.UserRequest
 import org.autojs.autojs.ui.main.MainActivity
 import org.autojs.autojs.user.UserManager
 import org.autojs.autojs6.R
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
@@ -52,18 +60,32 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun performLogin(mobile: String, password: String) {
-        // 这里应该实现实际的登录逻辑
-        // 例如,调用API进行身份验证
-        // 暂时用简单的Toast消息代替
-        Toast.makeText(this, "登录成功: $mobile", Toast.LENGTH_SHORT).show()
-        
-        // 设置登录状态
-        UserManager.setLoggedIn(this, true)
-        
-        // 登录成功后,返回到主界面
-       val intent = Intent(this, MainActivity::class.java)
-       intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-       startActivity(intent)
-       finish()
+        // 这里实现实际的登录逻辑
+        // 调用API进行身份验证
+        val userApi = RetrofitClient.createApi(UserApi::class.java)
+        userApi.loginUser(UserRequest(mobile, password)).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    // 登录成功
+                    Toast.makeText(this@LoginActivity, "登录成功", Toast.LENGTH_SHORT).show()
+                    // 设置登录状态
+                    UserManager.setLoggedIn(this@LoginActivity, true)
+                    
+                    // 登录成功后,返回到主界面
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
+                } else {
+                    // 登录失败
+                    Toast.makeText(this@LoginActivity, "登录失败: ${response.message()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                // 网络请求失败
+                Toast.makeText(this@LoginActivity, "网络请求失败: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

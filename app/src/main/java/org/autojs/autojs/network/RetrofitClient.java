@@ -21,7 +21,7 @@ public enum RetrofitClient {
                 .build();
     }
 
-    public static <T> T createApi(final Class<T> service) {
+    public static <T> T createApi(Class<T> service) {
         return INSTANCE.retrofit.create(service);
     }
 }

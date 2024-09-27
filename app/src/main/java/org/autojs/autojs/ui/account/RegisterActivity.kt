@@ -8,6 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import org.autojs.autojs6.R
 import org.autojs.autojs6.databinding.ActivityPreferencesBinding
 import org.autojs.autojs6.databinding.ActivityRegisterBinding
+import org.autojs.autojs.network.RetrofitClient
+import org.autojs.autojs.network.api.UserApi
+import org.autojs.autojs.network.api.dto.UserRequest
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import okhttp3.ResponseBody
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -44,7 +51,6 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         btnRegister.setOnClickListener {
-            // 处理注册逻辑
             if (validateInputs()) {
                 performRegister()
             }
@@ -52,13 +58,53 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun validateInputs(): Boolean {
-        // 验证输入
-        // 这里应该添加更详细的验证逻辑
+        val mobile = etMobile.text.toString()
+        val password = etPassword.text.toString()
+        val confirmPassword = etConfirmPassword.text.toString()
+        val verificationCode = etVerificationCode.text.toString()
+
+        if (mobile.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || verificationCode.isEmpty()) {
+            Toast.makeText(this, "请填写所有必要信息", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (password != confirmPassword) {
+            Toast.makeText(this, "两次输入的密码不一致", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // 可以添加更多验证，如手机号格式、密码强度等
+
         return true
     }
 
     private fun performRegister() {
-        // 执行注册逻辑
-        Toast.makeText(this, "注册功能待实现", Toast.LENGTH_SHORT).show()
+        val mobile = etMobile.text.toString()
+        val password = etPassword.text.toString()
+        val verificationCode = etVerificationCode.text.toString()
+
+        if (mobile.isEmpty() || password.isEmpty() || verificationCode.isEmpty()) {
+            Toast.makeText(this, "请填写所有必要信息", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val userApi = RetrofitClient.createApi(UserApi::class.java)
+        val userRequest = UserRequest(mobile, password)
+
+        userApi.registerUser(verificationCode, userRequest).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@RegisterActivity, "注册成功", Toast.LENGTH_SHORT).show()
+                    // 注册成功后，可以自动登录或返回登录页面
+                    finish()
+                } else {
+                    Toast.makeText(this@RegisterActivity, "注册失败: ${response.message()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(this@RegisterActivity, "网络请求失败: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

@@ -9,10 +9,10 @@ import org.autojs.autojs6.R
 import org.autojs.autojs6.databinding.ActivityAccountBinding
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import org.autojs.autojs.theme.widget.ThemeColorToolbar
 
 class AccountActivity : AppCompatActivity() {
 
@@ -22,13 +22,11 @@ class AccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //标题栏设置
-        val toolbar = findViewById<ThemeColorToolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true) // 显示返回按钮
-            setDisplayShowHomeEnabled(true) // 显示 Home 图标
-            title = "我的账号" // 设置标题
+        
+        // ... 其他初始化代码 ...
+
+        UserManager.refreshUserInfo(this) { isMember ->
+            updateMembershipUI(isMember)
         }
 
         setupUI()
@@ -126,5 +124,15 @@ class AccountActivity : AppCompatActivity() {
         }
         startActivity(intent)
         finish() // 结束当前的AccountActivity
+    }
+
+    private fun updateMembershipUI(isMember: Boolean) {
+        if (isMember) {
+            binding.membershipStatus.text = "会员状态：${UserManager.getExpirationDateString()}"
+            binding.renewButton.visibility = View.VISIBLE
+        } else {
+            binding.membershipStatus.text = "会员状态：非会员"
+            binding.renewButton.visibility = View.GONE
+        }
     }
 }

@@ -86,7 +86,11 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
             finish() // 结束MainActivity,防止用户按返回键回到未登录状态的主页面
             return
         }
-//        setContentView(R.layout.activity_main)
+        
+        UserManager.refreshUserInfo(this) { isMember ->
+            // 可以在这里处理刷新后的会员状态
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater).also {
             setContentView(it.root)
             mDrawerLayout = it.drawerLayout
