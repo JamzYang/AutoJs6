@@ -8,24 +8,25 @@ import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClient {
-    private static final String BASE_URL = Constants.BASE_URL;
-    private static Retrofit retrofit = null;
+public enum RetrofitClient {
+    INSTANCE;
 
-    public static Retrofit getClient() {
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(StringConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
-        return retrofit;
+    private final Retrofit retrofit;
+
+    RetrofitClient() {
+        retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(StringConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+
+    public static <T> T createApi(final Class<T> service) {
+        return INSTANCE.retrofit.create(service);
     }
 }
 
-
- class StringConverterFactory extends Converter.Factory {
+class StringConverterFactory extends Converter.Factory {
     private static final StringConverterFactory INSTANCE = new StringConverterFactory();
 
     public static StringConverterFactory create() {

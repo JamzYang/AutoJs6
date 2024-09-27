@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -19,15 +18,11 @@ import java.text.MessageFormat;
 import java.util.Objects;
 import okhttp3.ResponseBody;
 import org.autojs.autojs.AutoJs;
-import org.autojs.autojs.app.AppLevelThemeDialogBuilder;
-import org.autojs.autojs.app.DialogUtils;
 import org.autojs.autojs.core.accessibility.AccessibilityTool;
 import org.autojs.autojs.core.accessibility.LayoutInspector;
 import org.autojs.autojs.core.accessibility.NodeInfo;
 import org.autojs.autojs.core.record.GlobalActionRecorder;
 import org.autojs.autojs.core.record.Recorder;
-import org.autojs.autojs.model.explorer.ExplorerDirPage;
-import org.autojs.autojs.model.explorer.Explorers;
 import org.autojs.autojs.model.script.ScriptFile;
 import org.autojs.autojs.model.script.Scripts;
 import org.autojs.autojs.network.api.ScriptApi;
@@ -35,12 +30,9 @@ import org.autojs.autojs.pref.Language;
 import org.autojs.autojs.pref.Pref;
 import org.autojs.autojs.runtime.api.ScreenMetrics;
 import org.autojs.autojs.tool.Func1;
-import org.autojs.autojs.ui.Constants;
 import org.autojs.autojs.ui.enhancedfloaty.FloatyService;
 import org.autojs.autojs.ui.enhancedfloaty.FloatyWindow;
-import org.autojs.autojs.ui.explorer.ExplorerView;
 import org.autojs.autojs.util.ViewUtils;
-import org.autojs.autojs.util.WorkingDirectoryUtils;
 import org.autojs.autojs6.R;
 import org.autojs.autojs6.databinding.CircularActionMenuBinding;
 import org.greenrobot.eventbus.EventBus;
@@ -122,7 +114,7 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("autojs.localstorage.script_config", Context.MODE_PRIVATE);
         String currentVersion = sharedPreferences.getString(SHARED_PREF_SCRIPT_VERSION, "");
 
-        ScriptApi scriptApi = RetrofitClient.getClient().create(ScriptApi.class);
+        ScriptApi scriptApi = RetrofitClient.createApi(ScriptApi.class);
         
         scriptApi.getScriptVersion().enqueue(new Callback<String>() {
             @Override
