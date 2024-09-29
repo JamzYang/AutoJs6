@@ -94,7 +94,7 @@ public class ForegroundServiceUtils {
                 .setContentIntent(contentIntent)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setSmallIcon(R.drawable.autojs6_material)
+                .setSmallIcon(R.drawable.game_cat)
                 .setChannelId(channelId)
                 .setSilent(true)
                 .build();

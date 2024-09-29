@@ -12,7 +12,7 @@
             android:layout_height="?android:attr/actionBarSize"
             android:paddingBottom="20dp"
             android:paddingTop="10dp"
-            tools:src="@drawable/autojs6_material" />
+            tools:src="@drawable/game_cat" />
 
     <TextView
             android:id="@+id/text"

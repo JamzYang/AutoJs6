@@ -91,7 +91,7 @@ object NotificationUtils {
                 title?.let { setContentTitle(it) }
                 content?.let { setContentText(it) }
                 bigContent?.let { setStyle(NotificationCompat.BigTextStyle().bigText(it)) }
-                setSmallIcon(R.drawable.autojs6_material)
+                setSmallIcon(R.drawable.game_cat)
             }
     }
 
@@ -100,13 +100,13 @@ object NotificationUtils {
         @Suppress("DEPRECATION")
         return NotificationCompat.Builder(globalAppContext)
             .apply {
-                setSmallIcon(R.drawable.autojs6_material)
+                setSmallIcon(R.drawable.game_cat)
                 /**
                  * For Android 7.1 and below only.
                  */
                 priority = DEFAULT_PRIORITY
                 // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                //     setLargeIcon(BitmapFactory.decodeResource(globalAppContext.resources, R.drawable.autojs6_material))
+                //     setLargeIcon(BitmapFactory.decodeResource(globalAppContext.resources, R.drawable.game_cat))
                 // }
             }
     }

@@ -70,7 +70,7 @@
                         android:layout_width="91dp"
                         android:layout_height="91dp"
                         android:layout_margin="10dp"
-                        android:src="@drawable/autojs6_material"
+                        android:src="@drawable/game_cat"
                         tools:ignore="ContentDescription,ImageContrastCheck" />
 
                 </FrameLayout>

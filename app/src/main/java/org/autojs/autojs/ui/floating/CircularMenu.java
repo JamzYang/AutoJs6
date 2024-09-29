@@ -248,7 +248,7 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
         mState = state;
         mActionViewIcon.setImageResource(isRecording()
                 ? R.drawable.ic_ali_record
-                : R.drawable.autojs6_material);
+                : R.drawable.game_cat);
         mActionViewIcon.setBackgroundTintList(ColorStateList.valueOf(mContext.getColor(isRecording()
                 ? R.color.circular_menu_icon_red
                 : R.color.circular_menu_icon_white)));
