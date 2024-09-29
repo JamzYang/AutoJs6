@@ -60,25 +60,23 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun performLogin(mobile: String, password: String) {
-        // 这里实现实际的登录逻辑
-        // 调用API进行身份验证
         val userApi = RetrofitClient.createApi(UserApi::class.java)
         userApi.loginUser(UserRequest(mobile, password)).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     // 登录成功
                     Toast.makeText(this@LoginActivity, "登录成功", Toast.LENGTH_SHORT).show()
-                    // 设置登录状态
                     UserManager.setLoggedIn(this@LoginActivity, true)
-                    
+
                     // 登录成功后,返回到主界面
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                     finish()
                 } else {
-                    // 登录失败
-                    Toast.makeText(this@LoginActivity, "登录失败: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    // 登录失败，尝试获取错误信息
+                    val errorMessage = response.errorBody()?.string() ?: "登录失败，未知错误"
+                    Toast.makeText(this@LoginActivity, "登录失败: $errorMessage", Toast.LENGTH_SHORT).show()
                 }
             }
 

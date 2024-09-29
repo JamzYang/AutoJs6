@@ -98,7 +98,8 @@ class RegisterActivity : AppCompatActivity() {
                     // 注册成功后，可以自动登录或返回登录页面
                     finish()
                 } else {
-                    Toast.makeText(this@RegisterActivity, "注册失败: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    val errorMessage = response.errorBody()?.string() ?: "登录失败，未知错误"
+                    Toast.makeText(this@RegisterActivity, "注册失败: ${errorMessage}", Toast.LENGTH_SHORT).show()
                 }
             }
 
