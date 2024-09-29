@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.PowerManager
+import android.os.Build
 import android.provider.Settings
 import org.autojs.autojs.ui.main.drawer.PermissionItemHelper
 import org.autojs.autojs.util.ViewUtils
@@ -41,5 +42,11 @@ class IgnoreBatteryOptimizationsPermission(override val context: Context) : Perm
             false
         }
     }
-
+    companion object {
+        fun isGranted(context: Context): Boolean {
+            val packageName = context.packageName
+            val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+            return powerManager.isIgnoringBatteryOptimizations(packageName)
+        }
+    }
 }

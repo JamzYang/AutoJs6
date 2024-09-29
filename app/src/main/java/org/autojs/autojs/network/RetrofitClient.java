@@ -3,19 +3,19 @@ package org.autojs.autojs.network;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import okhttp3.ResponseBody;
-import org.autojs.autojs.ui.Constants;
+import org.autojs.autojs6.BuildConfig;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public enum RetrofitClient {
     INSTANCE;
-
+    private final String BASE_URL = BuildConfig.BASE_URL;
     private final Retrofit retrofit;
 
     RetrofitClient() {
         retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
+                .baseUrl(BASE_URL)
                 .addConverterFactory(StringConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

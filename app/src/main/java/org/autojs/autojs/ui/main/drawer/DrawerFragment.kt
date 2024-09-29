@@ -1,5 +1,6 @@
 package org.autojs.autojs.ui.main.drawer
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -33,7 +34,8 @@ import org.autojs.autojs6.R
 import org.autojs.autojs6.databinding.FragmentDrawerBinding
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
-
+import android.provider.Settings
+import android.net.Uri
 /**
  * Created by Stardust on Jan 30, 2017.
  * Modified by SuperMonster003 as of Nov 16, 2021.
@@ -259,6 +261,26 @@ open class DrawerFragment : Fragment() {
             .setAction(Runnable { 
                 startActivity(Intent(requireContext(), FreeMembershipActivity::class.java))
             })
+
+        // 检查浮动按钮开关状态
+//        if (!ViewUtils.isFloatingButtonEnabled) {
+//            mFloatingWindowItem.toggle(true) // 尝试开启浮动按钮
+//        }
+
+        // 检查忽略电池优化权限
+        if (!IgnoreBatteryOptimizationsPermission.isGranted(mContext)) {
+            // 引导用户去设置中开启权限
+            showBatteryOptimizationSettings()
+        }
+    }
+
+    // 引导用户去设置中开启忽略电池优化权限
+    @SuppressLint("BatteryLife")
+    private fun showBatteryOptimizationSettings() {
+        val intent = Intent()
+        intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+        intent.data = Uri.parse("package:${mContext.packageName}")
+        startActivity(intent)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -25,6 +25,8 @@ val buildTypeDebug = "debug"
 val buildTypeRelease = "release"
 val buildActionAssemble = "assemble"
 val templateName = "template"
+val baseUrlDebug = "http://192.168.68.16:8080"
+val baseUrlRelease = "http://101.43.24.30:8080"
 
 plugins {
     id("com.android.application")
@@ -528,11 +530,14 @@ android {
             isMinifyEnabled = false
             proguardFiles(*proguardFiles)
             niceSigningConfig?.let { signingConfig = it }
+            buildConfigField("String", "BASE_URL", "\"$baseUrlRelease\"") // 添加引号
+
         }
         getByName(buildTypeDebug) {
             isMinifyEnabled = getByName(buildTypeRelease).isMinifyEnabled
             proguardFiles(*proguardFiles)
             niceSigningConfig?.let { signingConfig = it }
+            buildConfigField("String", "BASE_URL", "\"$baseUrlDebug\"") // 添加引号
         }
     }
 

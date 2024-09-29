@@ -328,4 +328,17 @@ object ViewUtils {
 
     }
 
+//    private const val PREFS_NAME = "app_prefs"
+//    private const val KEY_FLOATING_BUTTON_ENABLED = "floating_button_enabled"
+//
+//    private fun getPreferences(context: Context): SharedPreferences {
+//        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+//    }
+//
+//    var isFloatingButtonEnabled: Boolean
+//        get() = getPreferences(context).getBoolean(KEY_FLOATING_BUTTON_ENABLED, false)
+//        set(value) {
+//            getPreferences(context).edit().putBoolean(KEY_FLOATING_BUTTON_ENABLED, value).apply()
+//        }
+
 }

@@ -50,7 +50,7 @@ import org.autojs.autojs.util.WorkingDirectoryUtils
 import org.autojs.autojs6.R
 import org.autojs.autojs6.databinding.ActivityMainBinding
 import org.greenrobot.eventbus.EventBus
-
+import org.autojs.autojs6.BuildConfig
 /**
  * Modified by SuperMonster003 as of Dec 1, 2021.
  * Transformed by SuperMonster003 on May 11, 2023.
@@ -179,10 +179,6 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView() {
-        val webView = findViewById<WebView>(R.id.webView)
-        webView.settings.javaScriptEnabled = true
-        webView.addJavascriptInterface(WebAppInterface(this), "Android")
-
         binding.webView.apply {
             settings.javaScriptEnabled = true
             webViewClient = object : WebViewClient() {
@@ -206,11 +202,13 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
                     Log.e("WebViewPerformance", "加载错误: ${error?.description}")
                 }
             }
-//            loadUrl("https://www.baidu.com")
-            loadUrl(BASE_URL + "/setting.html")
+            loadUrl(BuildConfig.BASE_URL + "/setting.html")
+            settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK) // 优先使用缓存
+            settings.setDomStorageEnabled(true) // 启用 DOM 存储（有助于提升缓存效果）
+            addJavascriptInterface(WebAppInterface(this@MainActivity), "Android")
         }
 
-
+        WebView.setWebContentsDebuggingEnabled(true)
     }
 
     fun rebirth(view: View) {
