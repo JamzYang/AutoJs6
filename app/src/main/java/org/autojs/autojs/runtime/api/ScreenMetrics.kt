@@ -10,6 +10,7 @@ import android.util.DisplayMetrics
 import android.view.Surface.ROTATION_0
 import android.view.WindowManager
 import org.autojs.autojs.app.GlobalAppContext
+import java.lang.ref.WeakReference
 
 /**
  * Created by Stardust on Apr 26, 2017.
@@ -54,11 +55,14 @@ class ScreenMetrics(private var designWidth: Int, private var designHeight: Int)
 
         private var mIsInitialized = false
 
-        private var mPrivateWindowManager: WindowManager? = null
-        private var windowManager: WindowManager
-            get() = mPrivateWindowManager ?: GlobalAppContext.get().getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            set(value) {
-                mPrivateWindowManager = value
+        private var windowManagerRef: WeakReference<WindowManager>? = null
+
+        private val windowManager: WindowManager
+            get() = windowManagerRef?.get() ?: run {
+                val appContext = GlobalAppContext.get()
+                val wm = appContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                windowManagerRef = WeakReference(wm)
+                wm
             }
 
         @Suppress("DEPRECATION")
@@ -114,8 +118,16 @@ class ScreenMetrics(private var designWidth: Int, private var designHeight: Int)
         @JvmStatic
         fun init(activity: Activity) {
             resources = activity.resources
-            windowManager = activity.windowManager
+            val appContext = activity.applicationContext
+            windowManagerRef = WeakReference(appContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
             mIsInitialized = true
+        }
+
+        @JvmStatic
+        fun clear() {
+            resources = null
+            windowManagerRef = null
+            mIsInitialized = false
         }
 
         private fun toOriAwarePoint(a: Int, b: Int) = arrayOf(minOf(a, b), maxOf(a, b))
