@@ -17,7 +17,6 @@ import android.webkit.*
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
-import leakcanary.LeakCanary
 import org.autojs.autojs.AutoJs
 import org.autojs.autojs.app.OnActivityResultDelegate
 import org.autojs.autojs.app.OnActivityResultDelegate.DelegateHost
@@ -81,10 +80,6 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (BuildConfig.DEBUG) {
-            LeakCanary.config = LeakCanary.config.copy(dumpHeap = true)
-        }
-
         // 调试时重置登录状态
         if (!UserManager.isLoggedIn(this)) {
             // 用户未登录,打开登录页面
