@@ -71,7 +71,7 @@
 
         </LinearLayout>
 
-        <org.autojs.autojs.core.console.FloatingConsoleView
+        <org.ys.game.core.console.FloatingConsoleView
                 android:id="@+id/console"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

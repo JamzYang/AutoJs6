@@ -12,9 +12,9 @@ let { util } = global;
 module.exports = function (scriptRuntime, scope) {
 
     const Manifest = android.Manifest;
-    const BuildConfig = org.autojs.autojs6.BuildConfig;
+    const BuildConfig = org.ys.gamecat.BuildConfig;
     const PackageManager = android.content.pm.PackageManager;
-    const RootUtils = org.autojs.autojs.util.RootUtils;
+    const RootUtils = org.ys.game.util.RootUtils;
     const RootMode = RootUtils.RootMode;
     const Settings = android.provider.Settings;
     const System = Settings.System;
@@ -108,13 +108,13 @@ module.exports = function (scriptRuntime, scope) {
                     return Settings.canDrawOverlays(context);
                 },
                 getLanguage() {
-                    return org.autojs.autojs.pref.Language.getPrefLanguage().getLocale();
+                    return org.ys.game.pref.Language.getPrefLanguage().getLocale();
                 },
                 getLanguageTag() {
                     return this.getLanguage().toLanguageTag();
                 },
                 get themeColor() {
-                    return org.autojs.autojs.theme.ThemeColorManager.getCurrentThemeColor();
+                    return org.ys.game.theme.ThemeColorManager.getCurrentThemeColor();
                 },
             };
 

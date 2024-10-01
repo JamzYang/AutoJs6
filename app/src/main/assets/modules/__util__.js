@@ -31,7 +31,7 @@ module.exports = function (scriptRuntime, scope) {
     const Build = android.os.Build;
     const Arrays = java.util.Arrays;
     const HashMap = java.util.HashMap;
-    const JavaUtils = org.autojs.autojs.util.JavaUtils;
+    const JavaUtils = org.ys.game.util.JavaUtils;
 
     let _ = {
         Util: (/* @IIFE */ () => {

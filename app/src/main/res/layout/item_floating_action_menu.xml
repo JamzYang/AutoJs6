@@ -24,7 +24,7 @@
             android:textColor="@color/day_night"
             tools:text="@string/text_sample_string"/>
 
-    <org.autojs.autojs.theme.widget.ThemeColorFloatingActionButton
+    <org.ys.game.theme.widget.ThemeColorFloatingActionButton
             android:id="@+id/floating_action_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

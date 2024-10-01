@@ -16,17 +16,17 @@ module.exports = function (scriptRuntime, scope) {
     const Path = android.graphics.Path;
     const Rect = android.graphics.Rect;
     const GestureDescription = android.accessibilityservice.GestureDescription;
-    const AccessibilityTool = org.autojs.autojs.core.accessibility.AccessibilityTool;
-    const AccessibilityBridge = org.autojs.autojs.core.accessibility.AccessibilityBridge;
-    const UiObject = org.autojs.autojs.core.automator.UiObject;
+    const AccessibilityTool = org.ys.game.core.accessibility.AccessibilityTool;
+    const AccessibilityBridge = org.ys.game.core.accessibility.AccessibilityBridge;
+    const UiObject = org.ys.game.core.automator.UiObject;
 
     /**
-     * @type {org.autojs.autojs.core.accessibility.SimpleActionAutomator}
+     * @type {org.ys.game.core.accessibility.SimpleActionAutomator}
      */
     const rtAutomator = scriptRuntime.automator;
 
     /**
-     * @type {org.autojs.autojs.core.accessibility.AccessibilityBridge}
+     * @type {org.ys.game.core.accessibility.AccessibilityBridge}
      */
     const a11yBridge = scriptRuntime.accessibilityBridge;
 
@@ -295,7 +295,7 @@ module.exports = function (scriptRuntime, scope) {
         },
         /**
          * @template {boolean} T
-         * @param {(target: org.autojs.autojs.core.automator.action.ActionTarget) => T} action
+         * @param {(target: org.ys.game.core.automator.action.ActionTarget) => T} action
          * @param {IArguments} args
          * @return {T}
          */
@@ -361,7 +361,7 @@ module.exports = function (scriptRuntime, scope) {
             __asGlobal__(automator, methods, scope);
 
             /**
-             * @type {(keyof org.autojs.autojs.core.accessibility.SimpleActionAutomator)[]}
+             * @type {(keyof org.ys.game.core.accessibility.SimpleActionAutomator)[]}
              */
             let methodsRt = [
                 'back', 'home', 'powerDialog', 'notifications',

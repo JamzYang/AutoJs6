@@ -8,7 +8,7 @@ let { autojs } = global;
  * @return {Internal.RootAutomator}
  */
 module.exports = function (scriptRuntime, scope) {
-    const RootAutomator = org.autojs.autojs.core.inputevent.RootAutomator;
+    const RootAutomator = org.ys.game.core.inputevent.RootAutomator;
 
     let _ = {
         /**

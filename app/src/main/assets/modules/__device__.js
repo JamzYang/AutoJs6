@@ -11,8 +11,8 @@ let { util } = global;
  */
 module.exports = function (scriptRuntime, scope) {
 
-    const NetworkUtils = org.autojs.autojs.util.NetworkUtils;
-    const DeviceUtils = org.autojs.autojs.util.DeviceUtils;
+    const NetworkUtils = org.ys.game.util.NetworkUtils;
+    const DeviceUtils = org.ys.game.util.DeviceUtils;
 
     const rtDevice = scriptRuntime.device;
 

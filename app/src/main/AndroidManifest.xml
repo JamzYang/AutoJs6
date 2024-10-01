@@ -112,7 +112,6 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-permission android:name="com.termux.permission.RUN_COMMAND" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
@@ -121,7 +120,7 @@
     <!-- Property "largeHeap" is not recommended to set to true. -->
     <!-- https://stackoverflow.com/questions/27396892/what-are-advantages-of-setting-largeheap-to-true -->
     <application
-            android:name="org.autojs.autojs.App"
+            android:name="org.ys.game.App"
             android:allowBackup="false"
             android:hardwareAccelerated="true"
             android:icon="${icon}"
@@ -144,7 +143,7 @@
                 android:value="${CHANNEL}" />
 
         <activity
-                android:name="org.autojs.autojs.ui.splash.SplashActivity"
+                android:name="org.ys.game.ui.splash.SplashActivity"
                 android:exported="true"
                 android:icon="@drawable/game_cat"
                 android:label="@string/app_name"
@@ -161,7 +160,7 @@
         </activity>
 
         <activity
-                android:name="org.autojs.autojs.ui.main.MainActivity"
+                android:name="org.ys.game.ui.main.MainActivity"
                 android:exported="true"
                 android:launchMode="singleTask"
                 android:theme="@style/AppTheme.FullScreen" />
@@ -179,50 +178,50 @@
         </provider>
 
         <activity
-                android:name="org.autojs.autojs.ui.edit.EditActivity"
+                android:name="org.ys.game.ui.edit.EditActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize|locale"
                 android:launchMode="standard"
                 android:multiprocess="true"
-                android:taskAffinity="org.autojs.autojs.edit"
+                android:taskAffinity="org.ys.game.edit"
                 android:theme="@style/EditorTheme" />
 
         <activity
-                android:name="org.autojs.autojs.ui.settings.AboutActivity"
+                android:name="org.ys.game.ui.settings.AboutActivity"
                 android:theme="@style/AppTheme.Settings" />
 
         <activity
-                android:name="org.autojs.autojs.ui.settings.PreferencesActivity"
+                android:name="org.ys.game.ui.settings.PreferencesActivity"
                 android:exported="true"
                 android:theme="@style/AppTheme.Settings" />
 
         <activity
-                android:name="org.autojs.autojs.ui.settings.DeveloperOptionsActivity"
+                android:name="org.ys.game.ui.settings.DeveloperOptionsActivity"
                 android:theme="@style/AppTheme.Settings" />
 
-        <activity android:name="org.autojs.autojs.ui.error.ErrorReportActivity" />
+        <activity android:name="org.ys.game.ui.error.ErrorReportActivity" />
 
         <activity
-                android:name="org.autojs.autojs.external.tasker.TaskerScriptEditActivity"
+                android:name="org.ys.game.external.tasker.TaskerScriptEditActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize|locale" />
 
         <activity
-                android:name="org.autojs.autojs.ui.project.BuildActivity"
+                android:name="org.ys.game.ui.project.BuildActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize|locale" />
 
-        <activity android:name="org.autojs.autojs.ui.project.ProjectConfigActivity" />
+        <activity android:name="org.ys.game.ui.project.ProjectConfigActivity" />
 
         <activity
-                android:name="org.autojs.autojs.ui.log.LogActivity"
+                android:name="org.ys.game.ui.log.LogActivity"
                 android:exported="true"
                 android:label="@string/text_app_shortcut_log_long_label"
-                android:taskAffinity="org.autojs.autojs.ui.log.LogActivity"
+                android:taskAffinity="org.ys.game.ui.log.LogActivity"
                 android:launchMode="singleTop" />
 
         <activity
-                android:name="org.autojs.autojs.ui.doc.DocumentationActivity"
+                android:name="org.ys.game.ui.doc.DocumentationActivity"
                 android:exported="true"
                 android:label="@string/text_app_shortcut_docs_long_label"
-                android:taskAffinity="org.autojs.autojs.ui.doc.DocumentationActivity"
+                android:taskAffinity="org.ys.game.ui.doc.DocumentationActivity"
                 android:launchMode="singleTop"
                 android:theme="@style/AppTheme.FullScreen">
 
@@ -236,28 +235,28 @@
 
         </activity>
 
-        <activity android:name="org.autojs.autojs.ui.shortcut.AppsIconSelectActivity" />
+        <activity android:name="org.ys.game.ui.shortcut.AppsIconSelectActivity" />
 
-        <activity android:name="org.autojs.autojs.ui.timing.TimedTaskSettingActivity" />
+        <activity android:name="org.ys.game.ui.timing.TimedTaskSettingActivity" />
 
         <activity
-                android:name="org.autojs.autojs.ui.shortcut.ShortcutCreateActivity"
+                android:name="org.ys.game.ui.shortcut.ShortcutCreateActivity"
                 android:theme="@style/AppTheme.Transparent" />
 
 
 
-        <service android:name="org.autojs.autojs.ui.enhancedfloaty.FloatyService" />
+        <service android:name="org.ys.game.ui.enhancedfloaty.FloatyService" />
 
         <service
-                android:name="org.autojs.autojs.external.foreground.MainActivityForegroundService"
+                android:name="org.ys.game.external.foreground.MainActivityForegroundService"
                 android:foregroundServiceType="specialUse" />
 
-        <service android:name="org.autojs.autojs.external.ScriptExecutionIntentService" />
+        <service android:name="org.ys.game.external.ScriptExecutionIntentService" />
 
-        <activity android:name="org.autojs.autojs.external.tasker.TaskPrefEditActivity" />
+        <activity android:name="org.ys.game.external.tasker.TaskPrefEditActivity" />
 
         <service
-                android:name="org.autojs.autojs.external.tile.LayoutBoundsTile"
+                android:name="org.ys.game.external.tile.LayoutBoundsTile"
                 android:exported="true"
                 android:icon="@drawable/ic_circular_menu_bounds"
                 android:label="@string/text_inspect_layout_bounds"
@@ -274,7 +273,7 @@
         </service>
 
         <service
-                android:name="org.autojs.autojs.external.tile.LayoutHierarchyTile"
+                android:name="org.ys.game.external.tile.LayoutHierarchyTile"
                 android:exported="true"
                 android:icon="@drawable/ic_circular_menu_hierarchy"
                 android:label="@string/text_inspect_layout_hierarchy"
@@ -291,11 +290,11 @@
         </service>
 
         <activity-alias
-                android:name="org.autojs.autojs.external.tasker.PluginActivity"
+                android:name="org.ys.game.external.tasker.PluginActivity"
                 android:exported="true"
                 android:icon="@drawable/game_cat"
                 android:label="@string/app_name"
-                android:targetActivity="org.autojs.autojs.external.tasker.TaskPrefEditActivity"
+                android:targetActivity="org.ys.game.external.tasker.TaskPrefEditActivity"
                 tools:ignore="ExportedActivity">
 
             <intent-filter>
@@ -305,7 +304,7 @@
         </activity-alias>
 
         <receiver
-                android:name="org.autojs.autojs.external.receiver.StaticBroadcastReceiver"
+                android:name="org.ys.game.external.receiver.StaticBroadcastReceiver"
                 android:exported="false">
 
             <intent-filter>
@@ -381,7 +380,7 @@
         </receiver>
 
         <receiver
-                android:name="org.autojs.autojs.external.tasker.FireSettingReceiver"
+                android:name="org.ys.game.external.tasker.FireSettingReceiver"
                 android:exported="true"
                 android:process=":background"
                 tools:ignore="ExportedReceiver">
@@ -395,7 +394,7 @@
         </receiver>
 
         <activity
-                android:name="org.autojs.autojs.external.open.EditIntentActivity"
+                android:name="org.ys.game.external.open.EditIntentActivity"
                 android:exported="true"
                 android:icon="@drawable/game_cat"
                 android:label="@string/text_edit_script">
@@ -421,11 +420,11 @@
         </activity>
 
         <activity
-                android:name="org.autojs.autojs.external.open.RunIntentActivity"
+                android:name="org.ys.game.external.open.RunIntentActivity"
                 android:exported="true"
                 android:icon="@drawable/game_cat"
                 android:label="@string/text_run_script"
-                android:taskAffinity="org.autojs.autojs.external.open.RunIntentActivity"
+                android:taskAffinity="org.ys.game.external.open.RunIntentActivity"
                 android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
 
@@ -449,7 +448,7 @@
         </activity>
 
         <activity
-                android:name="org.autojs.autojs.external.open.ImportIntentActivity"
+                android:name="org.ys.game.external.open.ImportIntentActivity"
                 android:exported="true"
                 android:icon="@drawable/game_cat"
                 android:label="@string/text_import_script"
@@ -476,7 +475,7 @@
         </activity>
 
         <service
-                android:name="org.autojs.autojs.core.notification.NotificationListenerService"
+                android:name="org.ys.game.core.notification.NotificationListenerService"
                 android:exported="false"
                 android:label="@string/app_name"
                 android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
@@ -486,7 +485,7 @@
         </service>
 
         <receiver
-                android:name="org.autojs.autojs.external.widget.ScriptWidget"
+                android:name="org.ys.game.external.widget.ScriptWidget"
                 android:exported="false">
 
             <intent-filter>
@@ -500,15 +499,15 @@
         </receiver>
 
         <receiver
-                android:name="org.autojs.autojs.timing.TaskReceiver"
+                android:name="org.ys.game.timing.TaskReceiver"
                 android:exported="false">
             <intent-filter>
-                <action android:name="org.autojs.autojs.action.task" />
+                <action android:name="org.ys.game.action.task" />
             </intent-filter>
         </receiver>
 
         <!--<receiver-->
-        <!--        android:name="org.autojs.autojs.ui.main.drawer.DrawerFragment.BatteryChangedReceiver"-->
+        <!--        android:name="org.ys.game.ui.main.drawer.DrawerFragment.BatteryChangedReceiver"-->
         <!--        android:exported="true">-->
         <!--    <intent-filter>-->
         <!--        <action android:name="android.intent.action.ACTION_BATTERY_CHANGED" />-->
@@ -518,28 +517,28 @@
         <!--</receiver>-->
 
         <activity
-                android:name="org.autojs.autojs.theme.app.ColorSelectActivity"
+                android:name="org.ys.game.theme.app.ColorSelectActivity"
                 android:theme="@style/MtAppTheme.FullScreen" />
 
         <activity
-                android:name="org.autojs.autojs.execution.ScriptExecuteActivity"
+                android:name="org.ys.game.execution.ScriptExecuteActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize|locale"
                 android:theme="@style/ScriptTheme" />
 
         <activity
-                android:name="org.autojs.autojs.core.permission.PermissionRequestActivity"
+                android:name="org.ys.game.core.permission.PermissionRequestActivity"
                 android:excludeFromRecents="true"
-                android:taskAffinity="org.autojs.autojs.core.image.capture.ScreenCaptureRequestActivity"
+                android:taskAffinity="org.ys.game.core.image.capture.ScreenCaptureRequestActivity"
                 android:theme="@style/ScriptTheme.Transparent" />
 
         <activity
-                android:name="org.autojs.autojs.core.image.capture.ScreenCaptureRequestActivity"
+                android:name="org.ys.game.core.image.capture.ScreenCaptureRequestActivity"
                 android:excludeFromRecents="true"
-                android:taskAffinity="org.autojs.autojs.core.image.capture.ScreenCaptureRequestActivity"
+                android:taskAffinity="org.ys.game.core.image.capture.ScreenCaptureRequestActivity"
                 android:theme="@style/ScriptTheme.Transparent" />
 
         <service
-                android:name="org.autojs.autojs.core.accessibility.AccessibilityServiceUsher"
+                android:name="org.ys.game.core.accessibility.AccessibilityServiceUsher"
                 android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
                 android:exported="true">
 
@@ -554,7 +553,7 @@
         </service>
 
         <service
-                android:name="org.autojs.autojs.core.image.capture.ScreenCapturerForegroundService"
+                android:name="org.ys.game.core.image.capture.ScreenCapturerForegroundService"
                 android:enabled="true"
                 android:exported="false"
                 android:foregroundServiceType="mediaProjection" />
@@ -569,7 +568,7 @@
         </service>
 
         <activity
-                android:name="org.autojs.autojs.inrt.SplashActivity"
+                android:name="org.ys.game.inrt.SplashActivity"
                 android:exported="true"
                 android:theme="@style/AppTheme.Splash">
             <intent-filter tools:ignore="ExtraText">
@@ -582,40 +581,40 @@
         </activity>
 
         <activity
-                android:name="org.autojs.autojs.inrt.LogActivity"
+                android:name="org.ys.game.inrt.LogActivity"
                 android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <activity
-                android:name="org.autojs.autojs.inrt.SettingsActivity"
+                android:name="org.ys.game.inrt.SettingsActivity"
                 android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <!-- This provider is required by Shizuku, remove this if your app only supports Sui -->
         <provider
                 android:name="rikka.shizuku.ShizukuProvider"
-                android:authorities="org.autojs.autojs6.shizuku"
+                android:authorities="org.ys.gamecat.shizuku"
                 android:enabled="true"
                 android:exported="true"
                 android:multiprocess="false"
                 android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
 
         <activity
-                android:name="org.autojs.autojs.ui.account.LoginActivity"
+                android:name="org.ys.game.ui.account.LoginActivity"
                 android:label="@string/title_activity_login"
           android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-          android:name="org.autojs.autojs.ui.account.RegisterActivity"
+          android:name="org.ys.game.ui.account.RegisterActivity"
           android:label="@string/title_activity_sign_in"
           android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-          android:name="org.autojs.autojs.ui.account.ForgotPasswordActivity"
+          android:name="org.ys.game.ui.account.ForgotPasswordActivity"
           android:label="@string/title_activity_sign_in"
           android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name="org.autojs.autojs.ui.account.AccountActivity" />
-        <activity android:name="org.autojs.autojs.ui.membership.FreeMembershipActivity" />
+        <activity android:name="org.ys.game.ui.account.AccountActivity" />
+        <activity android:name="org.ys.game.ui.membership.FreeMembershipActivity" />
 
         <activity
-                android:name="org.autojs.autojs.ui.notification.NotificationActivity"
+                android:name="org.ys.game.ui.notification.NotificationActivity"
                 android:label="@string/text_notification"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>

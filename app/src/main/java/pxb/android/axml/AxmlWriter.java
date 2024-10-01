@@ -25,7 +25,7 @@ import java.util.*;
 
 import static pxb.android.axml.AxmlParser.*;
 
-import org.autojs.autojs.pref.Language;
+import org.ys.game.pref.Language;
 
 /**
  * a class to write android axml

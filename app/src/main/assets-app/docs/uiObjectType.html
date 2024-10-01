@@ -1377,7 +1377,7 @@ w.clickBounds(0.2, -0.05); /* X 与 Y 坐标偏移量为 20% 屏幕宽度和 -5%
 <p>返回节点的 ID 资源全称 (Fully-Qualified ID Resource Name).</p>
 <p>若 ID 不存在, 返回 null.</p>
 <p>安卓资源全称格式为 <code>package:type/entry</code>, 即 <code>包名:类型/资源项</code>.<br>ID 资源全称的 <code>类型</code> 为 <code>id</code>.<br>一个有效的 ID 资源全称: <code>com.test:id/some_entry</code>.</p>
-<pre><code class="lang-js">console.log(idMatch(/.+/).findOnce().id()); // e.g. org.autojs.autojs6:id/action_bar_root
+<pre><code class="lang-js">console.log(idMatch(/.+/).findOnce().id()); // e.g. org.ys.gamecat:id/action_bar_root
 console.log(idMatch(/.+/).findOnce().fullId()); /* 同上. */
 console.log(idMatch(/.+/).findOnce().getViewIdResourceName()); /* 同上. */
 </code></pre>
@@ -1411,7 +1411,7 @@ let peculiarId = &quot;hello_world&quot;; /* 仅含资源项, 无包名及类型
 <p>返回节点的 ID 资源项名称 (ID Resource Entry Name).</p>
 <p>安卓资源全称格式为 <code>package:type/entry</code>, 即 <code>包名:类型/资源项</code>.<br>例如对于 ID 资源全称 <code>com.test:id/some_entry</code>, 其 ID 资源项名称为 <code>some_entry</code>.</p>
 <pre><code class="lang-js">/* ID 资源全称. */
-console.log(idMatch(/.+/).findOnce().id()); // e.g. org.autojs.autojs6:id/action_bar_root
+console.log(idMatch(/.+/).findOnce().id()); // e.g. org.ys.gamecat:id/action_bar_root
 
 /* ID 资源项名称. */
 console.log(idMatch(/.+/).findOnce().idEntry()); // action_bar_root
@@ -1523,7 +1523,7 @@ console.log(idMatch(/.+/).findOnce().simpleId()); /* 同上. */
 </ul>
 <p>返回控件的包名.</p>
 <p>若如包名, 返回 null.</p>
-<pre><code class="lang-js">console.log(packageNameMatch(/.+/).findOnce().packageName()); /* e.g. org.autojs.autojs6 */
+<pre><code class="lang-js">console.log(packageNameMatch(/.+/).findOnce().packageName()); /* e.g. org.ys.game6 */
 </code></pre>
 <p>别名属性或方法:</p>
 <ul>

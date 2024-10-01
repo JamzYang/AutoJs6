@@ -35,7 +35,7 @@
 
     <view
             android:id="@+id/color_setting_recycler_view"
-            class="org.autojs.autojs.theme.app.ColorSelectActivity$Companion$ColorSettingRecyclerView"
+            class="org.ys.game.theme.app.ColorSelectActivity$Companion$ColorSettingRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

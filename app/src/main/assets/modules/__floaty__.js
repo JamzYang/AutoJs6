@@ -41,10 +41,10 @@ module.exports = function (scriptRuntime, scope) {
         },
         /**
          * @param {(f: (context: android.content.Context, parent: android.view.ViewGroup) => android.view.View)
-         *     => org.autojs.autojs.runtime.api.Floaty.JsResizableWindow
-         *      | org.autojs.autojs.runtime.api.Floaty.JsRawWindow} windowFunction
+         *     => org.ys.game.runtime.api.Floaty.JsResizableWindow
+         *      | org.ys.game.runtime.api.Floaty.JsRawWindow} windowFunction
          * @param {Xml} xml
-         * @return {org.autojs.autojs.rhino.ProxyJavaObject|android.view.View}
+         * @return {org.ys.game.rhino.ProxyJavaObject|android.view.View}
          */
         wrap(windowFunction, xml) {
             let { layoutInflater } = scriptRuntime.ui;

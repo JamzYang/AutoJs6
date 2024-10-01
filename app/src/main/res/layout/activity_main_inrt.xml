@@ -34,7 +34,7 @@
             android:paddingStart="4dp"
             android:paddingEnd="2dp">
 
-        <org.autojs.autojs.core.console.ConsoleView
+        <org.ys.game.core.console.ConsoleView
                 android:id="@+id/console"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

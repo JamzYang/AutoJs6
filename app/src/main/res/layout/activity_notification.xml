@@ -11,7 +11,7 @@
     android:theme="@style/AppTheme.AppBarOverlay"
     android:fitsSystemWindows="true">
 
-    <org.autojs.autojs.theme.widget.ThemeColorToolbar
+    <org.ys.game.theme.widget.ThemeColorToolbar
       android:id="@+id/toolbar"
       android:theme="@style/ToolBarStyle"
       android:layout_width="match_parent"

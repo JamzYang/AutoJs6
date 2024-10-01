@@ -8,7 +8,7 @@ let { files } = global;
  * @return {Internal.Engines}
  */
 module.exports = function (scriptRuntime, scope) {
-    const ExecutionConfig = org.autojs.autojs.execution.ExecutionConfig;
+    const ExecutionConfig = org.ys.game.execution.ExecutionConfig;
 
     const rtEngines = scriptRuntime.engines;
 
@@ -49,8 +49,8 @@ module.exports = function (scriptRuntime, scope) {
             return Engines;
         })(),
         /**
-         * @param {Internal.Engines.ExecutionConfig | org.autojs.autojs.execution.ExecutionConfig} config
-         * @return {org.autojs.autojs.execution.ExecutionConfig}
+         * @param {Internal.Engines.ExecutionConfig | org.ys.game.execution.ExecutionConfig} config
+         * @return {org.ys.game.execution.ExecutionConfig}
          */
         fillConfig(config) {
             let executionConfig = new ExecutionConfig();

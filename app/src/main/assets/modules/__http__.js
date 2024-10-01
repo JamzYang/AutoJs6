@@ -11,7 +11,7 @@ let { ui } = global;
  */
 module.exports = function (scriptRuntime, scope) {
 
-    const PFile = org.autojs.autojs.pio.PFile;
+    const PFile = org.ys.game.pio.PFile;
     const Request = okhttp3.Request;
     const RequestBody = okhttp3.RequestBody;
     const MultipartBody = okhttp3.MultipartBody;
@@ -19,7 +19,7 @@ module.exports = function (scriptRuntime, scope) {
     const FormBody = okhttp3.FormBody;
     const Callback = okhttp3.Callback;
     const MimeTypeMap = android.webkit.MimeTypeMap;
-    const MutableOkHttp = org.autojs.autojs.core.http.MutableOkHttp;
+    const MutableOkHttp = org.ys.game.core.http.MutableOkHttp;
 
     let _ = {
         Http: (/* @IIFE */ () => {

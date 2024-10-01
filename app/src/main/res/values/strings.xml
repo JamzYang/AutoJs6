@@ -215,7 +215,7 @@
     <string name="foreground_notification_title">AutoJs6 foreground service</string>
     <string name="format_build_succeeded" formatted="true">Build succeeded.\nFile path: %s</string>
     <string name="format_debug_bar_title">Debug [ %s ]</string>
-    <string name="format_default_package_name" formatted="true" translatable="false">org.autojs.autojs6.%s</string>
+    <string name="format_default_package_name" formatted="true" translatable="false">org.ys.gamecat.%s</string>
     <string name="format_dialog_progress_number_format_kilo_bytes" translatable="false">%.1fKB/%.1fKB</string>
     <string name="format_dialog_progress_number_format_mega_bytes" translatable="false">%.2fMB/%.2fMB</string>
     <string name="format_editor_info" formatted="false">Chars: %d\nLines: %d\nSize: %s</string>

@@ -1,0 +1,18 @@
+package org.ys.game.core.ui.inflater.inflaters
+
+import android.content.Context
+import android.view.ViewGroup
+import org.ys.game.core.ui.inflater.ResourceParser
+import org.ys.game.core.ui.inflater.ViewCreator
+import org.ys.game.core.ui.widget.JsViewPager
+import org.ys.game.core.ui.widget.JsViewSwitcher
+
+class JsViewSwitcherInflater(resourceParser: ResourceParser) : ViewSwitcherInflater<JsViewSwitcher>(resourceParser) {
+
+    override fun getCreator(): ViewCreator<in JsViewSwitcher> = object : ViewCreator<JsViewSwitcher> {
+        override fun create(context: Context, attrs: HashMap<String, String>, parent: ViewGroup?): JsViewSwitcher {
+            return JsViewSwitcher(context)
+        }
+    }
+
+}

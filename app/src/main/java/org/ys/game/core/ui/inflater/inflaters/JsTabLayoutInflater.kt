@@ -1,0 +1,22 @@
+package org.ys.game.core.ui.inflater.inflaters
+
+import android.content.Context
+import android.view.View
+import android.view.ViewGroup
+import org.ys.game.core.ui.inflater.ResourceParser
+import org.ys.game.core.ui.inflater.ViewCreator
+import org.ys.game.core.ui.widget.JsTabLayout
+import org.ys.gamecat.R
+
+/**
+ * Transformed by SuperMonster003 on May 20, 2023.
+ */
+class JsTabLayoutInflater(resourceParser: ResourceParser) : TabLayoutInflater<JsTabLayout>(resourceParser) {
+
+    override fun getCreator(): ViewCreator<in JsTabLayout> = object : ViewCreator<JsTabLayout> {
+        override fun create(context: Context, attrs: HashMap<String, String>, parent: ViewGroup?): JsTabLayout {
+            return View.inflate(context, R.layout.js_tablayout, null) as JsTabLayout
+        }
+    }
+
+}

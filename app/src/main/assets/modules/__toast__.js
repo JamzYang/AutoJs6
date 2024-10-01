@@ -1,13 +1,13 @@
 // noinspection JSUnusedLocalSymbols,UnnecessaryLocalVariableJS
 
 /**
- * @param {org.autojs.autojs.runtime.ScriptRuntime} scriptRuntime
+ * @param {org.ys.game.runtime.ScriptRuntime} scriptRuntime
  * @param {org.mozilla.javascript.Scriptable | global} scope
  * @return {Internal.Toast}
  */
 module.exports = function (scriptRuntime, scope) {
 
-    const ScriptToast = org.autojs.autojs.runtime.api.ScriptToast;
+    const ScriptToast = org.ys.game.runtime.api.ScriptToast;
 
     let _ = {
         uiHandler: runtime.getUiHandler(),

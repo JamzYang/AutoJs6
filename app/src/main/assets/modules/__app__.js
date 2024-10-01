@@ -14,7 +14,7 @@ module.exports = function (scriptRuntime, scope) {
     const JavaInteger = java.lang.Integer;
 
     /**
-     * @type {org.autojs.autojs.runtime.api.AppUtils}
+     * @type {org.ys.game.runtime.api.AppUtils}
      */
     const rtApp = scriptRuntime.app;
 
@@ -438,7 +438,7 @@ module.exports = function (scriptRuntime, scope) {
         },
         /**
          * @param {string} alias
-         * @returns {org.autojs.autojs.util.App}
+         * @returns {org.ys.game.util.App}
          */
         getAppByAlias(alias) {
             return App.getAppByAlias(String(alias));

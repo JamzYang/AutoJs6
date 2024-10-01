@@ -7,9 +7,9 @@ import android.widget.EdgeEffect;
 import androidx.annotation.Nullable;
 import androidx.core.widget.EdgeEffectCompat;
 
-import org.autojs.autojs.theme.ThemeColor;
-import org.autojs.autojs.theme.ThemeColorManager;
-import org.autojs.autojs.theme.ThemeColorMutable;
+import org.ys.game.theme.ThemeColor;
+import org.ys.game.theme.ThemeColorManager;
+import org.ys.game.theme.ThemeColorMutable;
 
 import java.lang.reflect.Field;
 

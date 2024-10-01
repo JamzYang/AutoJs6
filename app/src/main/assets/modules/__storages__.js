@@ -4,7 +4,7 @@
  * @return {Internal.Storages}
  */
 module.exports = function (scriptRuntime, scope) {
-    const LocalStorage = org.autojs.autojs.core.storage.LocalStorage;
+    const LocalStorage = org.ys.game.core.storage.LocalStorage;
 
     let _ = {
         ProxyStorage: (/* @IIFE */ () => {

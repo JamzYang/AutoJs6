@@ -7,41 +7,41 @@ let global = this;
 
 /* Global View classes. */
 
-let JsAppBarLayout = org.autojs.autojs.core.ui.widget.JsAppBarLayout;
-let JsButton = org.autojs.autojs.core.ui.widget.JsButton;
-let JsCanvasView = org.autojs.autojs.core.ui.widget.JsCanvasView;
-let JsCardView = org.autojs.autojs.core.ui.widget.JsCardView;
-let JsCheckBox = org.autojs.autojs.core.ui.widget.JsCheckBox;
-let JsConsoleView = org.autojs.autojs.core.ui.widget.JsConsoleView;
-let JsDatePicker = org.autojs.autojs.core.ui.widget.JsDatePicker;
-let JsDrawerLayout = org.autojs.autojs.core.ui.widget.JsDrawerLayout;
-let JsEditText = org.autojs.autojs.core.ui.widget.JsEditText;
-let JsFloatingActionButton = org.autojs.autojs.core.ui.widget.JsFloatingActionButton;
-let JsFrameLayout = org.autojs.autojs.core.ui.widget.JsFrameLayout;
-let JsGridView = org.autojs.autojs.core.ui.widget.JsGridView;
-let JsImageButton = org.autojs.autojs.core.ui.widget.JsImageButton;
-let JsImageView = org.autojs.autojs.core.ui.widget.JsImageView;
-let JsLinearLayout = org.autojs.autojs.core.ui.widget.JsLinearLayout;
-let JsListView = org.autojs.autojs.core.ui.widget.JsListView;
-let JsProgressBar = org.autojs.autojs.core.ui.widget.JsProgressBar;
-let JsRadioButton = org.autojs.autojs.core.ui.widget.JsRadioButton;
-let JsRadioGroup = org.autojs.autojs.core.ui.widget.JsRadioGroup;
-let JsRatingBar = org.autojs.autojs.core.ui.widget.JsRatingBar;
-let JsRelativeLayout = org.autojs.autojs.core.ui.widget.JsRelativeLayout;
-let JsScrollView = org.autojs.autojs.core.ui.widget.JsScrollView;
-let JsSeekBar = org.autojs.autojs.core.ui.widget.JsSeekBar;
-let JsSpinner = org.autojs.autojs.core.ui.widget.JsSpinner;
-let JsSwitch = org.autojs.autojs.core.ui.widget.JsSwitch;
-let JsTabLayout = org.autojs.autojs.core.ui.widget.JsTabLayout;
-let JsTextClock = org.autojs.autojs.core.ui.widget.JsTextClock;
+let JsAppBarLayout = org.ys.game.core.ui.widget.JsAppBarLayout;
+let JsButton = org.ys.game.core.ui.widget.JsButton;
+let JsCanvasView = org.ys.game.core.ui.widget.JsCanvasView;
+let JsCardView = org.ys.game.core.ui.widget.JsCardView;
+let JsCheckBox = org.ys.game.core.ui.widget.JsCheckBox;
+let JsConsoleView = org.ys.game.core.ui.widget.JsConsoleView;
+let JsDatePicker = org.ys.game.core.ui.widget.JsDatePicker;
+let JsDrawerLayout = org.ys.game.core.ui.widget.JsDrawerLayout;
+let JsEditText = org.ys.game.core.ui.widget.JsEditText;
+let JsFloatingActionButton = org.ys.game.core.ui.widget.JsFloatingActionButton;
+let JsFrameLayout = org.ys.game.core.ui.widget.JsFrameLayout;
+let JsGridView = org.ys.game.core.ui.widget.JsGridView;
+let JsImageButton = org.ys.game.core.ui.widget.JsImageButton;
+let JsImageView = org.ys.game.core.ui.widget.JsImageView;
+let JsLinearLayout = org.ys.game.core.ui.widget.JsLinearLayout;
+let JsListView = org.ys.game.core.ui.widget.JsListView;
+let JsProgressBar = org.ys.game.core.ui.widget.JsProgressBar;
+let JsRadioButton = org.ys.game.core.ui.widget.JsRadioButton;
+let JsRadioGroup = org.ys.game.core.ui.widget.JsRadioGroup;
+let JsRatingBar = org.ys.game.core.ui.widget.JsRatingBar;
+let JsRelativeLayout = org.ys.game.core.ui.widget.JsRelativeLayout;
+let JsScrollView = org.ys.game.core.ui.widget.JsScrollView;
+let JsSeekBar = org.ys.game.core.ui.widget.JsSeekBar;
+let JsSpinner = org.ys.game.core.ui.widget.JsSpinner;
+let JsSwitch = org.ys.game.core.ui.widget.JsSwitch;
+let JsTabLayout = org.ys.game.core.ui.widget.JsTabLayout;
+let JsTextClock = org.ys.game.core.ui.widget.JsTextClock;
 let JsTextView = android.os.Build.VERSION.SDK_INT < 26 /* Android API 26 (8.0) [O] */
-    ? org.autojs.autojs.core.ui.widget.JsTextViewLegacy
-    : org.autojs.autojs.core.ui.widget.JsTextView;
-let JsTimePicker = org.autojs.autojs.core.ui.widget.JsTimePicker;
-let JsToggleButton = org.autojs.autojs.core.ui.widget.JsToggleButton;
-let JsToolbar = org.autojs.autojs.core.ui.widget.JsToolbar;
-let JsViewPager = org.autojs.autojs.core.ui.widget.JsViewPager;
-let JsWebView = org.autojs.autojs.core.ui.widget.JsWebView;
+    ? org.ys.game.core.ui.widget.JsTextViewLegacy
+    : org.ys.game.core.ui.widget.JsTextView;
+let JsTimePicker = org.ys.game.core.ui.widget.JsTimePicker;
+let JsToggleButton = org.ys.game.core.ui.widget.JsToggleButton;
+let JsToolbar = org.ys.game.core.ui.widget.JsToolbar;
+let JsViewPager = org.ys.game.core.ui.widget.JsViewPager;
+let JsWebView = org.ys.game.core.ui.widget.JsWebView;
 
 /* Global assignment. */
 
@@ -200,8 +200,8 @@ Object.assign(this, {
 
 ( /* @ModuleIIFE */ () => {
 
-    const ProxyObject = org.autojs.autojs.rhino.ProxyObject;
-    const Pref = org.autojs.autojs.pref.Pref;
+    const ProxyObject = org.ys.game.rhino.ProxyObject;
+    const Pref = org.ys.game.pref.Pref;
 
     let _ = {
         Throwable: java.lang.Throwable,
@@ -450,48 +450,48 @@ Object.assign(this, {
                 RequestBody: okhttp3.RequestBody,
                 Level: org.apache.log4j.Level,
                 LogManager: org.apache.log4j.LogManager,
-                GlobalAppContext: org.autojs.autojs.app.GlobalAppContext,
-                AccessibilityBridge: org.autojs.autojs.core.accessibility.AccessibilityBridge,
-                UiSelector: org.autojs.autojs.core.accessibility.UiSelector,
-                ApkBuilder: org.autojs.autojs.apkbuilder.ApkBuilder,
-                UiObject: org.autojs.autojs.core.automator.UiObject,
-                UiObjectCollection: org.autojs.autojs.core.automator.UiObjectCollection,
-                Crypto: org.autojs.autojs.core.crypto.Crypto,
-                EventEmitter: org.autojs.autojs.core.eventloop.EventEmitter,
-                Canvas: org.autojs.autojs.core.graphics.ScriptCanvas,
-                MutableOkHttp: org.autojs.autojs.core.http.MutableOkHttp,
-                ColorDetector: org.autojs.autojs.core.image.ColorDetector,
-                ColorTable: org.autojs.autojs.core.image.ColorTable,
-                Image: org.autojs.autojs.core.image.ImageWrapper,
-                ImageWrapper: org.autojs.autojs.core.image.ImageWrapper,
-                Mat: org.autojs.autojs.core.opencv.Mat,
-                DynamicLayoutInflater: org.autojs.autojs.core.ui.inflater.DynamicLayoutInflater,
-                JavaScriptEngine: org.autojs.autojs.engine.JavaScriptEngine,
-                PFile: org.autojs.autojs.pio.PFile,
-                Pref: org.autojs.autojs.pref.Pref,
-                ProxyJavaObject: org.autojs.autojs.rhino.ProxyJavaObject,
-                ProxyObject: org.autojs.autojs.rhino.ProxyObject,
-                ScriptRuntime: org.autojs.autojs.runtime.ScriptRuntime,
-                AppUtils: org.autojs.autojs.runtime.api.AppUtils,
-                ScreenMetrics: org.autojs.autojs.runtime.api.ScreenMetrics,
-                Shell: org.autojs.autojs.runtime.api.Shell,
-                ScriptInterruptedException: org.autojs.autojs.runtime.exception.ScriptInterruptedException,
-                JavaScriptSource: org.autojs.autojs.script.JavaScriptSource,
-                ThemeColor: org.autojs.autojs.theme.ThemeColor,
-                App: org.autojs.autojs.util.App,
-                ArrayUtils: org.autojs.autojs.util.ArrayUtils,
-                ColorUtils: org.autojs.autojs.util.ColorUtils,
-                ConsoleUtils: org.autojs.autojs.util.ConsoleUtils,
-                DeviceUtils: org.autojs.autojs.util.DeviceUtils,
-                DisplayUtils: org.autojs.autojs.util.DisplayUtils,
-                JavaUtils: org.autojs.autojs.util.JavaUtils,
-                NetworkUtils: org.autojs.autojs.util.NetworkUtils,
-                NotificationUtils: org.autojs.autojs.util.NotificationUtils,
-                RootMode: org.autojs.autojs.util.RootUtils.RootMode,
-                RootUtils: org.autojs.autojs.util.RootUtils,
-                StringUtils: org.autojs.autojs.util.StringUtils,
-                TextUtils: org.autojs.autojs.util.TextUtils,
-                BuildConfig: org.autojs.autojs6.BuildConfig,
+                GlobalAppContext: org.ys.game.app.GlobalAppContext,
+                AccessibilityBridge: org.ys.game.core.accessibility.AccessibilityBridge,
+                UiSelector: org.ys.game.core.accessibility.UiSelector,
+                ApkBuilder: org.ys.game.apkbuilder.ApkBuilder,
+                UiObject: org.ys.game.core.automator.UiObject,
+                UiObjectCollection: org.ys.game.core.automator.UiObjectCollection,
+                Crypto: org.ys.game.core.crypto.Crypto,
+                EventEmitter: org.ys.game.core.eventloop.EventEmitter,
+                Canvas: org.ys.game.core.graphics.ScriptCanvas,
+                MutableOkHttp: org.ys.game.core.http.MutableOkHttp,
+                ColorDetector: org.ys.game.core.image.ColorDetector,
+                ColorTable: org.ys.game.core.image.ColorTable,
+                Image: org.ys.game.core.image.ImageWrapper,
+                ImageWrapper: org.ys.game.core.image.ImageWrapper,
+                Mat: org.ys.game.core.opencv.Mat,
+                DynamicLayoutInflater: org.ys.game.core.ui.inflater.DynamicLayoutInflater,
+                JavaScriptEngine: org.ys.game.engine.JavaScriptEngine,
+                PFile: org.ys.game.pio.PFile,
+                Pref: org.ys.game.pref.Pref,
+                ProxyJavaObject: org.ys.game.rhino.ProxyJavaObject,
+                ProxyObject: org.ys.game.rhino.ProxyObject,
+                ScriptRuntime: org.ys.game.runtime.ScriptRuntime,
+                AppUtils: org.ys.game.runtime.api.AppUtils,
+                ScreenMetrics: org.ys.game.runtime.api.ScreenMetrics,
+                Shell: org.ys.game.runtime.api.Shell,
+                ScriptInterruptedException: org.ys.game.runtime.exception.ScriptInterruptedException,
+                JavaScriptSource: org.ys.game.script.JavaScriptSource,
+                ThemeColor: org.ys.game.theme.ThemeColor,
+                App: org.ys.game.util.App,
+                ArrayUtils: org.ys.game.util.ArrayUtils,
+                ColorUtils: org.ys.game.util.ColorUtils,
+                ConsoleUtils: org.ys.game.util.ConsoleUtils,
+                DeviceUtils: org.ys.game.util.DeviceUtils,
+                DisplayUtils: org.ys.game.util.DisplayUtils,
+                JavaUtils: org.ys.game.util.JavaUtils,
+                NetworkUtils: org.ys.game.util.NetworkUtils,
+                NotificationUtils: org.ys.game.util.NotificationUtils,
+                RootMode: org.ys.game.util.RootUtils.RootMode,
+                RootUtils: org.ys.game.util.RootUtils,
+                StringUtils: org.ys.game.util.StringUtils,
+                TextUtils: org.ys.game.util.TextUtils,
+                BuildConfig: org.ys.gamecat.BuildConfig,
                 VolatileBox: org.autojs.concurrent.VolatileBox,
                 Imgproc: org.opencv.imgproc.Imgproc,
             });

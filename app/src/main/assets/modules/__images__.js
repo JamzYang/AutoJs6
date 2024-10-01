@@ -19,17 +19,17 @@ module.exports = function (scriptRuntime, scope) {
     const Core = org.opencv.core.Core;
     const Imgproc = org.opencv.imgproc.Imgproc;
     const Gravity = android.view.Gravity;
-    const Mat = org.autojs.autojs.core.opencv.Mat;
-    const Images = org.autojs.autojs.runtime.api.Images;
-    const ColorDetector = org.autojs.autojs.core.image.ColorDetector;
-    const ScreenCapturer = org.autojs.autojs.core.image.capture.ScreenCapturer;
+    const Mat = org.ys.game.core.opencv.Mat;
+    const Images = org.ys.game.runtime.api.Images;
+    const ColorDetector = org.ys.game.core.image.ColorDetector;
+    const ScreenCapturer = org.ys.game.core.image.capture.ScreenCapturer;
     const Bitmap = android.graphics.Bitmap;
     const BitmapFactory = android.graphics.BitmapFactory;
     const ByteArrayOutputStream = java.io.ByteArrayOutputStream;
 
-    const RtImages = org.autojs.autojs.runtime.api.Images;
+    const RtImages = org.ys.game.runtime.api.Images;
     /**
-     * @type {org.autojs.autojs.runtime.api.Images}
+     * @type {org.ys.game.runtime.api.Images}
      */
     const rtImages = scriptRuntime.getImages();
 
@@ -79,7 +79,7 @@ module.exports = function (scriptRuntime, scope) {
                 },
                 /**
                  * @Overwrite by SuperMonster003 on Apr 19, 2022.
-                 * Method org.autojs.autojs.runtime.api.Images.pixel is static.
+                 * Method org.ys.game.runtime.api.Images.pixel is static.
                  *
                  * @example Code snippet before overwrite
                  * util.__assignFunctions__(rtImages, images, [ ... , 'pixel']);

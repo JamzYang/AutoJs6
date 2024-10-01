@@ -19,7 +19,7 @@
             android:orientation="horizontal"
             android:padding="8dp">
 
-        <org.autojs.autojs.core.ui.widget.JsCheckBox
+        <org.ys.game.core.ui.widget.JsCheckBox
                 android:id="@+id/checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

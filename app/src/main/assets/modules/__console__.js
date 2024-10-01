@@ -14,11 +14,11 @@ module.exports = function (scriptRuntime, scope) {
     const Level = org.apache.log4j.Level;
     const LogManager = org.apache.log4j.LogManager;
     const LogConfigurator = de.mindpipe.android.logging.log4j.LogConfigurator;
-    const ProxyObject = org.autojs.autojs.rhino.ProxyObject;
-    const ConsoleUtils = org.autojs.autojs.util.ConsoleUtils;
+    const ProxyObject = org.ys.game.rhino.ProxyObject;
+    const ConsoleUtils = org.ys.game.util.ConsoleUtils;
 
     // noinspection JSValidateTypes
-    /** @type {org.autojs.autojs.core.console.GlobalConsole} */
+    /** @type {org.ys.game.core.console.GlobalConsole} */
     const rtConsole = scriptRuntime.console;
 
     const multiArgsWrapperWhiteList = [ 'size', 'position' ];

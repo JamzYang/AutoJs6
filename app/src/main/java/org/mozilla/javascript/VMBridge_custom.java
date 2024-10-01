@@ -3,7 +3,7 @@ package org.mozilla.javascript;
 import android.os.Looper;
 import android.util.Log;
 
-import org.autojs.autojs.rhino.AutoJsContext;
+import org.ys.game.rhino.AutoJsContext;
 import org.mozilla.javascript.jdk18.VMBridge_jdk18;
 
 import java.lang.reflect.Constructor;
@@ -63,7 +63,7 @@ public class VMBridge_custom extends VMBridge_jdk18 {
                     //  ! https://github.com/kkevsekk1/AutoX/commit/9cfeb00280447ef2807bdc5e195095d5a83afb39#diff-18d5934044cd3d259e52c3b1053ecd57e653ae70d14a7c0f31700029e97da239
                     if (context instanceof AutoJsContext) {
                         // notify the script thread to exit
-                        org.autojs.autojs.runtime.ScriptRuntime runtime = ((AutoJsContext) context).getRhinoJavaScriptEngine().getRuntime();
+                        org.ys.game.runtime.ScriptRuntime runtime = ((AutoJsContext) context).getRhinoJavaScriptEngine().getRuntime();
                         Log.d(LOG_TAG, "runtime = " + runtime);
                         runtime.exit(e);
                     }

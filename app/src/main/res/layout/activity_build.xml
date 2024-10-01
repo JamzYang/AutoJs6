@@ -12,7 +12,7 @@
             android:theme="@style/AppTheme.AppBarOverlay"
             android:fitsSystemWindows="true">
 
-        <org.autojs.autojs.theme.widget.ThemeColorToolbar
+        <org.ys.game.theme.widget.ThemeColorToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -315,7 +315,7 @@
 
         </ScrollView>
 
-        <org.autojs.autojs.theme.widget.ThemeColorFloatingActionButton
+        <org.ys.game.theme.widget.ThemeColorFloatingActionButton
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

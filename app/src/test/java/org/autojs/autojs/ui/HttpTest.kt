@@ -1,4 +1,4 @@
-package org.autojs.autojs.ui
+package org.ys.game.ui
 
 import okhttp3.OkHttpClient
 import okhttp3.Request

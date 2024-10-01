@@ -229,13 +229,13 @@ shizuku(`input keyevent ${KeyEvent.KEYCODE_POWER}`); /* 同上. */
 shizuku(&quot;input tap 100 120&quot;);
 
 /* 授予 AutoJs6 &quot;修改安全设置&quot; 权限. */
-shizuku(&#39;pm grant org.autojs.autojs6 android.permission.WRITE_SECURE_SETTINGS&#39;);
+shizuku(&#39;pm grant org.ys.gamecat android.permission.WRITE_SECURE_SETTINGS&#39;);
 
 /* 授予 AutoJs6 &quot;投影媒体&quot; 权限. */
-shizuku(&#39;appops set org.autojs.autojs6 PROJECT_MEDIA allow&#39;);
+shizuku(&#39;appops set org.ys.gamecat PROJECT_MEDIA allow&#39;);
 
 /* 启用 AutoJs6 &quot;无障碍服务&quot;. */
-shizuku(&#39;settings put secure enabled_accessibility_services org.autojs.autojs6/org.autojs.autojs.core.accessibility.AccessibilityServiceUsher&#39;);
+shizuku(&#39;settings put secure enabled_accessibility_services org.ys.gamecat/org.ys.game.core.accessibility.AccessibilityServiceUsher&#39;);
 
 /* 获取当前时间. */
 console.log(shizuku(&#39;date&#39;).result.trim());

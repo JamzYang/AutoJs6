@@ -61,7 +61,7 @@
             },
         },
         /**
-         * @param {org.autojs.autojs.runtime.api.ScriptPromiseAdapter} promiseAdapter
+         * @param {org.ys.game.runtime.api.ScriptPromiseAdapter} promiseAdapter
          * @return {Promise<unknown>}
          */
         promise(promiseAdapter) {
@@ -72,7 +72,7 @@
             });
         },
         /**
-         * @param {Promise<unknown> | org.autojs.autojs.runtime.api.ScriptPromiseAdapter} promise
+         * @param {Promise<unknown> | org.ys.game.runtime.api.ScriptPromiseAdapter} promise
          * @return {*}
          */
         wait(promise) {

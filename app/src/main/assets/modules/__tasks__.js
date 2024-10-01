@@ -10,11 +10,11 @@ let { ui, threads, files } = global;
  * @return {Internal.Tasks}
  */
 module.exports = function (scriptRuntime, scope) {
-    const TimedTask = org.autojs.autojs.timing.TimedTask;
-    const IntentTask = org.autojs.autojs.timing.IntentTask;
-    const TimedTaskManager = org.autojs.autojs.timing.TimedTaskManager;
-    const ExecutionConfig = org.autojs.autojs.execution.ExecutionConfig;
-    const DynamicBroadcastReceivers = org.autojs.autojs.external.receiver.DynamicBroadcastReceivers;
+    const TimedTask = org.ys.game.timing.TimedTask;
+    const IntentTask = org.ys.game.timing.IntentTask;
+    const TimedTaskManager = org.ys.game.timing.TimedTaskManager;
+    const ExecutionConfig = org.ys.game.execution.ExecutionConfig;
+    const DynamicBroadcastReceivers = org.ys.game.external.receiver.DynamicBroadcastReceivers;
 
     let _ = {
         Tasks: (/* @IIFE */ () => {
@@ -40,7 +40,7 @@ module.exports = function (scriptRuntime, scope) {
                 },
                 /**
                  * @param {Timers.TimedTask.Daily} [options]
-                 * @return {TimedTask$|org.autojs.autojs.core.looper.TimerThread|null}
+                 * @return {TimedTask$|org.ys.game.core.looper.TimerThread|null}
                  */
                 addDailyTask(options) {
                     let opt = options || {};
@@ -55,7 +55,7 @@ module.exports = function (scriptRuntime, scope) {
                 },
                 /**
                  * @param {Timers.TimedTask.Weekly} [options]
-                 * @return {TimedTask$|org.autojs.autojs.core.looper.TimerThread|null}
+                 * @return {TimedTask$|org.ys.game.core.looper.TimerThread|null}
                  */
                 addWeeklyTask(options) {
                     let timeFlag = 0;
@@ -84,7 +84,7 @@ module.exports = function (scriptRuntime, scope) {
                 },
                 /**
                  * @param {Timers.TimedTask.Disposable} options
-                 * @return {TimedTask$|org.autojs.autojs.core.looper.TimerThread|null}
+                 * @return {TimedTask$|org.ys.game.core.looper.TimerThread|null}
                  */
                 addDisposableTask(options) {
                     let opt = options || {};
@@ -99,7 +99,7 @@ module.exports = function (scriptRuntime, scope) {
                 },
                 /**
                  * @param {Timers.IntentTask.Basic} [options]
-                 * @return {IntentTask$|org.autojs.autojs.core.looper.TimerThread|null}
+                 * @return {IntentTask$|org.ys.game.core.looper.TimerThread|null}
                  */
                 addIntentTask(options) {
                     let opt = options || {};
@@ -155,7 +155,7 @@ module.exports = function (scriptRuntime, scope) {
                 /**
                  * @param {number} id
                  * @param {Timers.TimedTask.Extension} [options]
-                 * @return {TimedTask$|org.autojs.autojs.core.looper.TimerThread|null}
+                 * @return {TimedTask$|org.ys.game.core.looper.TimerThread|null}
                  */
                 removeTimedTask(id, options) {
                     let opt = options || {};
@@ -167,7 +167,7 @@ module.exports = function (scriptRuntime, scope) {
                 /**
                  * @param {number} id
                  * @param {Timers.TimedTask.Extension} [options]
-                 * @return {TimedTask$|org.autojs.autojs.core.looper.TimerThread|null}
+                 * @return {TimedTask$|org.ys.game.core.looper.TimerThread|null}
                  */
                 removeIntentTask(id, options) {
                     let opt = options || {};
@@ -268,7 +268,7 @@ module.exports = function (scriptRuntime, scope) {
          * @param {number} [config.delay=0]
          * @param {number} [config.interval=0]
          * @param {number} [config.loopTimes=1]
-         * @return {org.autojs.autojs.execution.ExecutionConfig}
+         * @return {org.ys.game.execution.ExecutionConfig}
          */
         parseConfig(config) {
             let execConfig = new ExecutionConfig();
@@ -307,7 +307,7 @@ module.exports = function (scriptRuntime, scope) {
         /**
          * @param {TimedTask$|IntentTask$} task
          * @param {Timers.TimedTask.Extension|{}} [options]
-         * @return {TimedTask$|org.autojs.autojs.core.looper.TimerThread|null}
+         * @return {TimedTask$|org.ys.game.core.looper.TimerThread|null}
          */
         taskFulfilled(task, options) {
             let opt = options || {};

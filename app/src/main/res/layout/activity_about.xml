@@ -17,7 +17,7 @@
                 app:theme="@style/AppTheme.AppBarOverlay"
                 android:fitsSystemWindows="true">
 
-            <org.autojs.autojs.theme.widget.ThemeColorToolbar
+            <org.ys.game.theme.widget.ThemeColorToolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
@@ -128,7 +128,7 @@
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent" />
 
-                    <org.autojs.autojs.ui.widget.CopyrightTextView
+                    <org.ys.game.ui.widget.CopyrightTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"

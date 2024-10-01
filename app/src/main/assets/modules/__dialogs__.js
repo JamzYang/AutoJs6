@@ -174,7 +174,7 @@ module.exports = function (scriptRuntime, scope) {
         linkifyMask: [ 'all', 'emailAddresses', 'mapAddresses', 'phoneNumbers', 'webUrls' ],
         animation: [ 'default', 'activity', 'dialog', 'inputMethod', 'toast', 'translucent' ],
         /**
-         * @type {org.autojs.autojs.runtime.api.Dialogs|org.autojs.autojs.runtime.api.Dialogs.NonUiDialogs|*}
+         * @type {org.ys.game.runtime.api.Dialogs|org.ys.game.runtime.api.Dialogs.NonUiDialogs|*}
          */
         get rtDialogs() {
             if (_._rtDialogs === undefined) {
@@ -283,7 +283,7 @@ module.exports = function (scriptRuntime, scope) {
         },
         /**
          *
-         * @param {org.autojs.autojs.core.ui.dialog.JsDialog} dialog
+         * @param {org.ys.game.core.ui.dialog.JsDialog} dialog
          * @param {Dialogs.Build.Properties} props
          */
         applyBuiltDialogProperties(dialog, props) {

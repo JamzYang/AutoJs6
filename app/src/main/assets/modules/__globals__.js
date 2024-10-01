@@ -8,12 +8,12 @@ let { autojs, console, device, pickup, ui, s13n, Numberx } = global;
 /* The same is true of destructuring assignment syntax (like `let {Uri} = android.net`). */
 
 /**
- * @param {org.autojs.autojs.runtime.ScriptRuntime} runtime
+ * @param {org.ys.game.runtime.ScriptRuntime} runtime
  * @param {org.mozilla.javascript.Scriptable | global} scope
  */
 module.exports = function (runtime, scope) {
 
-    const ScreenMetrics = org.autojs.autojs.runtime.api.ScreenMetrics;
+    const ScreenMetrics = org.ys.game.runtime.api.ScreenMetrics;
 
     let _ = {
         scale: {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-        android:configure="org.autojs.autojs.external.widget.ScriptWidgetSettingsActivity"
+        android:configure="org.ys.game.external.widget.ScriptWidgetSettingsActivity"
         android:initialLayout="@layout/widget_script_shortcut"
         android:minHeight="24dp"
         android:minWidth="24dp"

@@ -12,7 +12,7 @@
             android:theme="@style/AppTheme.AppBarOverlay"
             android:fitsSystemWindows="true">
 
-        <org.autojs.autojs.theme.widget.ThemeColorToolbar
+        <org.ys.game.theme.widget.ThemeColorToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -113,7 +113,7 @@
                                     android:paddingTop="6dp"
                                     android:paddingBottom="6dp">
 
-                                <org.autojs.autojs.theme.widget.ThemeColorImageViewCompat
+                                <org.ys.game.theme.widget.ThemeColorImageViewCompat
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"
                                         android:layout_gravity="center_vertical"
@@ -141,7 +141,7 @@
                                     android:orientation="horizontal"
                                     android:paddingTop="6dp">
 
-                                <org.autojs.autojs.theme.widget.ThemeColorImageViewCompat
+                                <org.ys.game.theme.widget.ThemeColorImageViewCompat
                                         android:id="@+id/disposable_task_date_icon"
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"

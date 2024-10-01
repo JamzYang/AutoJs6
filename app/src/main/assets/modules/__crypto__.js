@@ -2,7 +2,7 @@
 
 module.exports = function (runtime, global) {
 
-    const Crypto = org.autojs.autojs.core.crypto.Crypto;
+    const Crypto = org.ys.game.core.crypto.Crypto;
 
     return {
         Key: Crypto.Key,

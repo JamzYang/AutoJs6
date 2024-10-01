@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <org.autojs.autojs.ui.explorer.ExplorerProjectToolbar
+    <org.ys.game.ui.explorer.ExplorerProjectToolbar
             android:id="@+id/project_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

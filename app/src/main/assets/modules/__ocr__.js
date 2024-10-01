@@ -163,8 +163,8 @@ module.exports = function (scriptRuntime, scope) {
                     if (typeof arguments[0] === 'string') {
 
                         // @Signature
-                        // detect(imgPath: string, options?: DetectOptionsMLKit | DetectOptionsPaddle): org.autojs.autojs.runtime.api.OcrResult[];
-                        // detect(imgPath: string, region: OmniRegion): org.autojs.autojs.runtime.api.OcrResult[];
+                        // detect(imgPath: string, options?: DetectOptionsMLKit | DetectOptionsPaddle): org.ys.game.runtime.api.OcrResult[];
+                        // detect(imgPath: string, region: OmniRegion): org.ys.game.runtime.api.OcrResult[];
 
                         let img = images.read(/* path = */ arguments[0]);
                         if (img === null) {
@@ -175,8 +175,8 @@ module.exports = function (scriptRuntime, scope) {
                         argArray.splice(0, 1, img.oneShot());
 
                         // @Overload
-                        // detect(img: ImageWrapper, options?: DetectOptionsMLKit | DetectOptionsPaddle): org.autojs.autojs.runtime.api.OcrResult[];
-                        // detect(img: ImageWrapper, region: OmniRegion): org.autojs.autojs.runtime.api.OcrResult[];
+                        // detect(img: ImageWrapper, options?: DetectOptionsMLKit | DetectOptionsPaddle): org.ys.game.runtime.api.OcrResult[];
+                        // detect(img: ImageWrapper, region: OmniRegion): org.ys.game.runtime.api.OcrResult[];
                         return this.detect.apply(this, argArray);
                     }
 
@@ -194,16 +194,16 @@ module.exports = function (scriptRuntime, scope) {
 
                     if (_.shouldTakenAsRegion(arguments[1])) {
 
-                        // @Signature detect(img: ImageWrapper, region: OmniRegion): org.autojs.autojs.runtime.api.OcrResult[];
+                        // @Signature detect(img: ImageWrapper, region: OmniRegion): org.ys.game.runtime.api.OcrResult[];
 
                         let argArray = Array.from(arguments);
                         argArray.splice(1, 1, { region: arguments[1] });
 
-                        // @Overload detect(img: ImageWrapper, options: DetectOptionsMLKit | DetectOptionsPaddle): org.autojs.autojs.runtime.api.OcrResult[];
+                        // @Overload detect(img: ImageWrapper, options: DetectOptionsMLKit | DetectOptionsPaddle): org.ys.game.runtime.api.OcrResult[];
                         return this.detect.apply(this, argArray);
                     }
 
-                    // @Signature detect(img: ImageWrapper, options?: DetectOptionsMLKit | DetectOptionsPaddle): org.autojs.autojs.runtime.api.OcrResult[];
+                    // @Signature detect(img: ImageWrapper, options?: DetectOptionsMLKit | DetectOptionsPaddle): org.ys.game.runtime.api.OcrResult[];
 
                     let opt = /* options */ arguments[1] || {};
                     let region = opt.region;

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <org.autojs.autojs.theme.preference.ThemeColorPreferenceCategory
+    <org.ys.game.theme.preference.ThemeColorPreferenceCategory
             app:layout="@layout/preference_category_custom"
             app:title="@string/text_appearance">
 
-        <org.autojs.autojs.ui.settings.AppLanguagePreference
+        <org.ys.game.ui.settings.AppLanguagePreference
                 app:layout="@layout/preference_custom"
                 app:key="@string/key_app_language"
                 app:title="@string/text_app_language"
@@ -16,7 +16,7 @@
                 app:neutralTextShort="@string/dialog_button_system_settings_simplified"
                 app:onConfirmPrompt="@string/prompt_restart_may_be_needed_for_language_switch" />
 
-        <org.autojs.autojs.ui.settings.NightModePreference
+        <org.ys.game.ui.settings.NightModePreference
                 app:layout="@layout/preference_custom"
                 app:key="@string/key_night_mode"
                 app:title="@string/text_night_mode"
@@ -24,12 +24,12 @@
                 app:itemValues="@array/values_night_mode"
                 app:itemDefaultKey="@string/key_night_mode_follow_system" />
 
-        <org.autojs.autojs.ui.settings.ThemeColorPreference
+        <org.ys.game.ui.settings.ThemeColorPreference
                 app:layout="@layout/preference_custom"
                 app:key="@string/key_theme_color"
                 app:title="@string/text_theme_color" />
 
-        <org.autojs.autojs.ui.settings.KeepScreenOnWhenInForegroundPreference
+        <org.ys.game.ui.settings.KeepScreenOnWhenInForegroundPreference
                 app:layout="@layout/preference_custom"
                 app:key="@string/key_keep_screen_on_when_in_foreground"
                 app:title="@string/text_keep_screen_on_when_in_foreground"
@@ -37,14 +37,14 @@
                 app:itemValues="@array/values_keep_screen_on_when_in_foreground"
                 app:itemDefaultKey="@string/key_keep_screen_on_when_in_foreground_disabled" />
 
-    </org.autojs.autojs.theme.preference.ThemeColorPreferenceCategory>
+    </org.ys.game.theme.preference.ThemeColorPreferenceCategory>
 
-    <org.autojs.autojs.theme.preference.ThemeColorPreferenceCategory
+    <org.ys.game.theme.preference.ThemeColorPreferenceCategory
             app:layout="@layout/preference_category_custom"
             app:title="@string/text_config">
 
 
-        <org.autojs.autojs.ui.settings.RootModePreference
+        <org.ys.game.ui.settings.RootModePreference
                 app:layout="@layout/preference_custom"
                 app:key="@string/key_root_mode"
                 app:title="@string/text_root_mode_title"
@@ -55,49 +55,49 @@
 
 
 
-    </org.autojs.autojs.theme.preference.ThemeColorPreferenceCategory>
+    </org.ys.game.theme.preference.ThemeColorPreferenceCategory>
 
-    <org.autojs.autojs.theme.preference.ThemeColorPreferenceCategory
+    <org.ys.game.theme.preference.ThemeColorPreferenceCategory
             app:layout="@layout/preference_category_custom"
             app:title="@string/text_a11y_service">
 
-        <org.autojs.autojs.theme.preference.ThemeColorSwitchPreference
+        <org.ys.game.theme.preference.ThemeColorSwitchPreference
                 app:layout="@layout/preference_custom"
                 app:key="@string/key_enable_a11y_service_with_root_access"
                 app:defaultValue="@bool/pref_enable_a11y_service_with_root_access"
                 app:title="@string/text_enable_a11y_service_with_root_access_automatically"
                 app:summary="@string/summary_enable_a11y_service_with_root_access" />
 
-        <org.autojs.autojs.theme.preference.ThemeColorSwitchPreference
+        <org.ys.game.theme.preference.ThemeColorSwitchPreference
                 app:layout="@layout/preference_custom"
                 app:key="@string/key_enable_a11y_service_with_secure_settings"
                 app:defaultValue="@bool/pref_enable_a11y_service_with_secure_settings"
                 app:title="@string/text_enable_a11y_service_with_secure_settings_automatically"
                 app:summary="@string/summary_enable_a11y_service_with_secure_settings" />
 
-    </org.autojs.autojs.theme.preference.ThemeColorPreferenceCategory>
+    </org.ys.game.theme.preference.ThemeColorPreferenceCategory>
 
 
-    <org.autojs.autojs.theme.preference.ThemeColorPreferenceCategory
+    <org.ys.game.theme.preference.ThemeColorPreferenceCategory
             app:layout="@layout/preference_category_custom"
             app:title="@string/text_updates">
 
-        <org.autojs.autojs.ui.settings.CheckForUpdatesPreference
+        <org.ys.game.ui.settings.CheckForUpdatesPreference
                 app:layout="@layout/preference_custom"
                 app:key="@string/key_check_for_updates"
                 app:title="@string/text_check_for_updates" />
 
-        <org.autojs.autojs.theme.preference.ThemeColorSwitchPreference
+        <org.ys.game.theme.preference.ThemeColorSwitchPreference
                 app:layout="@layout/preference_custom"
                 app:key="@string/key_auto_check_for_updates"
                 app:defaultValue="@bool/pref_auto_check_for_updates"
                 app:title="@string/text_auto_check_for_updates"
                 app:summary="@string/text_auto_check_for_updates_and_show_snackbar" />
 
-        <org.autojs.autojs.ui.settings.ManageIgnoredUpdatesPreference
+        <org.ys.game.ui.settings.ManageIgnoredUpdatesPreference
                 app:layout="@layout/preference_custom"
                 app:key="@string/key_manage_ignored_updates"
                 app:title="@string/text_manage_ignored_updates" />
-    </org.autojs.autojs.theme.preference.ThemeColorPreferenceCategory>
+    </org.ys.game.theme.preference.ThemeColorPreferenceCategory>
 
 </PreferenceScreen>

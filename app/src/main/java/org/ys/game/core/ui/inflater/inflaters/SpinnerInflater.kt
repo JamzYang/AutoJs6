@@ -1,0 +1,17 @@
+package org.ys.game.core.ui.inflater.inflaters
+
+import android.content.Context
+import android.view.ViewGroup
+import android.widget.Spinner
+import org.ys.game.core.ui.inflater.ResourceParser
+import org.ys.game.core.ui.inflater.ViewCreator
+
+open class SpinnerInflater<V : Spinner>(resourceParser: ResourceParser) : AbsSpinnerInflater<V>(resourceParser) {
+
+    override fun getCreator(): ViewCreator<in V> = object : ViewCreator<Spinner> {
+        override fun create(context: Context, attrs: HashMap<String, String>, parent: ViewGroup?): Spinner {
+            return Spinner(context)
+        }
+    }
+
+}

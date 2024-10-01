@@ -14,12 +14,12 @@ module.exports = function (scriptRuntime, scope) {
     const Looper = android.os.Looper;
     const Runnable = java.lang.Runnable;
     const ContextThemeWrapper = android.view.ContextThemeWrapper;
-    const ViewExtras = org.autojs.autojs.core.ui.ViewExtras;
-    const JsListView = org.autojs.autojs.core.ui.widget.JsListView;
-    const JsGridView = org.autojs.autojs.core.ui.widget.JsGridView;
-    const JsViewHelper = org.autojs.autojs.core.ui.JsViewHelper;
-    const ThemeColor = org.autojs.autojs.theme.ThemeColor;
-    const DynamicLayoutInflater = org.autojs.autojs.core.ui.inflater.DynamicLayoutInflater;
+    const ViewExtras = org.ys.game.core.ui.ViewExtras;
+    const JsListView = org.ys.game.core.ui.widget.JsListView;
+    const JsGridView = org.ys.game.core.ui.widget.JsGridView;
+    const JsViewHelper = org.ys.game.core.ui.JsViewHelper;
+    const ThemeColor = org.ys.game.theme.ThemeColor;
+    const DynamicLayoutInflater = org.ys.game.core.ui.inflater.DynamicLayoutInflater;
     const ColorDrawable = android.graphics.drawable.ColorDrawable;
 
     require('object-observe-lite.min').call(scope);
@@ -244,7 +244,7 @@ module.exports = function (scriptRuntime, scope) {
             return UI;
         })(),
         /**
-         * @type {org.autojs.autojs.core.ui.inflater.LayoutInflaterDelegate}
+         * @type {org.ys.game.core.ui.inflater.LayoutInflaterDelegate}
          */
         layoutInflaterDelegate: {
             beforeConvertXml(context, xml) {

@@ -11,7 +11,7 @@ module.exports = function (scriptRuntime, scope) {
     // @Caution by SuperMonster003 on Apr 19, 2022.
     //  ! Do not declare globally because variable Continuation which
     //  ! extends org.mozilla.javascript.NativeContinuation has already declared.
-    const Result = org.autojs.autojs.rhino.continuation.Continuation.Result;
+    const Result = org.ys.game.rhino.continuation.Continuation.Result;
 
     let _ = {
         Creator: (/* @IIFE */ () => {

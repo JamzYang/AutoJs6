@@ -1,4 +1,4 @@
-package org.autojs.autojs.statics;
+package org.ys.game.statics;
 
 import org.junit.Test;
 import org.mozilla.javascript.Context;

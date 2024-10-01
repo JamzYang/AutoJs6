@@ -4,7 +4,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.autojs.autojs.pref.Language;
+import org.ys.game.pref.Language;
 
 import java.io.BufferedReader;
 import java.io.IOException;

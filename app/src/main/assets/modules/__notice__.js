@@ -7,8 +7,8 @@
  */
 module.exports = function (scriptRuntime, scope) {
 
-    const AppUtils = org.autojs.autojs.runtime.api.AppUtils;
-    const NotificationUtils = org.autojs.autojs.util.NotificationUtils;
+    const AppUtils = org.ys.game.runtime.api.AppUtils;
+    const NotificationUtils = org.ys.game.util.NotificationUtils;
     const NotificationCompat = androidx.core.app.NotificationCompat;
     const Builder = androidx.core.app.NotificationCompat.Builder;
     const BigTextStyle = androidx.core.app.NotificationCompat.BigTextStyle;

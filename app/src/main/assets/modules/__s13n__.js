@@ -29,7 +29,7 @@ module.exports = function (scriptRuntime, scope) {
                     if (o instanceof Color) {
                         return o.toInt();
                     }
-                    if (o instanceof org.autojs.autojs.theme.ThemeColor) {
+                    if (o instanceof org.ys.game.theme.ThemeColor) {
                         return o.getColorPrimary();
                     }
                     throw TypeError(`Failed to make "{value: ${o}, species: ${species(o)}})" a color being`);

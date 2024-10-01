@@ -5,7 +5,7 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="org.autojs.autojs.ui.main.MainActivity">
+        tools:context="org.ys.game.ui.main.MainActivity">
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +35,7 @@
 
     <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_drawer"
-            android:name="org.autojs.autojs.ui.main.drawer.DrawerFragment"
+            android:name="org.ys.game.ui.main.drawer.DrawerFragment"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"

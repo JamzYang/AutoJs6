@@ -11,8 +11,8 @@ let { http } = global;
  */
 module.exports = function (scriptRuntime, scope) {
     const Context = org.mozilla.javascript.Context;
-    const InjectableWebView = org.autojs.autojs.core.web.InjectableWebView;
-    const InjectableWebClient = org.autojs.autojs.core.web.InjectableWebClient;
+    const InjectableWebView = org.ys.game.core.web.InjectableWebView;
+    const InjectableWebClient = org.ys.game.core.web.InjectableWebClient;
 
     let _ = {
         Web: (/* @IIFE */ () => {
@@ -70,12 +70,12 @@ module.exports = function (scriptRuntime, scope) {
                 if (typeof this.url !== 'string') {
                     throw TypeError(`Invalid url (value: ${this.url}, species: ${species(this.url)}) for WebSocket`);
                 }
-                return new org.autojs.autojs.core.web.WebSocket(this.client, this.url);
+                return new org.ys.game.core.web.WebSocket(this.client, this.url);
             };
 
             /* Append all primitive static fields. */
-            Object.keys(org.autojs.autojs.core.web.WebSocket).forEach((key) => {
-                let value = org.autojs.autojs.core.web.WebSocket[key]
+            Object.keys(org.ys.game.core.web.WebSocket).forEach((key) => {
+                let value = org.ys.game.core.web.WebSocket[key]
                 if (isPrimitive(value)) {
                     WebSocket[key] = value;
                 }

@@ -12,14 +12,14 @@ let { util } = global;
 module.exports = function (scriptRuntime, scope) {
 
     /**
-     * @type {org.autojs.autojs.core.image.Colors}
+     * @type {org.ys.game.core.image.Colors}
      */
     const rtColors = scriptRuntime.colors;
 
     const ColorStateList = android.content.res.ColorStateList;
-    const ColorDetector = org.autojs.autojs.core.image.ColorDetector;
-    const ThemeColor = org.autojs.autojs.theme.ThemeColor;
-    const ColorTable = org.autojs.autojs.core.image.ColorTable;
+    const ColorDetector = org.ys.game.core.image.ColorDetector;
+    const ThemeColor = org.ys.game.theme.ThemeColor;
+    const ColorTable = org.ys.game.core.image.ColorTable;
 
     let _ = {
         Color: (/* @IIFE */ () => {

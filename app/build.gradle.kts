@@ -14,7 +14,7 @@ import java.util.TimeZone
 import java.util.zip.CRC32
 import kotlin.text.RegexOption.IGNORE_CASE
 
-val applicationId = "org.autojs.autojs6"
+val applicationId = "org.ys.gamecat"
 val sign = Sign("$rootDir/sign.properties")
 val versions = Versions("$rootDir/version.properties")
 
@@ -345,7 +345,7 @@ android {
                     "appName" to "@string/app_name",
                     "intentCategory" to "android.intent.category.LAUNCHER",
                     "intentCategoryInrt" to "android.intent.category.DEFAULT",
-                    "authorities" to "org.autojs.autojs6.fileprovider",
+                    "authorities" to "org.ys.gamecat.fileprovider",
                     "icon" to "@drawable/game_cat",
                 )
             )
@@ -367,7 +367,7 @@ android {
                     "appName" to "AutoJs6.$flavorNameInrt",
                     "intentCategory" to "android.intent.category.DEFAULT",
                     "intentCategoryInrt" to "android.intent.category.LAUNCHER",
-                    "authorities" to "org.autojs.autojs6.$flavorNameInrt.fileprovider",
+                    "authorities" to "org.ys.gamecat.$flavorNameInrt.fileprovider",
                     "icon" to "@mipmap/ic_launcher",
                 )
             )
@@ -439,7 +439,7 @@ android {
             if (gradle.startParameter.taskNames.any { it.contains(Regex("^(:?$flavorNameApp:)?$buildActionAssemble$flavorNameInrt", IGNORE_CASE)) }) {
                 // @Hint by SuperMonster003 on Oct 16, 2023.
                 //  ! Runtime assets will be copied from flavor "app"
-                //  ! while building an apk on org.autojs.autojs.ui.project.BuildActivity.
+                //  ! while building an apk on org.ys.game.ui.project.BuildActivity.
                 ignoreAssetsPatterns.addAll(emptyList())
             }
         }

@@ -30,8 +30,8 @@
 
 -keep class org.mozilla.javascript.** { *; }
 #-keep class com.jecelyin.editor.** { *; }
--keep class org.autojs.autojs.core.automator.** { *; }
--keep class org.autojs.autojs.** { *; }
+-keep class org.ys.game.core.automator.** { *; }
+-keep class org.ys.game.** { *; }
 -keep class org.greenrobot.eventbus.** { *; }
 -keep class * extends c
 -keepattributes *Annotation*
@@ -52,7 +52,7 @@
 -keep class com.some.package.server.JsonDeserializerWithOptions
 # autojs
 -keepclassmembers class ** {
-    @org.autojs.autojs.annotation.ScriptInterface <methods>;
+    @org.ys.game.annotation.ScriptInterface <methods>;
 }
 # 920 editor
 #-keep class org.msgpack.** { *; }

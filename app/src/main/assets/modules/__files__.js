@@ -4,7 +4,7 @@
  * @return {Internal.Files}
  */
 module.exports = function (scriptRuntime, scope) {
-    const RtFiles = org.autojs.autojs.runtime.api.Files;
+    const RtFiles = org.ys.game.runtime.api.Files;
 
     let _ = {
         Files: (/* @IIFE */ () => {

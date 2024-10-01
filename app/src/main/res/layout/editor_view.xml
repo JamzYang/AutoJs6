@@ -12,7 +12,7 @@
             android:theme="@style/AppTheme.AppBarOverlay"
             android:fitsSystemWindows="true">
 
-        <org.autojs.autojs.theme.widget.ThemeColorToolbarEditor
+        <org.ys.game.theme.widget.ThemeColorToolbarEditor
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -30,7 +30,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="end" />
 
-        </org.autojs.autojs.theme.widget.ThemeColorToolbarEditor>
+        </org.ys.game.theme.widget.ThemeColorToolbarEditor>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -44,7 +44,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-            <org.autojs.autojs.ui.edit.editor.CodeEditor
+            <org.ys.game.ui.edit.editor.CodeEditor
                     android:id="@+id/editor"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -56,7 +56,7 @@
                     android:layout_height="70dp"
                     android:background="#77f2f3f7">
 
-                <org.autojs.autojs.ui.edit.completion.CodeCompletionBar
+                <org.ys.game.ui.edit.completion.CodeCompletionBar
                         android:id="@+id/symbol_bar"
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
@@ -74,7 +74,7 @@
                     android:src="@drawable/ic_ali_fx"
                     app:tint="#222329" />
 
-                <org.autojs.autojs.ui.edit.completion.CodeCompletionBar
+                <org.ys.game.ui.edit.completion.CodeCompletionBar
                         android:id="@+id/code_completion_bar"
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
@@ -85,13 +85,13 @@
 
             </RelativeLayout>
 
-            <org.autojs.autojs.ui.edit.keyboard.FunctionsKeyboardView
+            <org.ys.game.ui.edit.keyboard.FunctionsKeyboardView
                     android:id="@+id/functions_keyboard"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="gone" />
 
-            <org.autojs.autojs.ui.edit.debug.DebugBar
+            <org.ys.game.ui.edit.debug.DebugBar
                     android:id="@+id/debug_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
 
         </LinearLayout>
 
-        <org.autojs.autojs.ui.widget.EWebView
+        <org.ys.game.ui.widget.EWebView
                 android:id="@+id/docs"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
