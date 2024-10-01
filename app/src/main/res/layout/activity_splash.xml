@@ -14,12 +14,12 @@
             android:layout_gravity="center"
             android:src="@drawable/game_cat" />
 
-    <ImageView
-            android:layout_width="100dp"
-            android:layout_height="32dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="4dp"
-            android:layout_marginStart="2dp"
-            android:src="@drawable/autojs6" />
+<!--    <ImageView-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="32dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_marginTop="4dp"-->
+<!--            android:layout_marginStart="2dp"-->
+<!--            android:src="@drawable/autojs6" />-->
 
 </LinearLayout>

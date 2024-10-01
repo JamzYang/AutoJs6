@@ -34,7 +34,6 @@ import org.autojs.autojs.pref.Pref
 import org.autojs.autojs.runtime.api.WrappedShizuku
 import org.autojs.autojs.theme.ThemeColorManager.addViewBackground
 import org.autojs.autojs.ui.BaseActivity
-import org.autojs.autojs.ui.Constants.BASE_URL
 import org.autojs.autojs.ui.enhancedfloaty.FloatyService
 import org.autojs.autojs.ui.floating.FloatyWindowManger
 import org.autojs.autojs.ui.log.LogActivity
@@ -51,6 +50,8 @@ import org.autojs.autojs6.R
 import org.autojs.autojs6.databinding.ActivityMainBinding
 import org.greenrobot.eventbus.EventBus
 import org.autojs.autojs6.BuildConfig
+import java.net.URL
+
 /**
  * Modified by SuperMonster003 as of Dec 1, 2021.
  * Transformed by SuperMonster003 on May 11, 2023.
@@ -181,35 +182,72 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
     private fun setUpWebView() {
         binding.webView.apply {
             settings.javaScriptEnabled = true
-            webViewClient = object : WebViewClient() {
+            settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK)
+            settings.setDomStorageEnabled(true)
+            
+            setWebViewClient(object : WebViewClient() {
+                override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+                    request?.url?.let { url ->
+                        try {
+                            val connection = URL(url.toString()).openConnection()
+                            connection.connectTimeout = 5000 // 5秒超时
+                        } catch (e: Exception) {
+                            // 处理超时异常
+//                            hideLoading()
+                        }
+                    }
+                    return super.shouldInterceptRequest(view, request)
+                }
+
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                     super.onPageStarted(view, url, favicon)
-                    Log.d("WebViewPerformance", "页面开始加载: $url")
+//                    showLoading()
                 }
 
                 override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
-                    Log.d("WebViewPerformance", "页面加载完成: $url")
+//                    hideLoading()
                 }
 
-                override fun onLoadResource(view: WebView?, url: String?) {
-                    super.onLoadResource(view, url)
-                    Log.d("WebViewPerformance", "加载资源: $url")
-                }
 
-                override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-                    super.onReceivedError(view, request, error)
-                    Log.e("WebViewPerformance", "加载错误: ${error?.description}")
-                }
-            }
-            loadUrl(BuildConfig.BASE_URL + "/setting.html")
-            settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK) // 优先使用缓存
-            settings.setDomStorageEnabled(true) // 启用 DOM 存储（有助于提升缓存效果）
+//                override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+//                    super.onReceivedError(view, request, error)
+//                    if (error?.errorCode == ERROR_TIMEOUT || error?.errorCode == ERROR_HOST_LOOKUP || error?.errorCode == ERROR_CONNECT) {
+//                        // 在超时或网络错误的情况下，尝试加载缓存
+//                        view?.loadUrl(request?.url.toString())
+//                    } else {
+//                        hideLoading()
+//                        showErrorMessage()
+//                    }
+//                }
+            })
+            
             addJavascriptInterface(WebAppInterface(this@MainActivity), "Android")
         }
 
         WebView.setWebContentsDebuggingEnabled(true)
+        
+        // 加载URL
+        binding.webView.loadUrl(BuildConfig.BASE_URL + "/setting.html")
     }
+
+//    private fun showLoading() {
+//        binding.loadingProgressBar.visibility = View.VISIBLE
+//        binding.webView.visibility = View.INVISIBLE
+//        binding.errorMessageTextView.visibility = View.GONE
+//    }
+//
+//    private fun hideLoading() {
+//        binding.loadingProgressBar.visibility = View.GONE
+//        binding.webView.visibility = View.VISIBLE
+//        binding.errorMessageTextView.visibility = View.GONE
+//    }
+//
+//    private fun showErrorMessage() {
+//        binding.loadingProgressBar.visibility = View.GONE
+//        binding.webView.visibility = View.GONE
+//        binding.errorMessageTextView.visibility = View.VISIBLE
+//    }
 
     fun rebirth(view: View) {
         val context = view.context as MainActivity

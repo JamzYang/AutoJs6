@@ -2,6 +2,8 @@ package org.autojs.autojs.network;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.concurrent.TimeUnit;
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import org.autojs.autojs6.BuildConfig;
 import retrofit2.Converter;
@@ -14,8 +16,15 @@ public enum RetrofitClient {
     private final Retrofit retrofit;
 
     RetrofitClient() {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
+
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(okHttpClient)
                 .addConverterFactory(StringConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
