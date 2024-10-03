@@ -32,6 +32,7 @@ import org.ys.game.runtime.api.ScreenMetrics;
 import org.ys.game.tool.Func1;
 import org.ys.game.ui.enhancedfloaty.FloatyService;
 import org.ys.game.ui.enhancedfloaty.FloatyWindow;
+import org.ys.game.user.UserManager;
 import org.ys.game.util.ViewUtils;
 import org.ys.gamecat.R;
 import org.ys.gamecat.databinding.CircularActionMenuBinding;
@@ -111,11 +112,15 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
     }
 
     private void runSpecificScript() {
+        String userId = UserManager.INSTANCE.getUserId(mContext);
+        if (userId == null || !UserManager.INSTANCE.isMember(mContext)){
+            ViewUtils.showToast(mContext, "请先加入会员");
+            return;
+        }
+
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("autojs.localstorage.script_config", Context.MODE_PRIVATE);
         String currentVersion = sharedPreferences.getString(SHARED_PREF_SCRIPT_VERSION, "");
-
         ScriptApi scriptApi = RetrofitClient.createApi(ScriptApi.class);
-        
         scriptApi.getScriptVersion().enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NotNull Call<String> call, @NotNull Response<String> response) {
@@ -138,6 +143,11 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
     }
 
     private void downloadAndRunScript(ScriptApi scriptApi, String serverVersion, SharedPreferences sharedPreferences) {
+//        String userId = UserManager.INSTANCE.getUserId(mContext);
+//        if (userId == null || !UserManager.INSTANCE.isMember(mContext)){
+//            ViewUtils.showToast(mContext, "请先加入会员");
+//            return;
+//        }
         scriptApi.downloadScript().enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
