@@ -181,23 +181,20 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView() {
         binding.webView.apply {
-            settings.javaScriptEnabled = true
-            settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK)
-            settings.setDomStorageEnabled(true)
-            
+
             setWebViewClient(object : WebViewClient() {
-                override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
-                    request?.url?.let { url ->
-                        try {
-                            val connection = URL(url.toString()).openConnection()
-                            connection.connectTimeout = 5000 // 5秒超时
-                        } catch (e: Exception) {
-                            // 处理超时异常
-//                            hideLoading()
-                        }
-                    }
-                    return super.shouldInterceptRequest(view, request)
-                }
+//                override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+//                    request?.url?.let { url ->
+//                        try {
+//                            val connection = URL(url.toString()).openConnection()
+//                            connection.connectTimeout = 5000 // 5秒超时
+//                        } catch (e: Exception) {
+//                            // 处理超时异常
+////                            hideLoading()
+//                        }
+//                    }
+//                    return super.shouldInterceptRequest(view, request)
+//                }
 
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                     super.onPageStarted(view, url, favicon)
@@ -221,14 +218,16 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
 //                    }
 //                }
             })
-            
+            settings.javaScriptEnabled = true
+            settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK)
+            settings.setDomStorageEnabled(true)
+            loadUrl(BuildConfig.BASE_URL + "/setting.html")
             addJavascriptInterface(WebAppInterface(this@MainActivity), "Android")
         }
 
         WebView.setWebContentsDebuggingEnabled(true)
         
         // 加载URL
-        binding.webView.loadUrl(BuildConfig.BASE_URL + "/setting.html")
     }
 
 //    private fun showLoading() {

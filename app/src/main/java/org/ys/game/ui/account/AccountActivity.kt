@@ -10,9 +10,28 @@ import org.ys.gamecat.databinding.ActivityAccountBinding
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.graphics.Color
+import android.graphics.Bitmap
+import android.graphics.Bitmap.Config
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.widget.*
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
+import com.google.zxing.common.BitMatrix
+import okhttp3.ResponseBody
+import org.ys.game.network.RetrofitClient
+import org.ys.game.network.api.UserApi
+import org.ys.game.network.api.dto.UserResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import org.ys.game.network.api.dto.Membership
+import org.ys.game.network.api.dto.MembershipType
+import java.math.BigDecimal
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class AccountActivity : AppCompatActivity() {
 
@@ -25,8 +44,8 @@ class AccountActivity : AppCompatActivity() {
         
         // ... 其他初始化代码 ...
 
-        UserManager.refreshUserInfo(this) { isMember ->
-            updateMembershipUI(isMember)
+        UserManager.refreshUserInfo(this) {
+            updateMembershipUI()
         }
 
         setupUI()
@@ -41,15 +60,68 @@ class AccountActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        binding.renewButton.setOnClickListener { /* 处理续费 */ }
-        binding.monthlyButton.setOnClickListener { /* 处理包月 */ }
-        binding.quarterlyButton.setOnClickListener { /* 处理包季 */ }
+        binding.monthlyButton.setOnClickListener { purchaseMembership("MONTHLY") }
+        binding.quarterlyButton.setOnClickListener { purchaseMembership("QUARTERLY") }
         binding.editPhoneButton.setOnClickListener { onEditPhoneClick() } // 处理修改手机号
         binding.editPasswordButton.setOnClickListener { onEditPasswordClick() } // 处理修改密码
-        binding.myInvitation.setOnClickListener { /* 处理我的邀请 */ }
-        binding.logoutButton.setOnClickListener { 
+        binding.logoutButton.setOnClickListener {
             logout()
         }
+        updateMembershipUI()
+        updateMembershipPrices()
+    }
+
+    private fun purchaseMembership(type: String) {
+        val uid = UserManager.getUserId(this)!!.toInt()
+        val userApi = RetrofitClient.createApi(UserApi::class.java)
+
+        userApi.purchaseMembership(uid, type).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                runOnUiThread {
+                    if (response.isSuccessful) {
+                        val qrCodeUrl = response.body()?.string()
+                        showQRCodeDialog(qrCodeUrl ?: "")
+                    } else {
+                        Toast.makeText(this@AccountActivity, "购买失败：${response.message()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                runOnUiThread {
+                    Toast.makeText(this@AccountActivity, "购买失败：${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
+    private fun showQRCodeDialog(qrCodeContent: String) {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_qr_code, null)
+        val qrCodeImageView = dialogView.findViewById<ImageView>(R.id.qrCodeImageView)
+
+        // 生成二维码
+        val qrCodeBitmap = generateQRCode(qrCodeContent)
+        qrCodeImageView.setImageBitmap(qrCodeBitmap)
+
+        AlertDialog.Builder(this)
+            .setTitle("微信支付")
+            .setView(dialogView)
+            .setPositiveButton("关闭", null)
+            .show()
+    }
+
+    private fun generateQRCode(content: String): Bitmap {
+        val qrCodeWriter = QRCodeWriter()
+        val bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, 512, 512)
+        val width = bitMatrix.width
+        val height = bitMatrix.height
+        val bitmap = Bitmap.createBitmap(width, height, Config.RGB_565)
+        for (x in 0 until width) {
+            for (y in 0 until height) {
+                bitmap.setPixel(x, y, if (bitMatrix[x, y]) Color.BLACK else Color.WHITE)
+            }
+        }
+        return bitmap
     }
 
     private fun onEditPhoneClick() {
@@ -126,13 +198,28 @@ class AccountActivity : AppCompatActivity() {
         finish() // 结束当前的AccountActivity
     }
 
-    private fun updateMembershipUI(isMember: Boolean) {
-        if (isMember) {
-            binding.membershipStatus.text = "会员状态：${UserManager.getExpirationDateString()}"
-            binding.renewButton.visibility = View.VISIBLE
-        } else {
-            binding.membershipStatus.text = "会员状态：非会员"
-            binding.renewButton.visibility = View.GONE
+    private fun updateMembershipUI() {
+        val user = UserManager.getCurrentUser()
+        when (user?.membershipType) {
+            MembershipType.NON -> binding.membershipStatus.text = "非会员"
+            else -> {
+                val expirationDate = user?.expirationDate?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                binding.membershipStatus.text = "会员到期：$expirationDate"
+            }
+        }
+    }
+
+    private fun updateMembershipPrices() {
+        val memberships = UserManager.getMemberships()
+        val monthlyMembership = memberships.find { it.type == MembershipType.MONTHLY }
+        val quarterlyMembership = memberships.find { it.type == MembershipType.QUARTERLY }
+
+        monthlyMembership?.let {
+            binding.monthlyPriceText.text = "原价：${it.originalPrice}元   现价：${it.currentPrice}元"
+        }
+
+        quarterlyMembership?.let {
+            binding.quarterlyPriceText.text = "原价：${it.originalPrice}元   现价：${it.currentPrice}元"
         }
     }
 }

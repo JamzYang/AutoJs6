@@ -3,12 +3,15 @@ package org.ys.game.user
 import android.content.Context
 import org.ys.game.network.RetrofitClient
 import org.ys.game.network.api.UserApi
+import org.ys.game.network.api.dto.Membership
 import org.ys.game.network.api.dto.MembershipType
 import org.ys.game.network.api.dto.UserResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Date
+import java.math.BigDecimal
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 object UserManager {
     private const val PREF_NAME = "user_pref"
@@ -18,6 +21,8 @@ object UserManager {
     private const val KEY_EXPIRATION_DATE = "expiration_date"
 
     private var currentUser: UserResponse? = null
+
+    private var memberships: List<Membership> = initMemberships()
 
     fun setLoggedIn(context: Context, loggedIn: Boolean, userId: String? = null) {
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -47,14 +52,15 @@ object UserManager {
         // 如果内存中没有，从本地缓存读取
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val membershipType = MembershipType.values().find { it.value == prefs.getInt(KEY_MEMBERSHIP_TYPE, 0) } ?: MembershipType.NON
-        val expirationDate = Date(prefs.getLong(KEY_EXPIRATION_DATE, 0))
+        
+        val expirationDate = LocalDateTime.ofEpochSecond(prefs.getLong(KEY_EXPIRATION_DATE, 0), 0, ZoneOffset.of("+8"))
 
         return checkMemberStatus(membershipType, expirationDate)
     }
 
-    private fun checkMemberStatus(membershipType: MembershipType?, expirationDate: Date?): Boolean {
+    private fun checkMemberStatus(membershipType: MembershipType?, expirationDate: LocalDateTime?): Boolean {
         return membershipType != MembershipType.NON && 
-               (expirationDate?.after(Date()) == true || membershipType == MembershipType.ETERNALLY)
+               (expirationDate?.isAfter(LocalDateTime.now()) == true || membershipType == MembershipType.ETERNALLY)
     }
 
     fun refreshUserInfo(context: Context, callback: (Boolean) -> Unit) {
@@ -80,6 +86,16 @@ object UserManager {
                 callback(isMember(context))
             }
         })
+
+        userApi.listMembership().enqueue(object : Callback<List<Membership>> {
+            override fun onResponse(call: Call<List<Membership>>, response: Response<List<Membership>>) {
+                if (response.isSuccessful) {
+                    memberships = response.body() ?: initMemberships()
+                }
+            }
+
+            override fun onFailure(call: Call<List<Membership>>, t: Throwable) {}
+        })
     }
 
     private fun saveMembershipInfo(context: Context) {
@@ -87,7 +103,7 @@ object UserManager {
         prefs.edit().apply {
             currentUser?.let {
                 putInt(KEY_MEMBERSHIP_TYPE, it.membershipType?.value ?: MembershipType.NON.value)
-                putLong(KEY_EXPIRATION_DATE, it.expirationDate?.time ?: 0)
+                putLong(KEY_EXPIRATION_DATE, it.expirationDate?.toEpochSecond(ZoneOffset.of("+8")) ?: 0)
             }
             apply()
         }
@@ -114,6 +130,22 @@ object UserManager {
 
     fun getCurrentUser(): UserResponse? {
         return currentUser
+    }
+
+    private fun initMemberships(): List<Membership> {
+        return listOf(
+            Membership(MembershipType.NON, BigDecimal.ZERO, BigDecimal.ZERO, 0),
+            Membership(MembershipType.FREE, BigDecimal.ZERO, BigDecimal.ZERO, 0),
+            Membership(MembershipType.MONTHLY, BigDecimal("19.9"), BigDecimal("9.9"), 30),
+            Membership(MembershipType.QUARTERLY, BigDecimal("55"), BigDecimal("45"), 60),
+//            Membership(MembershipType.SEMIANNUALLY, BigDecimal("100"), BigDecimal("100"), 180),
+//            Membership(MembershipType.YEARLY, BigDecimal("200"), BigDecimal("200"), 365),
+//            Membership(MembershipType.ETERNALLY, BigDecimal("400"), BigDecimal("400"), 1000)
+        )
+    }
+
+    fun getMemberships(): List<Membership> {
+        return memberships
     }
 }
 

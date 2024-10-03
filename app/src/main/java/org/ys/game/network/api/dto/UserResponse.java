@@ -16,6 +16,6 @@ public record UserResponse(
      */
     String inviterCode,
     MembershipType membershipType,
-    Date expirationDate,
+    LocalDateTime expirationDate,
     int freeDays
 ){}

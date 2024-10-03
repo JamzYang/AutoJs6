@@ -45,34 +45,58 @@
               android:layout_marginTop="16dp"
               android:text="会员状态：2024年5月1日到期" />
 
-            <Button
-              android:id="@+id/renewButton"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="续费" />
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
 
             <LinearLayout
-              android:layout_width="match_parent"
+              android:layout_width="0dp"
               android:layout_height="wrap_content"
-              android:layout_marginTop="16dp"
-              android:orientation="horizontal"
-              android:minHeight="48dp"> <!-- 设置最小高度 -->
+              android:layout_weight="1"
+              android:orientation="vertical">
+
+              <TextView
+                android:id="@+id/monthlyPriceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="原价：0元  现价：0元"
+                android:textSize="12sp" />
 
               <Button
                 android:id="@+id/monthlyButton"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="包月" />
+
+            </LinearLayout>
+
+            <LinearLayout
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:layout_marginStart="8dp"
+              android:orientation="vertical">
+
+              <TextView
+                android:id="@+id/quarterlyPriceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="原价：0元   现价：0元"
+                android:textSize="12sp" />
 
               <Button
                 android:id="@+id/quarterlyButton"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
                 android:text="包季" />
+
             </LinearLayout>
+
+          </LinearLayout>
 
             <LinearLayout
               android:layout_width="match_parent"
@@ -139,12 +163,12 @@
                 android:onClick="onEditPasswordClick" />
             </LinearLayout>
 
-            <TextView
-              android:id="@+id/myInvitation"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="16dp"
-              android:text="我的邀请" />
+<!--            <TextView-->
+<!--              android:id="@+id/myInvitation"-->
+<!--              android:layout_width="wrap_content"-->
+<!--              android:layout_height="wrap_content"-->
+<!--              android:layout_marginTop="16dp"-->
+<!--              android:text="我的邀请" />-->
 
             <Button
               android:id="@+id/logoutButton"
@@ -152,6 +176,8 @@
               android:layout_height="wrap_content"
               android:layout_marginTop="24dp"
               android:text="退出登录" />
+
+
 
         </LinearLayout>
     </ScrollView>

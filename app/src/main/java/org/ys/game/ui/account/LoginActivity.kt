@@ -7,11 +7,10 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import okhttp3.ResponseBody
 import org.ys.game.network.RetrofitClient
-import org.ys.game.network.api.ScriptApi
 import org.ys.game.network.api.UserApi
 import org.ys.game.network.api.dto.UserRequest
+import org.ys.game.network.api.dto.UserResponse
 import org.ys.game.ui.main.MainActivity
 import org.ys.game.user.UserManager
 import org.ys.gamecat.R
@@ -61,12 +60,13 @@ class LoginActivity : AppCompatActivity() {
 
     private fun performLogin(mobile: String, password: String) {
         val userApi = RetrofitClient.createApi(UserApi::class.java)
-        userApi.loginUser(UserRequest(mobile, password)).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        userApi.loginUser(UserRequest(mobile, password)).enqueue(object : Callback<UserResponse> {
+            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 if (response.isSuccessful) {
                     // 登录成功
                     Toast.makeText(this@LoginActivity, "登录成功", Toast.LENGTH_SHORT).show()
-                    UserManager.setLoggedIn(this@LoginActivity, true)
+                    val uid = response.body()!!.uid
+                    UserManager.setLoggedIn(this@LoginActivity, true,uid.toString())
 
                     // 登录成功后,返回到主界面
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
@@ -80,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                 // 网络请求失败
                 Toast.makeText(this@LoginActivity, "网络请求失败: ${t.message}", Toast.LENGTH_SHORT).show()
             }
