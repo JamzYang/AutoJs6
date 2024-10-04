@@ -1,36 +1,27 @@
 package org.ys.game.ui.account
 
-import android.os.Bundle
 import android.content.Intent
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import org.ys.game.user.UserManager
-import org.ys.gamecat.R
-import org.ys.gamecat.databinding.ActivityAccountBinding
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.graphics.Color
 import android.graphics.Bitmap
 import android.graphics.Bitmap.Config
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Paint
+import android.graphics.Color
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.MenuItem
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
-import com.google.zxing.common.BitMatrix
 import okhttp3.ResponseBody
 import org.ys.game.network.RetrofitClient
 import org.ys.game.network.api.UserApi
-import org.ys.game.network.api.dto.UserResponse
+import org.ys.game.network.api.dto.MembershipType
+import org.ys.game.user.UserManager
+import org.ys.gamecat.R
+import org.ys.gamecat.databinding.ActivityAccountBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import org.ys.game.network.api.dto.Membership
-import org.ys.game.network.api.dto.MembershipType
-import java.math.BigDecimal
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class AccountActivity : AppCompatActivity() {
@@ -174,7 +165,7 @@ class AccountActivity : AppCompatActivity() {
                 // 验证输入并处理逻辑
                 if (newPwd.length >= 8 && newPwd == confirmPwd) {
                     // 处理修改密码逻辑
-                    Toast.makeText(this, "密码已修改", Toast.LENGTH_SHORT).show()
+                    updatePassword(oldPwd, newPwd)
                 } else {
                     Toast.makeText(this, "请检查输入", Toast.LENGTH_SHORT).show()
                 }
@@ -183,6 +174,28 @@ class AccountActivity : AppCompatActivity() {
             .create()
 
         dialog.show()
+    }
+
+    private fun updatePassword(oldPwd: String, newPwd: String) {
+        val uid = UserManager.getUserId(this)?.toInt()
+        val userApi = RetrofitClient.createApi(UserApi::class.java)
+
+        userApi.updatePassword(uid, oldPwd, newPwd).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@AccountActivity, "修改成功", Toast.LENGTH_SHORT).show()
+                    // 跳转到登录页面
+                    finish()
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: "修改失败"
+                    Toast.makeText(this@AccountActivity, errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(this@AccountActivity, "网络请求失败: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun logout() {

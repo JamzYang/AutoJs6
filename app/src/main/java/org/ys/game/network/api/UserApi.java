@@ -6,13 +6,7 @@ import org.ys.game.network.api.dto.Membership;
 import org.ys.game.network.api.dto.UserRequest;
 import org.ys.game.network.api.dto.UserResponse;
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
+import retrofit2.http.*;
 
 public interface UserApi {
 
@@ -24,6 +18,12 @@ public interface UserApi {
 
     @POST("api/v1/users/login")
     Call<UserResponse> loginUser(@Body UserRequest body);
+
+    @PUT("api/v1/users/{uid}/password")
+    Call<ResponseBody> updatePassword(
+        @Path("uid") Integer uid,
+        @Query("oldPwd") String oldPwd,
+        @Query("password") String password);
 
 
     @GET("api/v1/users/{uid}")

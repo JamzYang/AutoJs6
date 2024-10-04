@@ -99,7 +99,7 @@ class RegisterActivity : AppCompatActivity() {
                     finish()
                 } else {
                     val errorMessage = response.errorBody()?.string() ?: "登录失败，未知错误"
-                    Toast.makeText(this@RegisterActivity, "注册失败: ${errorMessage}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity, "注册失败: $errorMessage", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -115,9 +115,10 @@ class RegisterActivity : AppCompatActivity() {
         userApi.sendTextCode(mobile).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(this@RegisterActivity, "发送成功", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity, "发送成功,请查收.10分钟内有效", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this@RegisterActivity, "发送失败,请稍后重试", Toast.LENGTH_SHORT).show()
+                    val errorMessage = response.errorBody()?.string() ?: "发送失败,请稍后重试"
+                    Toast.makeText(this@RegisterActivity, errorMessage, Toast.LENGTH_SHORT).show()
                 }
             }
 
