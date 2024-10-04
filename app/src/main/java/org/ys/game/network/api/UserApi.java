@@ -29,6 +29,9 @@ public interface UserApi {
     @GET("api/v1/users/{uid}")
     Call<UserResponse> getUserById(@Path("uid") Integer uid);
 
+    @GET("api/v1/users/{phone}/send")
+    Call<ResponseBody> sendTextCode(@Path("phone") String phone);
+
     @FormUrlEncoded
     @POST("api/v1/memberships/purchase")
     Call<ResponseBody> purchaseMembership(

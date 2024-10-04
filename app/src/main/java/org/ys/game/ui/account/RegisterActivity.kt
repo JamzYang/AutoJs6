@@ -47,7 +47,7 @@ class RegisterActivity : AppCompatActivity() {
 
         btnGetVerificationCode.setOnClickListener {
             // 处理获取验证码逻辑
-            Toast.makeText(this, "获取验证码功能待实现", Toast.LENGTH_SHORT).show()
+            sendTextCode()
         }
 
         btnRegister.setOnClickListener {
@@ -100,6 +100,24 @@ class RegisterActivity : AppCompatActivity() {
                 } else {
                     val errorMessage = response.errorBody()?.string() ?: "登录失败，未知错误"
                     Toast.makeText(this@RegisterActivity, "注册失败: ${errorMessage}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(this@RegisterActivity, "网络请求失败: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private  fun sendTextCode(){
+        val mobile = etMobile.text.toString()
+        val userApi = RetrofitClient.createApi(UserApi::class.java)
+        userApi.sendTextCode(mobile).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@RegisterActivity, "发送成功", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@RegisterActivity, "发送失败,请稍后重试", Toast.LENGTH_SHORT).show()
                 }
             }
 
