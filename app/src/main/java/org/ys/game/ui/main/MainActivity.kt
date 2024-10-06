@@ -221,7 +221,7 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
             settings.javaScriptEnabled = true
             settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK)
             settings.setDomStorageEnabled(true)
-            loadUrl(BuildConfig.BASE_URL + "/setting.html")
+            loadUrl(BuildConfig.BASE_URL + "/static/setting.html")
             addJavascriptInterface(WebAppInterface(this@MainActivity), "Android")
         }
 
