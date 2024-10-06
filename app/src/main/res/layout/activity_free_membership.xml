@@ -55,7 +55,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="每邀请1人充值包月会员得20天会员，包季会员得60天会员。" />
+                        android:text="每邀请1人注册得20天会员，被邀请人购买会员再得10天。" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

@@ -4,12 +4,24 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.ys.game.theme.widget.ThemeColorToolbar
+import org.ys.game.network.RetrofitClient
+import org.ys.game.network.api.InvitationApi
+import org.ys.game.network.api.dto.InvitationResponse
+import org.ys.game.user.UserManager
 import org.ys.gamecat.R
 import org.ys.gamecat.databinding.ActivityFreeMembershipBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import androidx.core.content.ContextCompat
+import org.ys.game.network.api.dto.UserResponse
 
 class FreeMembershipActivity : AppCompatActivity() {
 
@@ -39,7 +51,7 @@ class FreeMembershipActivity : AppCompatActivity() {
         }
 
         binding.myInviteCodeButton.setOnClickListener {
-            // 显示我的邀请码逻辑
+            showMyInviteCode()
         }
 
         invitedListAdapter = InvitedListAdapter()
@@ -78,19 +90,87 @@ class FreeMembershipActivity : AppCompatActivity() {
     }
 
     private fun handleInviteCode(inviteCode: String) {
-        // 这里处理邀请码的逻辑
-        // 例如,发送到服务器验证等
-        Toast.makeText(this, "邀请码: $inviteCode", Toast.LENGTH_SHORT).show()
+        val userId = UserManager.getUserId(this)?.toIntOrNull()
+        if (userId == null) {
+            Toast.makeText(this, "无法获取用户ID", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val invitationApi = RetrofitClient.createApi(InvitationApi::class.java)
+        invitationApi.putInvitorCode(userId, inviteCode).enqueue(object : Callback<UserResponse> {
+            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@FreeMembershipActivity, "邀请码填写成功", Toast.LENGTH_SHORT).show()
+                    // 可能需要更新用户信息
+                    UserManager.refreshUserInfo(this@FreeMembershipActivity) { _ ->
+                        // 刷新完成后的操作，如果需要的话
+                    }
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: "未知错误"
+                    Toast.makeText(this@FreeMembershipActivity, "邀请码填写失败: $errorMessage", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                Toast.makeText(this@FreeMembershipActivity, "网络错误: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun showMyInviteCode() {
+        val inviteCode = UserManager.getMyInvitationCode()
+        if (inviteCode.isNullOrEmpty()) {
+            AlertDialog.Builder(this)
+                .setTitle("我的邀请码")
+                .setMessage("暂无邀请码")
+                .setPositiveButton("确定", null)
+                .show()
+        } else {
+            val dialog = AlertDialog.Builder(this)
+                .setTitle("我的邀请码")
+                .setMessage(inviteCode)
+                .setPositiveButton("确定", null)
+                .setNeutralButton("复制") { _, _ ->
+                    copyToClipboard(inviteCode)
+                }
+                .create()
+
+            dialog.show()
+
+            // 获取"复制"按钮并设置为主题色
+            dialog.getButton(AlertDialog.BUTTON_NEUTRAL)?.let { button ->
+//                button.setTextColor(ContextCompat.getColor(this, R.color.theme_color)) // 主题色
+            }
+        }
+    }
+
+    private fun copyToClipboard(text: String) {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("邀请码", text)
+        clipboard.setPrimaryClip(clip)
     }
 
     private fun loadInvitedList() {
-        // 从服务器加载邀请列表
-        // 这里使用模拟数据
-        val mockData = listOf(
-            InvitedUser("用户1", "包月会员", "2023-05-01"),
-            InvitedUser("用户2", "非会员", "2023-06-15"),
-            InvitedUser("用户3", "包季会员", "2023-07-20")
-        )
-        invitedListAdapter.submitList(mockData)
+        val userId = UserManager.getUserId(this)?.toIntOrNull()
+        if (userId == null) {
+            Toast.makeText(this, "无法获取用户ID", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val invitationApi = RetrofitClient.createApi(InvitationApi::class.java)
+        invitationApi.listInvitees(userId).enqueue(object : Callback<List<InvitationResponse>> {
+            override fun onResponse(call: Call<List<InvitationResponse>>, response: Response<List<InvitationResponse>>) {
+                if (response.isSuccessful) {
+                    val invitationList = response.body() ?: emptyList()
+                    invitedListAdapter.submitList(invitationList)
+                } else {
+                    Toast.makeText(this@FreeMembershipActivity, "获取邀请列表失败", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<InvitationResponse>>, t: Throwable) {
+                Toast.makeText(this@FreeMembershipActivity, "网络错误", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

@@ -5,9 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import org.ys.game.network.api.dto.InvitationResponse
 import org.ys.gamecat.databinding.ItemInvitedUserBinding
+import java.time.format.DateTimeFormatter
 
-class InvitedListAdapter : ListAdapter<InvitedUser, InvitedListAdapter.ViewHolder>(InvitedUserDiffCallback()) {
+class InvitedListAdapter : ListAdapter<InvitationResponse, InvitedListAdapter.ViewHolder>(InvitationDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemInvitedUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -19,26 +21,26 @@ class InvitedListAdapter : ListAdapter<InvitedUser, InvitedListAdapter.ViewHolde
     }
 
     class ViewHolder(private val binding: ItemInvitedUserBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(user: InvitedUser) {
-            binding.username.text = user.username
-            binding.membershipStatus.text = user.membershipStatus
-            binding.registrationDate.text = user.registrationDate
+        fun bind(invitation: InvitationResponse) {
+            binding.apply {
+                inviteePhone.text = invitation.inviteePhone
+                membership.text = if (invitation.hasPurchased) {
+                    invitation.purchasedType?.desc ?: "未知会员类型"
+                } else {
+                    "非会员"
+                }
+                registrationDate.text = invitation.invitationDate.format(DateTimeFormatter.ISO_LOCAL_DATE)
+            }
+        }
+    }
+
+    private class InvitationDiffCallback : DiffUtil.ItemCallback<InvitationResponse>() {
+        override fun areItemsTheSame(oldItem: InvitationResponse, newItem: InvitationResponse): Boolean {
+            return oldItem.inviteeId == newItem.inviteeId
+        }
+
+        override fun areContentsTheSame(oldItem: InvitationResponse, newItem: InvitationResponse): Boolean {
+            return oldItem == newItem
         }
     }
 }
-
-class InvitedUserDiffCallback : DiffUtil.ItemCallback<InvitedUser>() {
-    override fun areItemsTheSame(oldItem: InvitedUser, newItem: InvitedUser): Boolean {
-        return oldItem.username == newItem.username
-    }
-
-    override fun areContentsTheSame(oldItem: InvitedUser, newItem: InvitedUser): Boolean {
-        return oldItem == newItem
-    }
-}
-
-data class InvitedUser(
-    val username: String,
-    val membershipStatus: String,
-    val registrationDate: String
-)

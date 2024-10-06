@@ -42,9 +42,4 @@ public interface UserApi {
     @GET("api/v1/memberships/list")
     Call<List<Membership>> listMembership();
 
-    // 在 Kotlin 代码中使用的包装方法
-//    static void purchaseMembership(int uid, String type, Callback<Result<String>> callback) {
-//        // 实现网络请求逻辑，调用上面定义的 purchaseMembership 方法
-//        // 处理响应，将结果通过 callback 返回
-//    }
 }

@@ -147,5 +147,9 @@ object UserManager {
     fun getMemberships(): List<Membership> {
         return memberships
     }
+
+    fun getMyInvitationCode(): String? {
+        return currentUser?.myInvitationCode
+    }
 }
 
