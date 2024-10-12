@@ -28,4 +28,14 @@
             android:padding="8dp"
             android:src="@drawable/ic_close_white_48dp" />
 
+    <ImageView
+        android:id="@+id/toggle_console"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="center"
+        android:padding="1dp"
+        android:background="@drawable/circle_green"
+        android:foreground="?selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_debug_console"/>
+
 </org.ys.game.ui.floating.CircularActionMenu>

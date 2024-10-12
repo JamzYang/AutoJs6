@@ -14,12 +14,19 @@ import android.view.animation.Interpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.FrameLayout;
 
+import android.widget.Toast;
 import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
+import org.ys.game.AutoJs;
+import org.ys.game.engine.JavaScriptEngine;
+import org.ys.game.engine.ScriptEngine;
 import org.ys.gamecat.R;
+//import org.ys.gamecat.AutoJs;
+//import org.ys.gamecat.engine.JavaScriptEngine;
+//import org.ys.gamecat.engine.ScriptEngine;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -292,6 +299,45 @@ public class CircularActionMenu extends FrameLayout {
         if (isAttachedToWindow()) {
             windowManager.removeView(this);
         }
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        findViewById(R.id.toggle_console).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleConsole();
+            }
+        });
+    }
+
+    // 添加切换控制台显示的方法
+    private void toggleConsole() {
+        doWithCurrentEngine(new Callback<ScriptEngine<?>>() {
+            @Override
+            public void call(ScriptEngine<?> engine) {
+                if (engine instanceof JavaScriptEngine) {
+                    ((JavaScriptEngine) engine).getRuntime().console.show();
+                }
+            }
+        });
+    }
+
+    // 添加 doWithCurrentEngine 方法
+    private void doWithCurrentEngine(Callback<ScriptEngine<?>> callback) {
+        AutoJs.getInstance().getScriptEngineService().getScriptExecutions()
+                .stream()
+                .findFirst()
+                .ifPresentOrElse(
+                    execution -> callback.call(execution.getEngine()),
+                    () -> Toast.makeText(getContext(), "没有执行中的脚本", Toast.LENGTH_SHORT).show()
+                );
+    }
+
+    // 添加 Callback 接口
+    private interface Callback<T> {
+        void call(T t);
     }
 
 }
