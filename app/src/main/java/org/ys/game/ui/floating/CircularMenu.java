@@ -216,10 +216,19 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
     }
 
     private void runExistingScript() {
+        String scriptPath = mContext.getFilesDir().getPath() + "/main.js";
+        ScriptFile scriptFile = new ScriptFile(scriptPath);
+
+        // 检查脚本是否已在运行
+        if (AutoJs.getInstance().getScriptEngineService().isRunning(scriptFile)) {
+            ViewUtils.showToast(mContext, "脚本已在运行中", true);
+            return;
+        }
+
         try {
-            Scripts.run(mContext, new ScriptFile(mContext.getFilesDir().getPath()+"/main.js"));
+            Scripts.run(mContext, scriptFile);
         } catch (Exception e) {
-            Log.e(CircularMenu.class.getSimpleName(),"运行脚本错误",e);
+            Log.e(CircularMenu.class.getSimpleName(), "运行脚本错误", e);
             ViewUtils.showToast(mContext, e.getMessage(), true);
         }
     }
