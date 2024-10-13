@@ -17,6 +17,7 @@ import org.ys.game.execution.ScriptExecutionObserver;
 import org.ys.game.execution.ScriptExecutionTask;
 import org.ys.game.execution.SimpleScriptExecutionListener;
 import org.ys.game.lang.ThreadCompat;
+import org.ys.game.model.script.ScriptFile;
 import org.ys.game.runtime.ScriptRuntime;
 import org.ys.game.runtime.api.Console;
 import org.ys.game.runtime.exception.ScriptInterruptedException;
@@ -266,6 +267,33 @@ public class ScriptEngineService {
             return mMessage;
         }
 
+    }
+
+    public boolean isRunning(ScriptFile scriptFile) {
+        for (ScriptExecution execution : mScriptExecutions.values()) {
+            if (execution.getSource().getFullPath().equals(scriptFile.getPath()) && !execution.getEngine().isDestroyed()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void pauseAll() {
+        for (ScriptExecution execution : mScriptExecutions.values()) {
+            if (execution.getEngine() instanceof JavaScriptEngine) {
+                JavaScriptEngine engine = (JavaScriptEngine) execution.getEngine();
+                engine.pause();
+            }
+        }
+    }
+
+    public void resumeAll() {
+        for (ScriptExecution execution : mScriptExecutions.values()) {
+            if (execution.getEngine() instanceof JavaScriptEngine) {
+                JavaScriptEngine engine = (JavaScriptEngine) execution.getEngine();
+                engine.resume();
+            }
+        }
     }
 
 }

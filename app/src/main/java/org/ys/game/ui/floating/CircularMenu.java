@@ -28,6 +28,7 @@ import org.ys.game.model.script.Scripts;
 import org.ys.game.network.api.ScriptApi;
 import org.ys.game.pref.Language;
 import org.ys.game.pref.Pref;
+import org.ys.game.runtime.api.Console;
 import org.ys.game.runtime.api.ScreenMetrics;
 import org.ys.game.tool.Func1;
 import org.ys.game.ui.enhancedfloaty.FloatyService;
@@ -71,6 +72,7 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
     private String mRunningPackage, mRunningActivity;
     private Deferred<NodeInfo, Void, Void> mCaptureDeferred;
     private final AccessibilityTool.Service mA11yToolService;
+    private boolean isScriptRunning = false;
 
     public CircularMenu(Context context) {
         // mContext = new ContextThemeWrapper(context, R.style.AppTheme);
@@ -107,8 +109,30 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
 
         binding.runScript.setOnClickListener(v -> {
             mWindow.collapse();
-            runSpecificScript();
+            if (isScriptRunning) {
+                pauseScript();
+            } else {
+                runSpecificScript();
+            }
         });
+
+        binding.toggleConsole.setOnClickListener(v -> {
+            toggleConsole();
+        });
+    }
+
+    private boolean isConsoleShowing;
+
+    private void toggleConsole() {
+        Console console = AutoJs.getInstance().getScriptEngineService().getGlobalConsole();
+        console.setTouchable(false);
+        if(isConsoleShowing){
+            console.hide();
+            isConsoleShowing = false;
+        }else {
+            console.show();
+            isConsoleShowing = true;
+        }
     }
 
     private void runSpecificScript() {
@@ -215,22 +239,35 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
             }
     }
 
-    private void runExistingScript() {
+    private boolean runExistingScript() {
         String scriptPath = mContext.getFilesDir().getPath() + "/main.js";
         ScriptFile scriptFile = new ScriptFile(scriptPath);
 
-        // 检查脚本是否已在运行
         if (AutoJs.getInstance().getScriptEngineService().isRunning(scriptFile)) {
             ViewUtils.showToast(mContext, "脚本已在运行中", true);
-            return;
+            return false;
         }
 
         try {
             Scripts.run(mContext, scriptFile);
+            updateRunScriptButton(true);
+            return true;
         } catch (Exception e) {
             Log.e(CircularMenu.class.getSimpleName(), "运行脚本错误", e);
             ViewUtils.showToast(mContext, e.getMessage(), true);
+            return false;
         }
+    }
+
+    private void pauseScript() {
+        // 实现暂停脚本的逻辑
+        AutoJs.getInstance().getScriptEngineService().pauseAll();
+        updateRunScriptButton(false);
+    }
+
+    private void updateRunScriptButton(boolean isRunning) {
+        isScriptRunning = isRunning;
+        binding.runScript.setImageResource(isRunning ? R.drawable.ic_pause : R.drawable.ic_play_arrow_white_48dp);
     }
 
     public boolean isRecording() {

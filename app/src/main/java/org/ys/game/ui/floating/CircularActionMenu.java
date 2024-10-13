@@ -21,7 +21,6 @@ import androidx.annotation.Nullable;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 import org.ys.game.AutoJs;
-import org.ys.game.engine.JavaScriptEngine;
 import org.ys.game.engine.ScriptEngine;
 import org.ys.game.runtime.api.Console;
 import org.ys.gamecat.R;
@@ -300,20 +299,9 @@ public class CircularActionMenu extends FrameLayout {
         }
     }
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        findViewById(R.id.toggle_console).setOnClickListener(v -> {
-                toggleConsole();
-        });
-    }
 
     // 添加切换控制台显示的方法
-    private void toggleConsole() {
-        Console globalConsole = AutoJs.getInstance().getScriptEngineService().getGlobalConsole();
-        globalConsole.setTouchable(false);
-        globalConsole.show();
-    }
+
 
     // 添加 doWithCurrentEngine 方法
     private void doWithCurrentEngine(Callback<ScriptEngine<?>> callback) {

@@ -259,6 +259,7 @@ public class ScriptRuntime {
     @ScriptVariable
     public final OcrPaddle ocrPaddle;
 
+
     private static WeakReference<Context> applicationContext;
     private final Map<String, Object> mProperties = new ConcurrentHashMap<>();
     private AbstractShell mRootShell;
@@ -666,5 +667,4 @@ public class ScriptRuntime {
             return;
         Permissions.requestPermissions(context, permissions);
     }
-
 }

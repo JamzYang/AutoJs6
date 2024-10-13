@@ -15,6 +15,8 @@ import org.ys.gamecat.R;
 public abstract class JavaScriptEngine extends ScriptEngine.AbstractScriptEngine<JavaScriptSource> {
     private ScriptRuntime mRuntime;
     private Object mExecArgv;
+    private static String TAG_ENGINE_SATE= "isPaused";
+
 
     @Override
     public Object execute(JavaScriptSource scriptSource) {
@@ -58,6 +60,14 @@ public abstract class JavaScriptEngine extends ScriptEngine.AbstractScriptEngine
         return mExecArgv;
     }
 
+    public void pause() {
+        setTag(TAG_IS_PAUSED, false);
+    }
+
+    public void resume() {
+        setTag(TAG_IS_PAUSED, true);
+    }
+
     @Override
     public synchronized void destroy() {
         mRuntime.onExit();
@@ -74,3 +84,5 @@ public abstract class JavaScriptEngine extends ScriptEngine.AbstractScriptEngine
                 "}";
     }
 }
+
+Enum EngineState{}
