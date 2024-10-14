@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.CountDownTimer
 import android.os.Looper
 import android.util.Log
+import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
 import androidx.annotation.ColorInt
 import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
@@ -410,16 +411,26 @@ open class ConsoleImpl(val uiHandler: UiHandler) : AbstractConsole() {
         configurator.setTouchable(touchable)
         if (isShowing) {
             try {
-                mFloatyWindow!!.setTouchable(touchable)
+                mFloatyWindow?.let { window ->
+                    window.windowView?.let { view ->
+                        if (view.isAttachedToWindow) {
+                            window.windowLayoutParams?.let { params ->
+                                params.flags = if (touchable) {
+                                    params.flags and FLAG_NOT_TOUCHABLE.inv()
+                                } else {
+                                    params.flags or FLAG_NOT_TOUCHABLE
+                                }
+                                window.updateWindowLayoutParams(params)
+                            }
+                        } else {
+                            Log.w("ConsoleImpl", "View is not attached to window manager")
+                            // 可能需要重新附加视图或者重新创建窗口
+                        }
+                    }
+                }
             } catch (e: Exception) {
-                // FIXME by SuperMonster003 on Nov 2, 2023.
-                //  ! java.lang.NullPointerException: Attempt to read from field
-                //  ! 'int android.view.WindowManager$LayoutParams.flags' on a null object reference in method
-                //  ! 'void org.ys.game.ui.enhancedfloaty.ResizableExpandableFloatyWindow.setTouchable(boolean)'.
-                //  ! A more elegant way is needed.
-                uiHandler.postDelayed({
-                    mFloatyWindow!!.setTouchable(touchable)
-                }, 320)
+                Log.e("ConsoleImpl", "Error setting touchable: ${e.message}")
+                // 如果发生异常，可以考虑重试或者执行其他恢复操作
             }
         }
     }
