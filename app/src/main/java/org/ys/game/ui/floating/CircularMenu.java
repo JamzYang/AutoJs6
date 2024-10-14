@@ -250,7 +250,7 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
 
         try {
             Scripts.run(mContext, scriptFile);
-            updateRunScriptButton(true);
+//            updateRunScriptButton(true);
             return true;
         } catch (Exception e) {
             Log.e(CircularMenu.class.getSimpleName(), "运行脚本错误", e);
@@ -262,7 +262,7 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
     private void pauseScript() {
         // 实现暂停脚本的逻辑
         AutoJs.getInstance().getScriptEngineService().pauseAll();
-        updateRunScriptButton(false);
+//        updateRunScriptButton(false);
     }
 
     private void updateRunScriptButton(boolean isRunning) {
