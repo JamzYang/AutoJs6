@@ -223,7 +223,7 @@ class App : MultiDexApplication() {
 
     companion object {
 
-        private const val BUGLY_APP_ID = "19b3607b53"
+        private const val BUGLY_APP_ID = "0bf25cc85c"
 
         private lateinit var instance: WeakReference<App>
 
