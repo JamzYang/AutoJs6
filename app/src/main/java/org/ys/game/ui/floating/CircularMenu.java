@@ -21,8 +21,11 @@ import org.ys.game.AutoJs;
 import org.ys.game.core.accessibility.AccessibilityTool;
 import org.ys.game.core.accessibility.LayoutInspector;
 import org.ys.game.core.accessibility.NodeInfo;
+import org.ys.game.core.console.GlobalConsole;
 import org.ys.game.core.record.GlobalActionRecorder;
 import org.ys.game.core.record.Recorder;
+import org.ys.game.engine.JavaScriptEngine;
+import org.ys.game.engine.ScriptEngine;
 import org.ys.game.model.script.ScriptFile;
 import org.ys.game.model.script.Scripts;
 import org.ys.game.network.api.ScriptApi;
@@ -121,19 +124,30 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
         });
     }
 
-    private boolean isConsoleShowing;
 
     private void toggleConsole() {
-        Console console = AutoJs.getInstance().getScriptEngineService().getGlobalConsole();
-        console.setTouchable(false);
-        if(isConsoleShowing){
-            console.hide();
-            isConsoleShowing = false;
-        }else {
-            console.show();
-            isConsoleShowing = true;
-        }
+        doWithCurrentEngine(scriptEngine -> {
+            GlobalConsole console = ((JavaScriptEngine) scriptEngine).getRuntime().console;
+            if(console.isShowing()){
+                console.hide();
+            }else {
+                console.show();
+                console.setTouchable(false);
+            }
+        });
     }
+
+
+    // 添加 doWithCurrentEngine 方法
+    private void doWithCurrentEngine(org.ys.game.tool.Callback <ScriptEngine<?>> callback) {
+        AutoJs.getInstance().getScriptEngineService().getScriptExecutions()
+                .stream()
+                .findFirst()
+                .ifPresentOrElse(execution -> callback.call(execution.getEngine()),
+                    () -> ViewUtils.showToast(this.mContext, "没有执行中的脚本,控制台不展示"));
+    }
+
+
 
     private void runSpecificScript() {
         String userId = UserManager.INSTANCE.getUserId(mContext);
@@ -267,7 +281,7 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
 
     private void updateRunScriptButton(boolean isRunning) {
         isScriptRunning = isRunning;
-        binding.runScript.setImageResource(isRunning ? R.drawable.ic_pause : R.drawable.ic_play_arrow_white_48dp);
+//        binding.runScript.setImageResource(isRunning ? R.drawable.ic_pause : R.drawable.ic_play_arrow_white_48dp);
     }
 
     public boolean isRecording() {

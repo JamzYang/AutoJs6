@@ -73,7 +73,7 @@ open class ConsoleImpl(val uiHandler: UiHandler) : AbstractConsole() {
     @Volatile
     var isShowing = false
         private set
-
+        get
     private val logEntriesJoint
         get() = synchronized(logEntries) {
             logEntries.joinToString("\n") { it.content }
