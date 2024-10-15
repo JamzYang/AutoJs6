@@ -3,6 +3,7 @@ package org.ys.game.ui.enhancedfloaty;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import org.ys.gamecat.R;
 
 /**
  * Created by Stardust on Apr 19, 2017.
@@ -40,6 +41,12 @@ public interface ResizableExpandableFloaty {
     int getInitialWidth();
 
     boolean isInitialExpanded();
+
+    @Nullable
+    View getTitleView(View expandedView);
+
+    @Nullable
+    View getContentView(View expandedView);
 
     abstract class AbstractResizableExpandableFloaty implements ResizableExpandableFloaty {
         private float mCollapsedHiddenWidthRadio = 0f;
@@ -138,6 +145,16 @@ public interface ResizableExpandableFloaty {
 
         public void setInitialWidth(int initialWidth) {
             mInitialWidth = initialWidth;
+        }
+
+        @Nullable
+        public View getTitleView(View expandedView) {
+            return expandedView.findViewById(R.id.title_bar);
+        }
+
+        @Nullable
+        public View getContentView(View expandedView) {
+            return expandedView.findViewById(R.id.console);
         }
     }
 }

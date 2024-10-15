@@ -40,6 +40,9 @@ class ResizableExpandableFloatyWindow(private var floaty: ResizableExpandableFlo
     private var mExpandedViewX = 0
     private var mExpandedViewY = 0
 
+    private lateinit var mTitleView: View
+    private lateinit var mContentView: View
+
     override fun onCreateView(service: FloatyService): View {
         inflateWindowViews(service)
         val windowView = View.inflate(service, R.layout.ef_expandable_floaty_container, null).apply {
@@ -53,6 +56,11 @@ class ResizableExpandableFloatyWindow(private var floaty: ResizableExpandableFlo
             }
         }
         mViewStack.setRootView(mExpandedView)
+
+        // 初始化标题和内容视图
+        mTitleView = mExpandedView.findViewById(R.id.title_bar)
+        mContentView = mExpandedView.findViewById(R.id.console)
+
         return windowView
     }
 
@@ -61,11 +69,21 @@ class ResizableExpandableFloatyWindow(private var floaty: ResizableExpandableFlo
         initGesture()
         setKeyListener()
         setInitialState()
+        setContentUntouchable()
     }
 
     private fun initGesture() {
-        enableResize()
-        enableMove()
+        // 移除原有的移动手势
+        // enableMove()
+
+        // 为标题添加拖动手势
+        DragGesture(windowBridge, mTitleView).apply {
+            pressedAlpha = 1.0f
+        }
+    }
+
+    private fun setContentUntouchable() {
+        mContentView.setOnTouchListener { _, _ -> true }
     }
 
     private fun enableResize() {
