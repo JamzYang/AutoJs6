@@ -120,6 +120,7 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
         });
 
         binding.toggleConsole.setOnClickListener(v -> {
+            mWindow.collapse();
             toggleConsole();
         });
     }
