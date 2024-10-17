@@ -169,7 +169,7 @@ class ResizableExpandableFloatyWindow(private var floaty: ResizableExpandableFlo
         if (floaty.shouldRequestFocusWhenExpand()) {
             requestWindowFocus()
         }
-        mDragGesture.isKeepToSide = false
+//        mDragGesture.isKeepToSide = false
         windowBridge?.updatePosition(mExpandedViewX, mExpandedViewY)
     }
 
@@ -177,7 +177,7 @@ class ResizableExpandableFloatyWindow(private var floaty: ResizableExpandableFlo
         mViewSwitcher.showFirst()
         disableWindowFocus()
         setWindowLayoutNoLimit()
-        mDragGesture.isKeepToSide = true
+//        mDragGesture.isKeepToSide = true
         windowBridge?.updatePosition(mCollapsedViewX, mCollapsedViewY)
     }
 
