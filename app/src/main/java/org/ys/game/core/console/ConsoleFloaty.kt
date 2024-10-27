@@ -48,7 +48,7 @@ class ConsoleFloaty(private val mConsole: ConsoleImpl) : AbstractResizableExpand
 
     private val defaultViewHeight
         // @History deviceScreenHeight / 3
-        get() = (deviceScreenHeight * 0.42).toInt()
+        get() = (deviceScreenHeight * 0.2).toInt()
 
     var expandedView: View? = null
         private set
@@ -60,6 +60,7 @@ class ConsoleFloaty(private val mConsole: ConsoleImpl) : AbstractResizableExpand
         isInitialExpanded = true
         isShouldRequestFocusWhenExpand = false
         collapsedViewUnpressedAlpha = 1.0f
+        setInitialY(100)
     }
 
     override fun inflateCollapsedView(service: FloatyService, window: ResizableExpandableFloatyWindow): View {
@@ -108,31 +109,7 @@ class ConsoleFloaty(private val mConsole: ConsoleImpl) : AbstractResizableExpand
             mTitleBackgroundColor?.let { setBackgroundColor(it) }
             mTitleBackgroundAlpha?.let { background.alpha = it }
         }
-        expandedBinding.close.let {
-            it.setOnClickListener { mConsole.hide() }
-            mtTitleIconsTint?.let { color -> it.imageTintList = ColorStateList.valueOf(color) }
-            mCloseButton = it
-        }
-        expandedBinding.moveOrResize.let {
-            it.setOnClickListener {
-                mMoveCursor?.run {
-                    if (visibility == View.VISIBLE) {
-                        visibility = View.GONE
-                        mResizer?.visibility = View.GONE
-                    } else {
-                        visibility = View.VISIBLE
-                        mResizer?.visibility = View.VISIBLE
-                    }
-                }
-            }
-            mtTitleIconsTint?.let { color -> it.imageTintList = ColorStateList.valueOf(color) }
-            mControllingButton = it
-        }
-        expandedBinding.minimize.let {
-            it.setOnClickListener { window.collapse() }
-            mtTitleIconsTint?.let { color -> it.imageTintList = ColorStateList.valueOf(color) }
-            mMinimizeButton = it
-        }
+
     }
 
     private fun setUpConsole(window: ResizableExpandableFloatyWindow) {

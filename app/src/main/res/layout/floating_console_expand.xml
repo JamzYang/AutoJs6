@@ -13,7 +13,7 @@
 
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="12dp"
                 android:id="@+id/title_bar"
                 android:background="@drawable/floating_console_bg_top"
                 android:orientation="horizontal">
@@ -30,45 +30,6 @@
                     android:text="@string/text_console"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="11sp" />
-
-            <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                <ImageView
-                        android:id="@+id/minimize"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="?selectableItemBackgroundBorderless"
-                        android:paddingBottom="8dp"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingTop="24dp"
-                        android:scaleType="center"
-                        android:src="@drawable/ic_remove_white_24dp"
-                        app:tint="@android:color/white" />
-
-                <ImageView
-                        android:id="@+id/move_or_resize"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="?selectableItemBackgroundBorderless"
-                        android:padding="8dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/ic_settings_ethernet_white_24dp"
-                        app:tint="@android:color/white" />
-
-                <ImageView
-                        android:id="@+id/close"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="?selectableItemBackgroundBorderless"
-                        android:padding="8dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/ic_close_white_24dp"
-                        app:tint="@android:color/white" />
-            </LinearLayout>
-
         </LinearLayout>
 
         <org.ys.game.core.console.FloatingConsoleView
