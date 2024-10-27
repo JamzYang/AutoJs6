@@ -19,8 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public enum RetrofitClient {
     INSTANCE;
-    private final String BASE_URL = BuildConfig.BASE_URL;
-    private final Retrofit retrofit;
+  private final Retrofit retrofit;
 
     RetrofitClient() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -37,7 +36,8 @@ public enum RetrofitClient {
             .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context) ->
                 new JsonPrimitive(src.format(DateTimeFormatter.ISO_DATE_TIME)))
             .create();
-        retrofit = new Retrofit.Builder()
+      String BASE_URL = BuildConfig.BASE_URL;
+      retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(StringConverterFactory.create())

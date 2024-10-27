@@ -373,18 +373,18 @@ class MainActivity : BaseActivity(), DelegateHost, HostActivity {
 
     class WebAppInterface(private val context: Context) {
         @JavascriptInterface
-        fun saveScriptConfig(data: String) {
-            val sharedPref = context.getSharedPreferences("autojs.localstorage.script_config", Context.MODE_PRIVATE)
+        fun saveScriptData(projectName: String,key: String, data: String) {
+            val sharedPref = context.getSharedPreferences("autojs.localstorage.${projectName}_script_config", Context.MODE_PRIVATE)
             with(sharedPref.edit()) {
-                putString("config", data)
+                putString(key, data)
                 apply()
             }
         }
 
         @JavascriptInterface
-        fun loadScriptConfig(): String? {
-            val sharedPref = context.getSharedPreferences("autojs.localstorage.script_config", Context.MODE_PRIVATE)
-            return sharedPref.getString("config", null)
+        fun loadScriptData(projectName: String, key: String): String? {
+            val sharedPref = context.getSharedPreferences("autojs.localstorage.${projectName}_script_config", Context.MODE_PRIVATE)
+            return sharedPref.getString(key, null)
         }
     }
 }

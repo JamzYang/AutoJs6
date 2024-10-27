@@ -28,8 +28,8 @@ val templateName = "template"
 
 // 定义子项目 flavors
 val subProjects = listOf(
-    "shua",
-    "pocket"
+    "shua-ass",
+    "pocket-war-ass"
 )
 
 val baseUrlDebug = "http://192.168.68.16:8080/"
@@ -378,7 +378,7 @@ android {
             manifestPlaceholders.putAll(
                 mapOf(
                     "CHANNEL" to flavorNameInrt,
-                    "appName" to "AutoJs6.$flavorNameInrt",
+                    "appName" to "gamecat.$flavorNameInrt",
                     "intentCategory" to "android.intent.category.DEFAULT",
                     "intentCategoryInrt" to "android.intent.category.LAUNCHER",
                     "authorities" to "org.ys.gamecat.$flavorNameInrt.fileprovider",
@@ -553,7 +553,7 @@ android {
             buildConfigField(
                 "String",
                 "BASE_URL",
-                "\"${baseUrlRelease}\" + BuildConfig.CHANNEL + \"/\""
+                "\"${baseUrlRelease}\""
             )
         }
         getByName(buildTypeDebug) {
@@ -563,7 +563,7 @@ android {
             buildConfigField(
                 "String",
                 "BASE_URL",
-                "\"${baseUrlDebug}\" + BuildConfig.CHANNEL + \"/\""
+                "\"${baseUrlDebug}\""
             )
         }
     }
@@ -624,17 +624,16 @@ android {
     splits {
         // Configures multiple APKs based on ABI.
         abi {
-            // Enables building multiple APKs per ABI.
-            isEnable = /* isNotAssembleInrt */ !gradle.startParameter.taskNames.any {
-                it.contains(Regex("^(:?$flavorNameApp:)?$buildActionAssemble$flavorNameInrt", IGNORE_CASE))
+            // 只在非 inrt flavor 时启用分包
+            isEnable = !gradle.startParameter.taskNames.any {
+                it.contains(Regex("^(:?$flavorNameInrt)", IGNORE_CASE))
             }
-            // By default, all ABIs are included, so use reset() and include to specify that we only
-            // want APKs for x86 and x86_64.
-            // Resets the list of ABIs that Gradle should create APKs for to none.
+            
+            // 重置并包含所有需要的 ABI
             reset()
-            // Specifies a list of ABIs that Gradle should create APKs for.
-            include("arm64-v8a", "x86_64", "armeabi-v7a", "x86", "armeabi")
-            // Specifies that we do not want to also generate a universal APK that includes all ABIs.
+            include("arm64-v8a", "armeabi-v7a", "armeabi", "x86_64", "x86")
+            
+            // 是否同时生成包含所有 ABI 的通用包
             isUniversalApk = true
         }
     }
