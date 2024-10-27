@@ -25,8 +25,15 @@ val buildTypeDebug = "debug"
 val buildTypeRelease = "release"
 val buildActionAssemble = "assemble"
 val templateName = "template"
-val baseUrlDebug = "http://192.168.68.16:8080"
-val baseUrlRelease = "http://101.43.24.30:8080"
+
+// 定义子项目 flavors
+val subProjects = listOf(
+    "shua",
+    "pocket"
+)
+
+val baseUrlDebug = "http://192.168.68.16:8080/"
+val baseUrlRelease = "http://101.43.24.30:8080/"
 
 plugins {
     id("com.android.application")
@@ -336,25 +343,28 @@ android {
     flavorDimensions.add(dimention)
 
     productFlavors {
-
-        create(flavorNameApp) {
-            dimension = dimention
-            versionCode = versions.appVersionCode
-            versionName = versions.appVersionName
-            buildConfigField("String", "CHANNEL", "\"$flavorNameApp\"")
-            buildConfigField("boolean", "is${flavorNameInrt.uppercaseFirstChar()}", "false")
-            manifestPlaceholders.putAll(
-                mapOf(
-                    "CHANNEL" to flavorNameApp,
-                    "appName" to "@string/app_name",
-                    "intentCategory" to "android.intent.category.LAUNCHER",
-                    "intentCategoryInrt" to "android.intent.category.DEFAULT",
-                    "authorities" to "org.ys.gamecat.fileprovider",
-                    "icon" to "@drawable/game_cat",
+        // 为每个子项目创建 flavor
+        subProjects.forEach { subProject ->
+            create(subProject) {
+                dimension = dimention
+                versionCode = versions.appVersionCode
+                versionName = versions.appVersionName
+                buildConfigField("String", "CHANNEL", "\"$subProject\"")
+                buildConfigField("boolean", "is${flavorNameInrt.uppercaseFirstChar()}", "false")
+                manifestPlaceholders.putAll(
+                    mapOf(
+                        "CHANNEL" to subProject,
+                        "appName" to "@string/app_name",
+                        "intentCategory" to "android.intent.category.LAUNCHER",
+                        "intentCategoryInrt" to "android.intent.category.DEFAULT",
+                        "authorities" to "org.ys.gamecat.fileprovider",
+                        "icon" to "@drawable/game_cat",
+                    )
                 )
-            )
+            }
         }
 
+        // inrt flavor 保持不变
         create(flavorNameInrt) {
             dimension = dimention
             applicationIdSuffix = ".$flavorNameInrt"
@@ -462,9 +472,15 @@ android {
         getByName("main") {
             assets.srcDirs("src/main/assets")
         }
-        getByName(flavorNameApp) {
-            assets.srcDirs("src/main/assets-$flavorNameApp")
+
+        // 为每个子项目配置 sourceSet
+        subProjects.forEach { subProject ->
+            getByName(subProject) {
+                assets.srcDirs("src/main/assets-$subProject")
+            }
         }
+
+        // inrt flavor 保持不变
         getByName(flavorNameInrt) {
             assets.srcDirs("src/main/assets-$flavorNameInrt")
         }
@@ -534,14 +550,21 @@ android {
             isMinifyEnabled = false
             proguardFiles(*proguardFiles)
             niceSigningConfig?.let { signingConfig = it }
-            buildConfigField("String", "BASE_URL", "\"$baseUrlRelease\"") // 添加引号
-
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"${baseUrlRelease}\" + BuildConfig.CHANNEL + \"/\""
+            )
         }
         getByName(buildTypeDebug) {
             isMinifyEnabled = getByName(buildTypeRelease).isMinifyEnabled
             proguardFiles(*proguardFiles)
             niceSigningConfig?.let { signingConfig = it }
-            buildConfigField("String", "BASE_URL", "\"$baseUrlDebug\"") // 添加引号
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"${baseUrlDebug}\" + BuildConfig.CHANNEL + \"/\""
+            )
         }
     }
 
@@ -872,3 +895,4 @@ object Utils {
     private fun capitalize(s: String) = "${s[0].uppercase(Locale.getDefault())}${s.substring(1)}"
 
 }
+
