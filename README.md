@@ -500,59 +500,6 @@ autojs6-v6.6.2-arm64-v8a-0f2a9d74.apk
 
 ******
 
-### 贡献参与
 
-******
-
-感谢每一位参与 AutoJs6 项目开发的贡献人员.
-
-|         <span style="word-break:keep-all;white-space:nowrap">贡献人员</span>          |                   <span style="word-break:keep-all;white-space:nowrap">提交数</span>                    | <span style="word-break:keep-all;white-space:nowrap">最近提交</span> |
-|:-------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------:|
-|             <span style="word-break:keep-all;white-space:nowrap">[wirsnow](https://github.com/wirsnow)</span>             |         <span style="word-break:keep-all;white-space:nowrap">[1](https://github.com/SuperMonster003/AutoJs6/commits?author=wirsnow)</span>         |                    <span style="word-break:keep-all;white-space:nowrap">`2025/05/19`</span>                    |
-|         <span style="word-break:keep-all;white-space:nowrap">[TonyJiangWJ](https://github.com/TonyJiangWJ)</span>         |       <span style="word-break:keep-all;white-space:nowrap">[5](https://github.com/SuperMonster003/AutoJs6/commits?author=TonyJiangWJ)</span>       |                    <span style="word-break:keep-all;white-space:nowrap">`2025/04/24`</span>                    |
-|          <span style="word-break:keep-all;white-space:nowrap">[luckyloogn](https://github.com/luckyloogn)</span>          |       <span style="word-break:keep-all;white-space:nowrap">[3](https://github.com/SuperMonster003/AutoJs6/commits?author=luckyloogn)</span>        |                    <span style="word-break:keep-all;white-space:nowrap">`2025/01/01`</span>                    |
-|                <span style="word-break:keep-all;white-space:nowrap">[kvii](https://github.com/kvii)</span>                |          <span style="word-break:keep-all;white-space:nowrap">[1](https://github.com/SuperMonster003/AutoJs6/commits?author=kvii)</span>           |                    <span style="word-break:keep-all;white-space:nowrap">`2024/10/16`</span>                    |
-|   <span style="word-break:keep-all;white-space:nowrap">[chenguangming](https://github.com/chenguangming) `(Tom)`</span>   | <span style="word-break:keep-all;white-space:nowrap">[2](https://github.com/SuperMonster003/AutoJs6/pulls?q=is%3Apr+author%3Achenguangming)</span> |                    <span style="word-break:keep-all;white-space:nowrap">`2024/05/14`</span>                    |
-|          <span style="word-break:keep-all;white-space:nowrap">[LZX284](https://github.com/LZX284) `(AI)`</span>           |         <span style="word-break:keep-all;white-space:nowrap">[17](https://github.com/SuperMonster003/AutoJs6/commits?author=LZX284)</span>         |                    <span style="word-break:keep-all;white-space:nowrap">`2023/11/19`</span>                    |
-| <span style="word-break:keep-all;white-space:nowrap">[little&#x2011;alei](https://github.com/little-alei) `(抠脚本人)`</span> |      <span style="word-break:keep-all;white-space:nowrap">[12](https://github.com/SuperMonster003/AutoJs6/commits?author=little-alei)</span>       |                    <span style="word-break:keep-all;white-space:nowrap">`2023/07/12`</span>                    |
-|              <span style="word-break:keep-all;white-space:nowrap">[aiselp](https://github.com/aiselp)</span>              |    <span style="word-break:keep-all;white-space:nowrap">[6](https://github.com/SuperMonster003/AutoJs6/pulls?q=is%3Apr+author%3Aaiselp)</span>     |                    <span style="word-break:keep-all;white-space:nowrap">`2023/06/14`</span>                    |
-|           <span style="word-break:keep-all;white-space:nowrap">[LYS86](https://github.com/LYS86) `(Lin)`</span>           |          <span style="word-break:keep-all;white-space:nowrap">[2](https://github.com/SuperMonster003/AutoJs6/commits?author=LYS86)</span>          |                    <span style="word-break:keep-all;white-space:nowrap">`2023/06/03`</span>                    |
-
-数据更新于 2025 年 5 月 27 日.
-
-数据条目按 `最近提交` 降序排序.
-
-新发起的暂未处理的 Pull Request, 将在合并处理后加入数据统计.
-
-部分贡献人员在 [GitHub Contributors](https://github.com/SuperMonster003/AutoJs6/graphs/contributors) 未能正常出现, 其提交记录为空, 仍可通过 [Pull Request](https://github.com/SuperMonster003/AutoJs6/pulls) 查看贡献记录.
-
-[//]: # (
-    # --------------------------------------------------------------#
-    # Before committing and pushing to the remote GitHub repository #
-    # --------------------------------------------------------------#
-    - IDE
-        - The summary of the latest changelog for committing to Git [ DO NOT commit or push ]
-    - $projectDir/version.properties
-        - Remove the part like [ alpha / beta / ... ] of VERSION_NAME
-    - $projectDir/.changelog/lang_zh-Hans.json
-        - Update version name and released date
-        - Translate into other languages
-        - Update TypeScript declarations according to section `dependency` if needed
-    - $projectDir/.readme/template_readme.md
-        - Update badges like [ android studio / rhino / ... ]
-        - Update contribution section: 贡献参与
-    - $projectDir/.readme/common.json
-        - Update android studio download links and version names
-        - Update contribution section: var_date_contribution_table_data_updated
-    - $projectDir/.python/generate_markdown.py
-        - Re-generate markdown by running the python script [ link: aj6mdgen ]
-    - Others
-        - Re-generate documentation by running the python script [ link: aj6docgen ]
-        - Check the two-way versions for AutoJs6 and VSCode ext, then publish the ext to Microsoft if needed
-        - Run Gradle task "app:assembleInrtRelease" [ shortcut: C+A+0#- ]
-        - Build APK to determine the final VERSION_BUILD field [ shortcut: C+A+0#A ]
-        - Run Gradle task "app:appendDigestToReleasedFiles" [ shortcut: C+A+0#= ]
-        - Check VERSION_BUILD in version.properties with released apks
-        - Commit and push to GitHub
-        - Publish the latest release with signed APKs
-)
+## 个人使用 打包autome
+./gradlew :app:assembleAutomeDebug
