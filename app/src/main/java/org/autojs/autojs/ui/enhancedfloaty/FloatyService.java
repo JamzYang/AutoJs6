@@ -36,6 +36,7 @@ public class FloatyService extends Service {
 
     public static void removeWindow(FloatyWindow window) {
         windows.remove(window);
+        window.onRemove();
     }
 
     @Override

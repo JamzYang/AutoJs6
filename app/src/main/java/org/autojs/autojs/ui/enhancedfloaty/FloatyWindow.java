@@ -33,6 +33,12 @@ public abstract class FloatyWindow {
         onCreateWindow(service, manager);
     }
 
+
+    @CallSuper
+    public void onRemove() {
+        mFloatyService = null;
+    }
+
     @CallSuper
     protected void onCreateWindow(FloatyService service, WindowManager manager) {
         setWindowLayoutParams(onCreateWindowLayoutParams());
@@ -117,6 +123,7 @@ public abstract class FloatyWindow {
 
     public void close() {
         try {
+            mFloatyService = null;
             mWindowManager.removeView(mWindowView);
             FloatyService.removeWindow(this);
         } catch (Exception e) {

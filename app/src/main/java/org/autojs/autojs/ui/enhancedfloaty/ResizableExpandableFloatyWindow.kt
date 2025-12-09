@@ -23,6 +23,8 @@ import java.util.concurrent.CopyOnWriteArrayList
  * Created by Stardust on Apr 18, 2017.
  * Modified by SuperMonster003 as of Apr 29, 2023.
  * Transformed by SuperMonster003 on Dec 2, 2023.
+ *
+ * 可调整大小且可展开的浮窗窗口实现, 负责承载折叠/展开视图并处理拖拽、缩放等交互.
  */
 open class ResizableExpandableFloatyWindow(private var floaty: ResizableExpandableFloaty) : FloatyWindow() {
 
@@ -31,7 +33,7 @@ open class ResizableExpandableFloatyWindow(private var floaty: ResizableExpandab
     private lateinit var mCollapsedView: View
     private lateinit var mExpandedView: View
     private lateinit var mViewSwitcher: ViewSwitcher
-    private lateinit var mDragGesture: DragGesture
+    private var mDragGesture: DragGesture? = null
 
     private var mResizer: View? = null
     private var mMoveCursor: View? = null
@@ -58,10 +60,17 @@ open class ResizableExpandableFloatyWindow(private var floaty: ResizableExpandab
         return windowView
     }
 
+
+    /**
+     * 清空待附着后执行的任务队列, 防止持有无用引用.
+     */
     fun clearOnViewAttachedTask() {
         mViewAttachedTasks.clear()
     }
 
+    /**
+     * 添加在视图附着到窗口后执行的任务.
+     */
     fun addOnViewAttachedTask(task: () -> Unit) {
         mViewAttachedTasks.add(task)
     }
@@ -113,6 +122,9 @@ open class ResizableExpandableFloatyWindow(private var floaty: ResizableExpandab
         }
     }
 
+    /**
+     * 初始化窗口位置与展开状态.
+     */
     private fun setInitialState() {
         if (floaty.isInitialExpanded) {
             mExpandedViewX = floaty.initialX
@@ -120,7 +132,7 @@ open class ResizableExpandableFloatyWindow(private var floaty: ResizableExpandab
             expand()
         } else {
             mCollapsedViewX = floaty.initialX
-            mCollapsedViewX = floaty.initialY
+            mCollapsedViewY = floaty.initialY
             windowBridge?.updatePosition(mCollapsedViewX, mCollapsedViewY)
         }
     }
@@ -140,6 +152,9 @@ open class ResizableExpandableFloatyWindow(private var floaty: ResizableExpandab
         }
     }
 
+    /**
+     * 装载折叠/展开视图以及可选的拖拽、缩放手柄.
+     */
     private fun inflateWindowViews(service: FloatyService?) {
         mExpandedView = floaty.inflateExpandedView(service, this)
         mCollapsedView = floaty.inflateCollapsedView(service, this)
@@ -163,7 +178,7 @@ open class ResizableExpandableFloatyWindow(private var floaty: ResizableExpandab
         if (floaty.shouldRequestFocusWhenExpand()) {
             requestWindowFocus()
         }
-        mDragGesture.isKeepToSide = false
+        mDragGesture?.isKeepToSide = false
         windowBridge?.updatePosition(mExpandedViewX, mExpandedViewY)
     }
 
@@ -171,7 +186,7 @@ open class ResizableExpandableFloatyWindow(private var floaty: ResizableExpandab
         mViewSwitcher.showFirst()
         disableWindowFocus()
         setWindowLayoutNoLimit()
-        mDragGesture.isKeepToSide = true
+        mDragGesture?.isKeepToSide = true
         windowBridge?.updatePosition(mCollapsedViewX, mCollapsedViewY)
     }
 
@@ -212,6 +227,29 @@ open class ResizableExpandableFloatyWindow(private var floaty: ResizableExpandab
                 else -> flags or FLAG_NOT_TOUCHABLE
             }
         })
+    }
+
+    /**
+     * 在窗口被移除时释放资源, 避免持有已分离视图导致内存泄漏.
+     */
+    override fun onRemove() {
+        super.onRemove()
+        // 移除所有子视图并断开引用, 释放 ViewSwitcher.
+        mViewSwitcher.apply {
+            setOnClickListener(null)
+            setOnLongClickListener(null)
+            while (childCount > 0) {
+                removeViewAt(0)
+            }
+        }
+        mViewAttachedTasks.clear()
+        // 断开对视图与手势对象的引用, 便于 GC.
+        mResizer = null
+        mMoveCursor = null
+        // DragGesture 未提供释放接口, 仅置空引用.
+        mDragGesture = null
+        // 置空核心视图引用.
+        setWindowView(null)
     }
 
     companion object {
