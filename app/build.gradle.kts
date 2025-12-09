@@ -19,6 +19,7 @@ val versions = Versions("$rootDir/version.properties")
 val dimention = "channel"
 val flavorNameApp = "app"
 val flavorNameInrt = "inrt"
+val flavorNameAutome = "autome"
 val buildTypeDebug = "debug"
 val buildTypeRelease = "release"
 val buildActionAssemble = "assemble"
@@ -476,6 +477,33 @@ android {
             )
         }
 
+        create(flavorNameAutome) {
+            dimension = dimention
+
+            // 自定义 autome 风味的最终应用 ID
+            applicationId = "cn.ys.autome"
+
+            versionCode = versions.appVersionCode
+            versionName = versions.appVersionName
+
+            buildConfigField("String", "CHANNEL", "\"$flavorNameAutome\"")
+            buildConfigField("boolean", "is${flavorNameInrt.uppercaseFirstChar()}", "false")
+
+            manifestPlaceholders.putAll(
+                mapOf(
+                    "CHANNEL" to flavorNameAutome,
+                    // 这里的名称会显示在桌面图标下
+                    "appName" to "autome",
+                    "intentCategory" to "android.intent.category.LAUNCHER",
+                    "intentCategoryInrt" to "android.intent.category.DEFAULT",
+                    // FileProvider 的 authorities 必须全局唯一，这里跟随新的 applicationId
+                    "authorities" to "cn.ys.autome.fileprovider",
+                    // 为 autome 预留独立图标资源，占位为 @mipmap/ic_autome
+                    "icon" to "@mipmap/ic_autome",
+                )
+            )
+        }
+
         create(flavorNameInrt) {
             dimension = dimention
             applicationIdSuffix = ".$flavorNameInrt"
@@ -590,6 +618,10 @@ android {
         }
         getByName(flavorNameInrt) {
             assets.srcDirs("src/main/assets-$flavorNameInrt")
+        }
+        // 为 autome 预留独立的 assets 目录，如无需要可以保持为空
+        getByName(flavorNameAutome) {
+            assets.srcDirs("src/main/assets-$flavorNameAutome")
         }
 
     }
@@ -773,7 +805,7 @@ tasks {
     }
 
     register<Copy>("appendDigestToReleasedFiles") {
-        listOf(flavorNameApp, flavorNameInrt).forEach { flavorName ->
+        listOf(flavorNameApp, flavorNameInrt, flavorNameAutome).forEach { flavorName ->
             val src = "$flavorName/$buildTypeRelease"
             val dst = "${src}s"
             val ext = Utils.FILE_EXTENSION_APK
