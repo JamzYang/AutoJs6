@@ -810,6 +810,7 @@
     <string name="text_expand_all">Expand all</string>
     <string name="text_export">Export</string>
     <string name="text_exported">Exported</string>
+    <string name="text_export_layout_tree" translatable="false">Export layout tree</string>
     <string name="text_extending_js_build_in_objects">Extending JavaScript build-in objects</string>
     <string name="text_extensibility">Extensibility</string>
     <string name="text_failed">Failed</string>
@@ -919,8 +920,8 @@
     <string name="text_launch_debugger">Launch debugger</string>
     <string name="text_launcher_shortcuts">Launcher shortcuts</string>
     <string name="text_layout_inspector_is_dumping" tools:ignore="TypographyEllipsis">Inspecting layout...</string>
-    <string name="text_layout_tree_exported" translatable="false">布局树已导出并复制到剪贴板\n文件: %1$s</string>
-    <string name="text_layout_tree_export_failed" translatable="false">导出布局树失败: %1$s</string>
+    <string name="text_layout_tree_exported">Layout tree exported and copied to clipboard.\nFile: %1$s</string>
+    <string name="text_layout_tree_export_failed">Failed to export layout tree: %1$s</string>
     <string name="text_licenses">Open Sources Licenses</string>
     <string name="text_loading_a_fallback_solution_with_dots" tools:ignore="TypographyEllipsis">Trying a fallback solution...</string>
     <string name="text_loading_with_dots" tools:ignore="TypographyEllipsis">Loading...</string>
