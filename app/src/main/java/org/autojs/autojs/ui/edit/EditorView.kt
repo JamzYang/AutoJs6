@@ -89,13 +89,11 @@ import java.nio.charset.StandardCharsets
 @SuppressLint("CheckResult")
 class EditorView : LinearLayout, OnHintClickListener, ClickCallback, ToolbarFragment.OnMenuItemClickListener {
 
-    private var binding: EditorViewBinding = EditorViewBinding.bind(View.inflate(context, R.layout.editor_view, this))
+    private lateinit var binding: EditorViewBinding
 
-    @JvmField
-    val editor: CodeEditor = binding.editor
+    lateinit var editor: CodeEditor
 
-    @JvmField
-    val debugBar: DebugBar = binding.debugBar
+    lateinit var debugBar: DebugBar
 
     lateinit var name: String
 
@@ -119,13 +117,13 @@ class EditorView : LinearLayout, OnHintClickListener, ClickCallback, ToolbarFrag
     private val scriptExecution: ScriptExecution?
         get() = AutoJs.instance.scriptEngineService.getScriptExecution(scriptExecutionId)
 
-    private val mCodeCompletionBar: CodeCompletionBar = binding.codeCompletionBar
-    private val mInputMethodEnhanceBar: View = binding.inputMethodEnhanceBar
-    private val mSymbolBar: CodeCompletionBar = binding.symbolBar
-    private val mShowFunctionsButton: ImageView = binding.functions
-    private val mFunctionsKeyboard: FunctionsKeyboardView = binding.functionsKeyboard
-    private val mDocsWebView: EWebView = binding.docs
-    private val mDrawerLayout: DrawerLayout = binding.drawerLayout
+    private lateinit var mCodeCompletionBar: CodeCompletionBar
+    private lateinit var mInputMethodEnhanceBar: View
+    private lateinit var mSymbolBar: CodeCompletionBar
+    private lateinit var mShowFunctionsButton: ImageView
+    private lateinit var mFunctionsKeyboard: FunctionsKeyboardView
+    private lateinit var mDocsWebView: EWebView
+    private lateinit var mDrawerLayout: DrawerLayout
 
     private var mCurrentCharsetConfidence: Int = 0
     private var mCurrentCharset: Charset = DEFAULT_CHARSET_TO_WRITE_FILE
@@ -165,6 +163,18 @@ class EditorView : LinearLayout, OnHintClickListener, ClickCallback, ToolbarFrag
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     init {
+        // 在 init 块中初始化 binding，确保 View 构造完成后才 inflate 子布局
+        binding = EditorViewBinding.bind(View.inflate(context, R.layout.editor_view, this))
+        editor = binding.editor
+        debugBar = binding.debugBar
+        mCodeCompletionBar = binding.codeCompletionBar
+        mInputMethodEnhanceBar = binding.inputMethodEnhanceBar
+        mSymbolBar = binding.symbolBar
+        mShowFunctionsButton = binding.functions
+        mFunctionsKeyboard = binding.functionsKeyboard
+        mDocsWebView = binding.docs
+        mDrawerLayout = binding.drawerLayout
+
         setUpEditor()
         setUpInputMethodEnhancedBar()
         setUpFunctionsKeyboard()
