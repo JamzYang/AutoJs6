@@ -26,6 +26,7 @@ open class LayoutHierarchyFloatyWindow @JvmOverloads constructor(
         R.string.text_show_widget_information to ::showNodeInfo,
         R.string.text_show_layout_bounds to ::showLayoutBounds,
         R.string.text_generate_code to ::generateCode,
+        R.string.text_export_layout_tree to ::exportLayoutTree,
         SPLIT_LINE,
         R.string.text_switch_window to ::switchWindow,
         R.string.text_exit to ::close,

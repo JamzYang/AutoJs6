@@ -10,6 +10,8 @@ import android.view.accessibility.AccessibilityNodeInfo
 
 import org.autojs.autojs.core.automator.UiObject
 
+import org.json.JSONArray
+import org.json.JSONObject
 import java.util.ArrayList
 import java.util.HashMap
 
@@ -68,6 +70,66 @@ class NodeInfo(private val resources: Resources?, private val node: UiObject, va
     val children = ArrayList<NodeInfo>()
 
     override fun toString() = "$className${node.summary()}"
+
+    /**
+     * 将当前节点及其所有子节点递归序列化为 JSONObject
+     * 用于导出整棵布局树以便在电脑上分析
+     */
+    fun toJson(): JSONObject {
+        return JSONObject().apply {
+            put("className", className)
+            put("packageName", packageName)
+            put("id", id)
+            put("fullId", fullId)
+            put("idHex", idHex)
+            put("desc", desc)
+            put("text", text)
+            put("bounds", JSONObject().apply {
+                put("left", bounds.left)
+                put("top", bounds.top)
+                put("right", bounds.right)
+                put("bottom", bounds.bottom)
+            })
+            put("center", JSONObject().apply {
+                put("x", center?.x)
+                put("y", center?.y)
+            })
+            put("clickable", clickable)
+            put("longClickable", longClickable)
+            put("scrollable", scrollable)
+            put("checkable", checkable)
+            put("checked", checked)
+            put("enabled", enabled)
+            put("editable", editable)
+            put("focusable", focusable)
+            put("focused", focused)
+            put("selected", selected)
+            put("dismissable", dismissable)
+            put("visibleToUser", visibleToUser)
+            put("contextClickable", contextClickable)
+            put("accessibilityFocused", accessibilityFocused)
+            put("indexInParent", indexInParent)
+            put("childCount", childCount)
+            put("depth", depth)
+            put("drawingOrder", drawingOrder)
+            put("rowCount", rowCount)
+            put("columnCount", columnCount)
+            put("row", row)
+            put("column", column)
+            put("rowSpan", rowSpan)
+            put("columnSpan", columnSpan)
+            put("actionNames", JSONArray(actionNames))
+
+            // 递归序列化子节点
+            if (children.isNotEmpty()) {
+                put("children", JSONArray().apply {
+                    children.forEach { child ->
+                        put(child.toJson())
+                    }
+                })
+            }
+        }
+    }
 
     companion object {
 
