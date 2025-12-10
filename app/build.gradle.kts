@@ -619,9 +619,10 @@ android {
         getByName(flavorNameInrt) {
             assets.srcDirs("src/main/assets-$flavorNameInrt")
         }
-        // 为 autome 预留独立的 assets 目录，如无需要可以保持为空
+        // autome 风味包复用 assets-app 目录的资源（编辑器主题、文档等）
+        // 如有需要可额外添加 assets-autome 目录
         getByName(flavorNameAutome) {
-            assets.srcDirs("src/main/assets-$flavorNameAutome")
+            assets.srcDirs("src/main/assets-$flavorNameApp")
         }
 
     }
