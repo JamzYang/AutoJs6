@@ -581,6 +581,7 @@
     <string name="text_export">导出</string>
     <string name="text_exported">已导出</string>
     <string name="text_export_layout_tree">导出布局树</string>
+    <string name="text_export_layout_tree_gpt">导出布局树 (GPT)</string>
     <string name="text_extending_js_build_in_objects">JavaScript 内置对象扩展</string>
     <string name="text_extensibility">扩展性</string>
     <string name="text_failed">失败</string>
@@ -690,7 +691,8 @@
     <string name="text_launch_debugger">启动调试</string>
     <string name="text_launcher_shortcuts">启动器快捷方式</string>
     <string name="text_layout_inspector_is_dumping" tools:ignore="TypographyEllipsis">布局分析中...</string>
-    <string name="text_layout_tree_exported">布局树已导出并复制到剪贴板\n文件: %1$s</string>
+    <string name="text_layout_tree_exported">布局树已导出\n文件: %1$s</string>
+    <string name="text_layout_tree_exported_gpt">GPT 友好版布局树已导出到剪贴板和文件:\n%1$s</string>
     <string name="text_layout_tree_export_failed">导出布局树失败: %1$s</string>
     <string name="text_licenses">开源许可信息</string>
     <string name="text_loading_a_fallback_solution_with_dots" tools:ignore="TypographyEllipsis">正在尝试备选方案...</string>

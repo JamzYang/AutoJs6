@@ -580,6 +580,7 @@
     <string name="text_export">Export</string>
     <string name="text_exported">Exported</string>
     <string name="text_export_layout_tree">Export layout tree</string>
+    <string name="text_export_layout_tree_gpt">Export layout tree (GPT)</string>
     <string name="text_extending_js_build_in_objects">Extending JavaScript build-in objects</string>
     <string name="text_extensibility">Extensibility</string>
     <string name="text_failed">Failed</string>

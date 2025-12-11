@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewGroup
+import android.graphics.Rect
 import org.autojs.autojs.app.AppLevelThemeDialogBuilder
 import org.autojs.autojs.app.DialogUtils
 import org.autojs.autojs.core.accessibility.Capture
@@ -20,6 +21,7 @@ import org.autojs.autojs.ui.floating.layoutinspector.LayoutBoundsView
 import org.autojs.autojs.ui.floating.layoutinspector.LayoutHierarchyFloatyWindow
 import org.autojs.autojs.ui.floating.layoutinspector.NodeInfoView
 import org.autojs.autojs.ui.widget.BubblePopupMenu
+import org.autojs.autojs.util.ClipboardUtils
 import org.autojs.autojs.util.EnvironmentUtils
 import org.autojs.autojs.util.ViewUtils
 import org.autojs.autojs6.R
@@ -158,6 +160,80 @@ abstract class LayoutFloatyWindow(
             layoutBoundsView.hideAllBoundsSameNode(it)
             mLayoutSelectedNode = null
         }
+    }
+
+    /**
+     * 导出 GPT 友好版布局树
+     *
+     * 以易读的缩进文本格式输出：
+     * [id] Class id=xxx text="..." clickable=true bounds=[l,t,r,b]
+     * 并同时写入剪贴板与文件，方便直接粘贴给 GPT 进行关系分析。
+     */
+    protected fun exportLayoutTreeForGpt() {
+        try {
+            val gptText = buildGptFriendlyLayoutTreeText(capture.root)
+
+            // 写入剪贴板（文本版适合直接粘贴进 GPT）
+            ClipboardUtils.setClip(context, gptText)
+
+            // 写入文件，便于持久保存
+            val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+            val dir = File(EnvironmentUtils.externalStoragePath, "AutoJs6")
+            if (!dir.exists()) {
+                dir.mkdirs()
+            }
+            val file = File(dir, "layout_tree_gpt_$timestamp.txt")
+            file.writeText(gptText)
+
+            ViewUtils.showToast(context, context.getString(R.string.text_layout_tree_exported_gpt, file.absolutePath), true)
+        } catch (e: Exception) {
+            ViewUtils.showToast(context, context.getString(R.string.text_layout_tree_export_failed, e.message), true)
+        }
+    }
+
+    /**
+     * 构造 GPT 友好版的缩进布局树文本
+     *
+     * @param root 根节点
+     * @return 可直接粘贴到 GPT 的缩进树字符串
+     */
+    private fun buildGptFriendlyLayoutTreeText(root: NodeInfo): String {
+        val counter = intArrayOf(0)
+        val builder = StringBuilder()
+
+        fun Rect.toBracketString(): String = "[${left},${top},${right},${bottom}]"
+
+        fun traverse(node: NodeInfo, depth: Int) {
+            val id = counter[0]++
+            val indent = "  ".repeat(depth)
+            val className = node.className ?: "unknown"
+            val text = node.text?.replace("\n", "\\n") ?: ""
+            val contentDesc = node.desc ?: ""
+            val boundsStr = node.boundsInScreen.toBracketString()
+            val clickable = node.clickable
+            val checked = node.checked
+            val enabled = node.enabled
+            val resourceId = node.id ?: ""
+
+            builder.append(indent)
+                .append("[").append(id).append("] ")
+                .append(className)
+                .append(" id=").append(resourceId)
+                .append(" text=\"").append(text).append("\"")
+                .append(" desc=\"").append(contentDesc).append("\"")
+                .append(" clickable=").append(clickable)
+                .append(" checked=").append(checked)
+                .append(" enabled=").append(enabled)
+                .append(" bounds=").append(boundsStr)
+                .append("\n")
+
+            node.children.forEach { child ->
+                traverse(child, depth + 1)
+            }
+        }
+
+        traverse(root, 0)
+        return builder.toString()
     }
 
     /**
