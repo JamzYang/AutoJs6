@@ -173,9 +173,6 @@ abstract class LayoutFloatyWindow(
         try {
             val gptText = buildGptFriendlyLayoutTreeText(capture.root)
 
-            // 写入剪贴板（文本版适合直接粘贴进 GPT）
-            ClipboardUtils.setClip(context, gptText)
-
             // 写入文件，便于持久保存
             val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
             val dir = File(EnvironmentUtils.externalStoragePath, "AutoJs6")
@@ -203,7 +200,10 @@ abstract class LayoutFloatyWindow(
 
         fun Rect.toBracketString(): String = "[${left},${top},${right},${bottom}]"
 
-        fun traverse(node: NodeInfo, depth: Int) {
+        // 使用 "路径" 表示层级及同级序号，例如：
+        // 根节点 path="0"，其第一个子节点 path="0.0"，第二个子节点 path="0.1"，依此类推。
+        // 这样既能直观看出同级关系，又方便 GPT 还原整棵树结构。
+        fun traverse(node: NodeInfo, depth: Int, path: MutableList<Int>) {
             val id = counter[0]++
             val indent = "  ".repeat(depth)
             val className = node.className ?: "unknown"
@@ -214,9 +214,11 @@ abstract class LayoutFloatyWindow(
             val checked = node.checked
             val enabled = node.enabled
             val resourceId = node.id ?: ""
+            val pathString = path.joinToString(separator = ".")
 
             builder.append(indent)
                 .append("[").append(id).append("] ")
+                .append("(path=").append(pathString).append(", depth=").append(depth).append(") ")
                 .append(className)
                 .append(" id=").append(resourceId)
                 .append(" text=\"").append(text).append("\"")
@@ -227,12 +229,15 @@ abstract class LayoutFloatyWindow(
                 .append(" bounds=").append(boundsStr)
                 .append("\n")
 
-            node.children.forEach { child ->
-                traverse(child, depth + 1)
+            node.children.forEachIndexed { index, child ->
+                // 子节点 path 继承父节点路径，并在末尾追加当前同级序号
+                val childPath = (path + index).toMutableList()
+                traverse(child, depth + 1, childPath)
             }
         }
 
-        traverse(root, 0)
+        // 根节点从 path=[0] 开始，depth=0
+        traverse(root, 0, mutableListOf(0))
         return builder.toString()
     }
 
