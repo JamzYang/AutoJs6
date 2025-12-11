@@ -26,6 +26,7 @@ open class LayoutBoundsFloatyWindow @JvmOverloads constructor(
         R.string.text_show_widget_information to ::showNodeInfo,
         R.string.text_show_layout_hierarchy to ::showLayoutHierarchy,
         R.string.text_generate_code to ::generateCode,
+        R.string.text_export_layout_tree to ::exportLayoutTree,
         SPLIT_LINE,
         R.string.text_hide_node to ::excludeNode,
         R.string.text_hide_same_frame_nodes to ::excludeAllBoundsSameNodeInternal,

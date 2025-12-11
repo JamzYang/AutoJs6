@@ -20,7 +20,14 @@ import org.autojs.autojs.ui.floating.layoutinspector.LayoutBoundsView
 import org.autojs.autojs.ui.floating.layoutinspector.LayoutHierarchyFloatyWindow
 import org.autojs.autojs.ui.floating.layoutinspector.NodeInfoView
 import org.autojs.autojs.ui.widget.BubblePopupMenu
+import org.autojs.autojs.util.ClipboardUtils
+import org.autojs.autojs.util.EnvironmentUtils
+import org.autojs.autojs.util.ViewUtils
 import org.autojs.autojs6.R
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.reflect.KFunction0
 
 abstract class LayoutFloatyWindow(
@@ -151,6 +158,34 @@ abstract class LayoutFloatyWindow(
         mLayoutSelectedNode?.let {
             layoutBoundsView.hideAllBoundsSameNode(it)
             mLayoutSelectedNode = null
+        }
+    }
+
+    /**
+     * 导出整棵布局树到剪贴板和文件
+     * 从根节点开始序列化为 JSON 格式
+     */
+    protected fun exportLayoutTree() {
+        try {
+            // 序列化整棵树为 JSON
+            val jsonString = capture.root.toJson().toString(2)
+
+            // 复制到剪贴板
+            ClipboardUtils.setClip(context, jsonString)
+
+            // 保存到文件
+            val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+            val dir = File(EnvironmentUtils.externalStoragePath, "AutoJs6")
+            if (!dir.exists()) {
+                dir.mkdirs()
+            }
+            val file = File(dir, "layout_tree_$timestamp.json")
+            file.writeText(jsonString)
+
+            // 显示成功提示
+            ViewUtils.showToast(context, context.getString(R.string.text_layout_tree_exported, file.absolutePath), true)
+        } catch (e: Exception) {
+            ViewUtils.showToast(context, context.getString(R.string.text_layout_tree_export_failed, e.message), true)
         }
     }
 
