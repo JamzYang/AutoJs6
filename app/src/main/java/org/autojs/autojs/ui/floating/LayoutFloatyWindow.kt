@@ -20,7 +20,6 @@ import org.autojs.autojs.ui.floating.layoutinspector.LayoutBoundsView
 import org.autojs.autojs.ui.floating.layoutinspector.LayoutHierarchyFloatyWindow
 import org.autojs.autojs.ui.floating.layoutinspector.NodeInfoView
 import org.autojs.autojs.ui.widget.BubblePopupMenu
-import org.autojs.autojs.util.ClipboardUtils
 import org.autojs.autojs.util.EnvironmentUtils
 import org.autojs.autojs.util.ViewUtils
 import org.autojs.autojs6.R
@@ -162,16 +161,15 @@ abstract class LayoutFloatyWindow(
     }
 
     /**
-     * 导出整棵布局树到剪贴板和文件
-     * 从根节点开始序列化为 JSON 格式
+     * 导出整棵布局树到本地文件
+     *
+     * 从根节点开始序列化为 JSON 格式，仅写入外部存储目录下的 AutoJs6 目录，
+     * 不再写入剪贴板，避免在布局树过大时触发 TransactionTooLargeException。
      */
     protected fun exportLayoutTree() {
         try {
-            // 序列化整棵树为 JSON
+            // 序列化整棵树为 JSON 字符串
             val jsonString = capture.root.toJson().toString(2)
-
-            // 复制到剪贴板
-            ClipboardUtils.setClip(context, jsonString)
 
             // 保存到文件
             val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
@@ -182,9 +180,10 @@ abstract class LayoutFloatyWindow(
             val file = File(dir, "layout_tree_$timestamp.json")
             file.writeText(jsonString)
 
-            // 显示成功提示
+            // 显示成功提示，提示包含导出路径
             ViewUtils.showToast(context, context.getString(R.string.text_layout_tree_exported, file.absolutePath), true)
         } catch (e: Exception) {
+            // 导出失败时提示异常信息
             ViewUtils.showToast(context, context.getString(R.string.text_layout_tree_export_failed, e.message), true)
         }
     }
