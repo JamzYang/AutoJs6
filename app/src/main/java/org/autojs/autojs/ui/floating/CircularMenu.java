@@ -264,9 +264,35 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
                 setupBindingListeners();
                 return menu;
             }
-        });
+        }) {
+            @Override
+            public void onServiceDestroy(FloatyService floatyService) {
+                super.onServiceDestroy(floatyService);
+                // 当 FloatyService 被销毁时，窗口会被关闭，但 CircularMenu 仍可能被单例监听器持有。
+                // 这里需要同步释放 CircularMenu 侧的引用与监听，避免泄漏已 detach 的 View 与 Service。
+                releaseResources();
+            }
+        };
         mWindow.setKeepToSideHiddenWidthRadio(0.25f);
         FloatyService.addWindow(mWindow);
+    }
+
+    /**
+     * 释放 CircularMenu 持有的外部资源与 View 引用。
+     * <p>
+     * 主要用于与 FloatyService/CircularMenuWindow 生命周期对齐，避免单例监听器链路继续强引用菜单 UI。
+     */
+    private void releaseResources() {
+        dismissSettingsDialog();
+        if (mLayoutInspectDialog != null) {
+            mLayoutInspectDialog.dismiss();
+            mLayoutInspectDialog = null;
+        }
+        mRecorder.removeOnStateChangedListener(this);
+        AutoJs.getInstance().getLayoutInspector().removeCaptureAvailableListener(this);
+        mCaptureDeferred = null;
+        binding = null;
+        mActionViewIcon = null;
     }
 
     private void setState(int state) {
@@ -373,8 +399,7 @@ public class CircularMenu implements Recorder.OnStateChangedListener, LayoutInsp
             EventBus.getDefault().post(new StateChangeEvent(STATE_CLOSED, mState));
             mState = STATE_CLOSED;
         }
-        mRecorder.removeOnStateChangedListener(this);
-        AutoJs.getInstance().getLayoutInspector().removeCaptureAvailableListener(this);
+        releaseResources();
     }
 
     @Override
