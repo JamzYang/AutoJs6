@@ -1,8 +1,10 @@
 package org.autojs.autojs.runtime.api;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,6 +13,7 @@ import android.graphics.Paint;
 import android.media.Image;
 import android.os.Build;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.util.Base64;
 import android.util.Log;
@@ -36,6 +39,7 @@ import org.autojs.autojs.pio.UncheckedIOException;
 import org.autojs.autojs.runtime.ScriptRuntime;
 import org.autojs.autojs.runtime.api.ImageFeatureMatching.FeatureMatchingDescriptor;
 import org.autojs.autojs.runtime.exception.WrappedRuntimeException;
+import org.autojs.autojs.util.ForegroundServiceUtils;
 import org.autojs.autojs.util.BitmapUtils;
 import org.autojs.autojs6.R;
 import org.jetbrains.annotations.Contract;
@@ -56,39 +60,29 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static android.app.Activity.RESULT_OK;
 import static org.autojs.autojs.util.RhinoUtils.isMainThread;
 import static org.autojs.autojs.util.StringUtils.str;
 
 /**
- * Quick Reference – Image Size / Quality Helpers<br>
- * zh-CN: 快速参考 – 图像尺寸 / 质量相关辅助方法
+ * 快速参考 – 图像尺寸 / 质量相关辅助方法
  * <hr>
  * <b>scale</b><br>
- * Multiply both width and height of an <b>already-decoded</b> Bitmap by
- * the given scale factor(s).<br>
- * zh-CN: 在 <b>已解码</b> 的 Bitmap 上, 按照给定比例同时缩放宽高.
+ * 在已解码的 Bitmap 上, 按照给定比例同时缩放宽高.<br>
  * <p>
  * <b>resize</b><br>
- * Force an <b>already-decoded</b> Bitmap to the specified width/height.
- * Aspect ratio may be kept or ignored depending on the overload.<br>
- * zh-CN: 将 <b>已解码</b> Bitmap 调整为指定宽高; 可选择保持或忽略纵横比.
+ * 将已解码的 Bitmap 调整为指定宽高; 可选择保持或忽略纵横比.<br>
  * <p>
  * <b>downsample</b><br>
- * Shrink <b>before decoding</b> by setting <code>inSampleSize</code>; pixels are
- * skipped while reading, dramatically reducing memory.<br>
- * zh-CN: <b>解码前</b> 通过设置 <code>inSampleSize</code> 跳读像素, 显著降低解码分辨率与内存.
+ * 解码前通过设置 inSampleSize 跳读像素, 显著降低解码分辨率与内存.<br>
  * <p>
  * <b>compress</b><br>
- * Re-encode an existing Bitmap (or byte stream) into JPEG/PNG/WebP
- * with the given format & quality to reduce <b>disk</b> footprint.<br>
- * zh-CN: 使用指定格式与质量重新编码 Bitmap (或字节流), 以减小 <b>磁盘</b> 体积.
+ * 使用指定格式与质量重新编码 Bitmap (或字节流), 以减小磁盘体积.<br>
  * <p>
  * <b>save</b><br>
- * Convenience wrapper that internally invokes <code>compress</code> (with
- * default or user-supplied options) and then writes to storage.<br>
- * zh-CN: 便捷封装, 内部调用 <code>compress</code> (默认或自定义参数) 后写入存储.
+ * 便捷封装, 内部调用 compress (默认或自定义参数) 后写入存储.<br>
  * <hr>
  * Created by Stardust on May 20, 2017.
  * Modified by SuperMonster003 as of Dec 1, 2021.
@@ -97,6 +91,16 @@ public class Images {
 
     private static final String TAG = Images.class.getSimpleName();
     private static volatile boolean sOpenCvInitialized;
+
+    /**
+     * 截屏授权结果的进程级缓存 (MediaProjection 授权返回的 Intent data).
+     *
+     * 说明:
+     * - 该缓存只在当前进程存活期间有效 (App 进程被杀后会丢失).
+     * - 缓存的目的是让后续脚本执行可直接复用授权结果创建 ScreenCapturer, 避免重复弹系统授权弹窗.
+     */
+    @Nullable
+    private static volatile Intent sScreenCapturePermissionData;
 
     @ScriptVariable
     public final RhinoColorFinder colorFinder;
@@ -109,6 +113,108 @@ public class Images {
     private CapturedImage mPreCaptureImage;
     private ScreenCapturer mScreenCapturer;
     private ScreenCaptureRequester mScreenCaptureRequester;
+
+    /**
+     * 获取进程级缓存的截屏授权 Intent.
+     *
+     * @return 缓存的授权 Intent 的拷贝, 可能为 null.
+     */
+    @Nullable
+    private static Intent getCachedScreenCapturePermissionData() {
+        Intent data = sScreenCapturePermissionData;
+        return data == null ? null : new Intent(data);
+    }
+
+    /**
+     * 写入进程级缓存的截屏授权 Intent.
+     *
+     * @param data MediaProjection 授权返回的 Intent.
+     */
+    private static void cacheScreenCapturePermissionData(@NonNull Intent data) {
+        sScreenCapturePermissionData = new Intent(data);
+    }
+
+    /**
+     * 清空进程级缓存的截屏授权 Intent.
+     */
+    private static void clearCachedScreenCapturePermissionData() {
+        sScreenCapturePermissionData = null;
+    }
+
+    /**
+     * 确保 ScreenCapturerForegroundService 已启动并进入前台.
+     *
+     * Android 10+ 及 Android 14 对 MediaProjection 的前台服务时序/状态有更严格要求,
+     * 这里复用 ScreenCaptureRequester 中的策略:
+     * - 先 startService
+     * - 如果尚未进入前台, 则 bindService 等待回调后再继续
+     */
+    private static void ensureScreenCapturerForegroundServiceReady(@NonNull Context applicationContext, @NonNull Runnable onReady) {
+        // 超时兜底: 避免 bindService / onServiceConnected 在某些 ROM/时序下不回调, 导致脚本无限 block.
+        final long READY_TIMEOUT_MS = 3000L;
+        final Handler mainHandler = new Handler(Looper.getMainLooper());
+        final AtomicBoolean done = new AtomicBoolean(false);
+
+        applicationContext.startService(new Intent(applicationContext, ScreenCapturerForegroundService.class));
+        if (ForegroundServiceUtils.isRunning(applicationContext, ScreenCapturerForegroundService.class)) {
+            if (done.compareAndSet(false, true)) {
+                mainHandler.post(onReady);
+            }
+            return;
+        }
+        final ServiceConnection[] connectionHolder = new ServiceConnection[1];
+        final Runnable timeoutRunnable = () -> {
+            if (!done.compareAndSet(false, true)) return;
+            try {
+                if (connectionHolder[0] != null) {
+                    applicationContext.unbindService(connectionHolder[0]);
+                }
+            } catch (Exception ignored) {
+                // 忽略解绑异常.
+            }
+            onReady.run();
+        };
+        mainHandler.postDelayed(timeoutRunnable, READY_TIMEOUT_MS);
+
+        connectionHolder[0] = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                if (!done.compareAndSet(false, true)) {
+                    try {
+                        applicationContext.unbindService(connectionHolder[0]);
+                    } catch (Exception ignored) {
+                        // Ignore.
+                    }
+                    return;
+                }
+                mainHandler.removeCallbacks(timeoutRunnable);
+                try {
+                    applicationContext.unbindService(connectionHolder[0]);
+                } catch (Exception ignored) {
+                    // 忽略解绑异常 (部分 ROM/时序下可能抛出异常).
+                }
+                mainHandler.post(onReady);
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                /* Empty body. */
+            }
+        };
+
+        boolean bound = applicationContext.bindService(
+                new Intent(applicationContext, ScreenCapturerForegroundService.class),
+                connectionHolder[0],
+                Context.BIND_AUTO_CREATE
+        );
+
+        if (!bound) {
+            mainHandler.removeCallbacks(timeoutRunnable);
+            if (done.compareAndSet(false, true)) {
+                mainHandler.post(onReady);
+            }
+        }
+    }
 
     public Images(Context context, ScriptRuntime scriptRuntime) {
         mContext = context;
@@ -220,42 +326,108 @@ public class Images {
 
     public ScriptPromiseAdapter requestScreenCapture(int orientation, int width, int height, boolean isAsync) {
         ScriptPromiseAdapter promiseAdapter = new ScriptPromiseAdapter();
-        if (mScreenCapturer == null) {
-            Handler handler = isAsync ? new Handler(Looper.getMainLooper()) : new Handler(mScriptRuntime.loopers.getServantLooper());
-            Context contextForRequest = mScriptRuntime.app.getCurrentActivity();
-            if (contextForRequest == null) contextForRequest = mContext;
-            mScreenCaptureRequester = new ScreenCaptureRequester();
-            mScreenCaptureRequester.request(contextForRequest, new ScreenCaptureRequester.Callback() {
-                @Override
-                public void onRequestResult(int resultCode, @Nullable Intent intent) {
-                    if (resultCode == RESULT_OK && intent != null) {
-                        try {
-                            ScreenCapturer.Options options = new ScreenCapturer.Options(
-                                    width, height, orientation, ScreenMetrics.getDeviceScreenDensity(), isAsync
-                            );
-                            mScreenCapturer = new ScreenCapturer(mContext, intent, options, handler);
-                            mScreenCapturer.setImageCaptureCallback(mOnScreenCaptureAvailableListener);
-                            promiseAdapter.resolve(true);
-                        } catch (SecurityException ex) {
-                            promiseAdapter.reject(ex);
-                        }
-                    } else {
-                        promiseAdapter.resolve(false);
-                    }
-                }
+        if (mScreenCapturer != null) {
+            promiseAdapter.resolve(true);
+            return promiseAdapter;
+        }
 
-                @Override
-                public void onRequestError(@NonNull Throwable t) {
-                    promiseAdapter.reject(t);
+        Handler handler = isAsync
+                ? new Handler(Looper.getMainLooper())
+                : new Handler(mScriptRuntime.loopers.getServantLooper());
+        ScreenCapturer.Options options = new ScreenCapturer.Options(
+                width, height, orientation, ScreenMetrics.getDeviceScreenDensity(), isAsync
+        );
+
+        // 优先复用进程级缓存的授权结果, 避免重复弹系统授权.
+        Intent cachedPermissionData = getCachedScreenCapturePermissionData();
+        if (cachedPermissionData != null) {
+            Context applicationContext = AutoJs.getInstance().getApplication().getApplicationContext();
+            ensureScreenCapturerForegroundServiceReady(applicationContext, () -> {
+                try {
+                    mScreenCapturer = new ScreenCapturer(mContext, cachedPermissionData, options, handler);
+                    mScreenCapturer.setImageCaptureCallback(mOnScreenCaptureAvailableListener);
+                    promiseAdapter.resolve(true);
+                } catch (SecurityException ex) {
+                    // 缓存可能已失效 (系统回收/用户撤销/ROM 策略等), 清理缓存并回退到正常申请流程.
+                    clearCachedScreenCapturePermissionData();
+                    requestScreenCaptureByPrompt(handler, options, promiseAdapter);
                 }
             });
+            return promiseAdapter;
         }
+
+        requestScreenCaptureByPrompt(handler, options, promiseAdapter);
         return promiseAdapter;
     }
 
+    /**
+     * 通过系统弹窗申请截屏权限 (MediaProjection).
+     */
+    private void requestScreenCaptureByPrompt(@NonNull Handler handler, @NonNull ScreenCapturer.Options options, @NonNull ScriptPromiseAdapter promiseAdapter) {
+        Context contextForRequest = mScriptRuntime.app.getCurrentActivity();
+        if (contextForRequest == null) contextForRequest = mContext;
+        mScreenCaptureRequester = new ScreenCaptureRequester();
+        mScreenCaptureRequester.request(contextForRequest, new ScreenCaptureRequester.Callback() {
+            @Override
+            public void onRequestResult(int resultCode, @Nullable Intent intent) {
+                try {
+                    if (resultCode == RESULT_OK && intent != null) {
+                        cacheScreenCapturePermissionData(intent);
+                        mScreenCapturer = new ScreenCapturer(mContext, intent, options, handler);
+                        mScreenCapturer.setImageCaptureCallback(mOnScreenCaptureAvailableListener);
+                        promiseAdapter.resolve(true);
+                    } else {
+                        promiseAdapter.resolve(false);
+                    }
+                } catch (SecurityException ex) {
+                    promiseAdapter.reject(ex);
+                } finally {
+                    // 申请流程结束后释放 requester, 避免 bindService 未解绑导致泄漏.
+                    releaseScreenCaptureRequester();
+                }
+            }
+
+            @Override
+            public void onRequestError(@NonNull Throwable t) {
+                try {
+                    promiseAdapter.reject(t);
+                } finally {
+                    // 发生错误同样需要释放 requester.
+                    releaseScreenCaptureRequester();
+                }
+            }
+        });
+    }
+
+    /**
+     * 执行一次截屏并返回截图图像.
+     *
+     * 说明:
+     * - 若当前脚本未创建 ScreenCapturer, 将优先尝试使用进程级缓存的授权结果进行懒加载.
+     * - 若没有缓存或缓存失效, 将抛出无权限异常, 脚本需先调用 requestScreenCapture().
+     */
     @Nullable
     public ImageWrapper captureScreen() {
         synchronized (this) {
+            if (mScreenCapturer == null) {
+                Intent cachedPermissionData = getCachedScreenCapturePermissionData();
+                if (cachedPermissionData != null) {
+                    Handler handler = new Handler(mScriptRuntime.loopers.getServantLooper());
+                    ScreenCapturer.Options options = new ScreenCapturer.Options(
+                            -1, -1, ScreenCapturer.ORIENTATION_AUTO, ScreenMetrics.getDeviceScreenDensity(), false
+                    );
+                    Context applicationContext = AutoJs.getInstance().getApplication().getApplicationContext();
+                    ensureScreenCapturerForegroundServiceReady(applicationContext, () -> {
+                        try {
+                            mScreenCapturer = new ScreenCapturer(mContext, cachedPermissionData, options, handler);
+                            mScreenCapturer.setImageCaptureCallback(mOnScreenCaptureAvailableListener);
+                        } catch (SecurityException ex) {
+                            clearCachedScreenCapturePermissionData();
+                        }
+                    });
+                }
+            }
+
             if (mScreenCapturer == null) {
                 throw new SecurityException(mContext.getString(R.string.error_no_screen_capture_permission));
             }

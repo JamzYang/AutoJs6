@@ -592,8 +592,11 @@ class ScriptRuntime private constructor(builder: Builder) {
         ignoresException({ media.recycle() })
         ignoresException({ loopers.recycle() })
         ignoresException({ this.recycleShell() })
+        // 默认跨脚本复用截屏权限:
+        // - 释放 ScreenCapturer 本身 (释放 VirtualDisplay/ImageReader/EventBus 订阅等资源, 避免泄漏)
+        // - 不停止 MediaProjection 前台服务
+        // - 进程级缓存的授权结果由 Images 维护, 不随脚本退出清空
         ignoresException({ images.releaseScreenCapturer() })
-        ignoresException({ images.stopScreenCapturerForegroundService() })
         ignoresException({ ocrMLKit.release() })
         ignoresException({ ocrPaddle.release() })
         ignoresException({ sensors.unregisterAll() })
