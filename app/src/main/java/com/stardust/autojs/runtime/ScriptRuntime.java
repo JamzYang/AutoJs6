@@ -1,5 +1,6 @@
 package com.stardust.autojs.runtime;
 
+import com.stardust.autojs.core.hardware.FqyUsbDriver;
 import android.content.Context;
 import android.os.Build;
 import android.os.Looper;
@@ -193,6 +194,9 @@ public class ScriptRuntime {
     @ScriptVariable
     public final Plugins plugins;
 
+    @ScriptVariable
+    public final FqyUsbDriver fqy;
+
     private Images images;
 
     private static WeakReference<Context> applicationContext;
@@ -225,6 +229,7 @@ public class ScriptRuntime {
         files = new Files(this);
         media = new Media(context, this);
         plugins = new Plugins(context, this);
+        fqy = new FqyUsbDriver(context);
     }
 
     public void init() {

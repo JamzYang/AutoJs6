@@ -11,6 +11,12 @@
         android:required="false" />
 
     <!-- @Hint by SuperMonster003 on May 27, 2022. -->
+    <uses-feature
+        android:name="android.hardware.usb.host"
+        android:required="true" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
     <!--  ! -->
     <!--  ! WRT: android.permission.WRITE_EXTERNAL_STORAGE -->
     <!--  ! MSV<API>: android:maxSdkVersion="API" -->
